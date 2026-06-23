@@ -1,0 +1,1481 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Семейный отдых в парк-отеле «Гранд Камелия» — зелёный двор, бассейны и море рядом.">
+  <title>Гранд Камелия — семейный отдых у моря</title>
+  <style>
+    :root {
+      /* ─── Surface (3 levels) ────────────────────────────────────────
+       * Canvas White is both the page and the card — Airbnb refuses a
+       * tonal shift between the two. Cards earn their edges from the
+       * Hairline Gray border and from full-bleed photography. The
+       * tertiary tier (--surface-warm) is Soft Cloud, used only for
+       * footer backgrounds, map-view wrappers, and middle-of-range
+       * date cells in the date picker. */
+      --bg: #ffffff;
+      --surface: #ffffff;
+      --surface-warm: #f7f7f7;
+
+      /* ─── Foreground ramp (4 levels) ────────────────────────────────
+       * Ink Black (#222222) carries roughly ninety percent of every
+       * page — every heading, every body paragraph, every nav label,
+       * every price. The brand's near-black is never true #000000.
+       * Charcoal (--fg-2) is a one-step-down emphasis tier reserved
+       * for focused-input text. Ash Gray (--muted) is the secondary
+       * label — "Cottage rentals" subtitles, muted footer links.
+       * Mute Gray (--meta) is reserved for disabled buttons and
+       * low-priority metadata. */
+      --fg: #222222;
+      --fg-2: #3f3f3f;
+      --muted: #6a6a6a;
+      --meta: #929292;
+
+      /* ─── Border (2 levels) ─────────────────────────────────────────
+       * Hairline Gray (#dddddd) is the workhorse — every card-to-card
+       * divider, every amenity-row separator, every footer-column
+       * rule. The soft tier is a lighter hairline used to break up
+       * dense list interiors without competing with the primary card
+       * edge. */
+      --border: #dddddd;
+      --border-soft: #ebebeb;
+
+      /* ─── Accent ────────────────────────────────────────────────────
+       * Rausch coral-pink — the single signature color. Reserve for
+       * primary CTAs (Reserve, Search, Add dates), the active-tab
+       * underline, the wishlist heart fill, and price emphasis. Hard
+       * cap of two visible uses per viewport; if a third Rausch
+       * element shows up, neutralize one. Plus Magenta (#92174d) and
+       * Luxe Purple (#460479) are kept inline at their product-tier
+       * surfaces, not promoted to shared accent slots. */
+      --accent: #ff385c;
+      --accent-on: #ffffff;
+      --accent-hover: #e31c5f;
+      --accent-active: #e00b41;
+
+      /* ─── Semantic ────────────────────────────────────────────────── */
+      --success: #008a05;
+      --warn: #c47700;
+      --danger: #c13515;
+
+      /* ─── Typography — fonts ──────────────────────────────────────── */
+      --font-display:
+        "Airbnb Cereal VF", "Airbnb Cereal App", Circular,
+        -apple-system, system-ui, "Helvetica Neue", Roboto, sans-serif;
+      --font-body:
+        "Airbnb Cereal VF", "Airbnb Cereal App", Circular,
+        -apple-system, system-ui, "Helvetica Neue", Roboto, sans-serif;
+      --font-mono:
+        ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Monaco,
+        Consolas, monospace;
+
+      /* ─── Typography — type scale (px) ────────────────────────────── */
+      --text-xs: 12px;
+      --text-sm: 14px;
+      --text-base: 16px;
+      --text-lg: 20px;
+      --text-xl: 22px;
+      --text-2xl: 28px;
+      --text-3xl: 44px;
+      --text-4xl: 56px;
+
+      /* ─── Typography — leading & tracking ─────────────────────────── */
+      --leading-body: 1.43;
+      --leading-tight: 1.2;
+      --tracking-display: -0.02em;
+
+      /* ─── Spacing — base scale ────────────────────────────────────── */
+      --space-1: 4px;
+      --space-2: 8px;
+      --space-3: 12px;
+      --space-4: 16px;
+      --space-5: 20px;
+      --space-6: 24px;
+      --space-8: 32px;
+      --space-12: 48px;
+
+      /* ─── Section rhythm ──────────────────────────────────────────── */
+      --section-y-desktop: 64px;
+      --section-y-tablet: 48px;
+      --section-y-phone: 32px;
+
+      /* ─── Radius ──────────────────────────────────────────────────── */
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --radius-pill: 9999px;
+
+      /* ─── Elevation ───────────────────────────────────────────────── */
+      --elev-flat: none;
+      --elev-ring: 0 0 0 1px var(--border);
+      --elev-raised:
+        rgba(0, 0, 0, 0.02) 0 0 0 1px,
+        rgba(0, 0, 0, 0.04) 0 2px 6px 0,
+        rgba(0, 0, 0, 0.1) 0 4px 8px 0;
+
+      /* ─── Focus ring ──────────────────────────────────────────────── */
+      --focus-ring: 0 0 0 2px var(--fg);
+
+      /* ─── Motion ──────────────────────────────────────────────────── */
+      --motion-fast: 150ms;
+      --motion-base: 200ms;
+      --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+
+      /* ─── Layout ──────────────────────────────────────────────────── */
+      --container-max: 1280px;
+      --container-gutter-desktop: 40px;
+      --container-gutter-tablet: 24px;
+      --container-gutter-phone: 16px;
+    }
+
+    * { box-sizing: border-box; }
+    html { color-scheme: light; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      background: var(--bg);
+      color: var(--fg);
+      font-family: var(--font-body);
+      font-weight: 500;
+      -webkit-font-smoothing: antialiased;
+    }
+    button, a { font: inherit; }
+    button:focus-visible, a:focus-visible { outline: none; box-shadow: var(--focus-ring); }
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+    .hero { min-height: 100svh; display: grid; grid-template-rows: 80px minmax(0, 1fr); overflow: hidden; }
+    .header {
+      position: relative;
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-6);
+      padding-inline: max(var(--container-gutter-desktop), calc((100% - var(--container-max)) / 2));
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+    }
+    .brand { display: inline-flex; align-items: center; gap: var(--space-3); color: var(--fg); text-decoration: none; }
+    .logo {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border-radius: var(--radius-pill);
+      background: var(--fg);
+      color: var(--surface);
+      font-weight: 700;
+      letter-spacing: var(--tracking-display);
+    }
+    .brand-copy { display: grid; gap: 1px; }
+    .brand strong { font-size: 15px; font-weight: 700; }
+    .brand small { color: var(--muted); font-size: 11px; letter-spacing: .02em; }
+    .nav { display: flex; align-items: center; gap: clamp(18px, 2.2vw, 32px); }
+    .nav a { color: var(--fg); text-decoration: none; font-size: var(--text-sm); font-weight: 500; letter-spacing: .02em; }
+    .nav a:hover { text-decoration: underline; text-underline-offset: 5px; }
+    .menu {
+      display: none;
+      width: 44px;
+      height: 44px;
+      place-items: center;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-pill);
+      background: var(--surface);
+      color: var(--fg);
+      cursor: pointer;
+    }
+    .menu svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; }
+    .stage { position: relative; min-height: 0; isolation: isolate; overflow: hidden; touch-action: pan-y; background: var(--fg-2); }
+    .stage:focus-visible { outline: 2px solid var(--surface); outline-offset: -6px; }
+    .slides, .slide, .shade { position: absolute; inset: 0; }
+    .slide {
+      margin: 0;
+      opacity: 0;
+      transform: scale(1.018);
+      transition: opacity 520ms var(--ease-standard), transform 700ms var(--ease-standard);
+    }
+    .slide.active { opacity: 1; transform: scale(1); }
+    .slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      opacity: 0;
+      transition: opacity 500ms var(--ease-standard);
+    }
+    .slide[data-state="ready"] img { opacity: 1; }
+    .slide[data-state="loading"]::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 34px;
+      height: 34px;
+      margin: -17px;
+      border: 3px solid rgba(255, 255, 255, .36);
+      border-top-color: var(--surface);
+      border-radius: var(--radius-pill);
+      animation: image-loading 800ms linear infinite;
+    }
+    .slide[data-state="error"]::after {
+      content: "Фото временно недоступно";
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      padding: var(--space-6);
+      color: var(--surface);
+      font-size: var(--text-sm);
+      letter-spacing: .02em;
+      text-align: center;
+    }
+    @keyframes image-loading { to { transform: rotate(360deg); } }
+    .shade {
+      z-index: 1;
+      background:
+        linear-gradient(90deg, rgba(0, 0, 0, .66) 0%, rgba(0, 0, 0, .38) 46%, rgba(0, 0, 0, .08) 74%),
+        linear-gradient(0deg, rgba(0, 0, 0, .34), transparent 46%);
+      pointer-events: none;
+    }
+    .content {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      width: min(calc(100% - (2 * var(--container-gutter-desktop))), var(--container-max));
+      min-height: 100%;
+      margin-inline: auto;
+      padding-block: var(--section-y-desktop) 132px;
+    }
+    .copy { max-width: 720px; color: var(--surface); }
+    .copy > * { animation: hero-copy-in 520ms var(--ease-standard) both; }
+    .copy > *:nth-child(2) { animation-delay: 60ms; }
+    .copy > *:nth-child(3) { animation-delay: 120ms; }
+    .copy > *:nth-child(4) { animation-delay: 180ms; }
+    @keyframes hero-copy-in {
+      from { opacity: 0; transform: translate3d(0, 14px, 0); }
+    }
+    .location { margin: 0 0 var(--space-4); font-size: var(--text-sm); font-weight: 600; letter-spacing: .02em; }
+    h1 {
+      max-width: 10ch;
+      margin: 0;
+      font: 700 clamp(48px, 5.4vw, 72px)/1.02 var(--font-display);
+      letter-spacing: -.03em;
+      text-wrap: balance;
+    }
+    .lead {
+      max-width: 52ch;
+      margin: var(--space-6) 0 0;
+      color: rgba(255, 255, 255, .88);
+      font-size: clamp(17px, 1.35vw, 20px);
+      line-height: 1.5;
+      text-wrap: pretty;
+    }
+    .book-button {
+      min-height: 56px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: var(--space-8);
+      padding-inline: var(--space-8);
+      border: 0;
+      border-radius: var(--radius-sm);
+      background: var(--accent);
+      color: var(--accent-on);
+      font-weight: 600;
+      letter-spacing: .02em;
+      cursor: pointer;
+      transition: background var(--motion-fast) var(--ease-standard), transform var(--motion-fast) var(--ease-standard);
+      text-decoration: none;
+    }
+    .book-button:hover { background: var(--accent-active); }
+    .book-button:active {
+      background: color-mix(in oklch, var(--accent-active) 82%, var(--fg));
+      transform: scale(.96);
+    }
+    .slider-controls {
+      position: absolute;
+      z-index: 4;
+      right: max(var(--container-gutter-desktop), calc((100% - var(--container-max)) / 2));
+      bottom: var(--space-8);
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      color: var(--surface);
+    }
+    .slide-count {
+      min-width: 62px;
+      display: grid;
+      gap: var(--space-2);
+      margin-right: var(--space-2);
+      font: 600 12px/1 var(--font-mono);
+      letter-spacing: .08em;
+      text-align: right;
+    }
+    .slide-count::after {
+      content: "";
+      width: 100%;
+      height: 2px;
+      border-radius: var(--radius-pill);
+      background: rgba(255, 255, 255, .72);
+      transform: scaleX(0);
+      transform-origin: left center;
+    }
+    .stage[data-autoplay="running"] .slide-count::after {
+      animation: autoplay-progress 7000ms linear forwards;
+    }
+    @keyframes autoplay-progress { to { transform: scaleX(1); } }
+    .slider-controls button {
+      width: 44px;
+      height: 44px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(255, 255, 255, .64);
+      border-radius: var(--radius-pill);
+      background: rgba(0, 0, 0, .22);
+      color: var(--surface);
+      cursor: pointer;
+      backdrop-filter: blur(10px);
+      transition: background var(--motion-fast) var(--ease-standard), transform var(--motion-fast) var(--ease-standard);
+    }
+    .slider-controls button:hover { background: rgba(0, 0, 0, .68); }
+    .slider-controls button:active { background: rgba(0, 0, 0, .82); transform: scale(.92); }
+    .slider-controls button:focus-visible { box-shadow: var(--focus-ring), 0 0 0 4px var(--surface); }
+    .slider-controls svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+    [data-toggle-autoplay] .icon-play { display: none; }
+    [data-toggle-autoplay][aria-pressed="true"] .icon-pause { display: none; }
+    [data-toggle-autoplay][aria-pressed="true"] .icon-play { display: block; }
+
+    .benefits {
+      padding: clamp(72px, 8vw, 112px) max(var(--container-gutter-desktop), calc((100% - var(--container-max)) / 2));
+      background: var(--surface);
+    }
+    .benefits-heading {
+      max-width: 780px;
+      margin: 0 0 clamp(40px, 5vw, 64px);
+      font: 700 clamp(36px, 4.2vw, 56px)/1.08 var(--font-display);
+      letter-spacing: -.03em;
+      text-wrap: balance;
+    }
+    .benefits-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      border-top: 1px solid var(--border);
+      border-left: 1px solid var(--border);
+    }
+    .benefit-card {
+      min-height: 260px;
+      display: flex;
+      flex-direction: column;
+      padding: clamp(24px, 2.5vw, 32px);
+      border-right: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
+    }
+    .benefit-number {
+      margin-bottom: auto;
+      color: var(--muted);
+      font: 600 var(--text-xs)/1 var(--font-mono);
+      letter-spacing: .08em;
+    }
+    .benefit-card h3 {
+      max-width: 18ch;
+      margin: var(--space-8) 0 var(--space-3);
+      font: 600 var(--text-xl)/1.2 var(--font-display);
+      letter-spacing: var(--tracking-display);
+      text-wrap: balance;
+    }
+    .benefit-card p {
+      max-width: 38ch;
+      margin: 0;
+      color: var(--muted);
+      font-size: var(--text-base);
+      line-height: var(--leading-body);
+      text-wrap: pretty;
+    }
+
+    @media (max-width: 900px) {
+      .hero { grid-template-rows: 72px minmax(0, 1fr); }
+      .header { padding-inline: var(--container-gutter-tablet); }
+      .menu { display: grid; }
+      .nav {
+        position: absolute;
+        top: calc(100% + var(--space-2));
+        right: var(--container-gutter-tablet);
+        width: min(280px, calc(100% - 48px));
+        display: grid;
+        gap: 0;
+        padding: var(--space-2);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-md);
+        background: var(--surface);
+        box-shadow: var(--elev-raised);
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-8px);
+        transition: opacity var(--motion-base) var(--ease-standard), transform var(--motion-base) var(--ease-standard), visibility var(--motion-base);
+      }
+      .nav.open { opacity: 1; visibility: visible; transform: translateY(0); }
+      .nav a { min-height: 44px; display: flex; align-items: center; padding-inline: var(--space-3); border-radius: var(--radius-sm); }
+      .nav a:hover { background: var(--surface-warm); text-decoration: none; }
+      .content { width: min(calc(100% - (2 * var(--container-gutter-tablet))), 760px); padding-block: var(--section-y-tablet) 120px; }
+      .slider-controls { right: var(--container-gutter-tablet); bottom: var(--space-6); }
+      .benefits { padding-inline: var(--container-gutter-tablet); }
+      .benefits-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 560px) {
+      .hero { grid-template-rows: 72px minmax(0, 1fr); }
+      .header { padding-inline: var(--container-gutter-phone); }
+      .brand small { display: none; }
+      .nav { right: var(--container-gutter-phone); width: min(280px, calc(100% - 32px)); }
+      .slide:first-child img { object-position: 32% center; }
+      .slide:nth-child(2) img { object-position: 58% center; }
+      .shade {
+        background:
+          linear-gradient(0deg, rgba(0, 0, 0, .7) 0%, rgba(0, 0, 0, .38) 56%, rgba(0, 0, 0, .1) 100%);
+      }
+      .content { width: calc(100% - (2 * var(--container-gutter-phone))); align-items: end; padding-block: var(--section-y-phone) 116px; }
+      h1 { max-width: 9ch; font-size: clamp(40px, 12vw, 56px); }
+      .location { margin-bottom: var(--space-3); }
+      .lead { margin-top: var(--space-4); font-size: var(--text-base); line-height: var(--leading-body); }
+      .book-button { width: 100%; margin-top: var(--space-6); }
+      .slider-controls { right: var(--container-gutter-phone); bottom: var(--space-4); }
+      .slide-count { display: none; }
+      .benefits { padding: 64px var(--container-gutter-phone); }
+      .benefits-heading { margin-bottom: var(--space-8); font-size: clamp(32px, 10vw, 44px); }
+      .benefits-grid { grid-template-columns: 1fr; }
+      .benefit-card { min-height: 0; padding: var(--space-6); }
+      .benefit-number { margin-bottom: var(--space-12); }
+      .benefit-card h3 { margin-top: 0; }
+    }
+
+    @media (max-height: 700px) {
+      .content { align-items: end; padding-block: var(--space-6) 88px; }
+      h1 { font-size: clamp(36px, 7vh, 56px); }
+      .lead { margin-top: var(--space-3); font-size: var(--text-base); line-height: 1.35; }
+      .book-button { min-height: 48px; margin-top: var(--space-4); }
+      .slider-controls { bottom: var(--space-4); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .slide, .slide img, .nav, .book-button, .slider-controls button { transition: none; }
+      .copy > *, .slide[data-state="loading"]::after, .slide-count::after { animation: none; }
+      .slide-count::after { transform: scaleX(1); }
+    }
+  </style>
+  <style data-od-inline-asset="hotel-sections.css">
+.page-section {
+  scroll-margin-top: 24px;
+  padding: clamp(72px, 8vw, 112px) max(var(--container-gutter-desktop), calc((100% - var(--container-max)) / 2));
+}
+
+.page-section--muted { background: var(--surface-warm); }
+.page-section--dark { background: var(--fg); color: var(--surface); }
+
+.section-photo-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.18fr) minmax(280px, .82fr);
+  gap: var(--space-5);
+  margin: 0 0 clamp(40px, 5vw, 64px);
+}
+
+.section-photo-card {
+  margin: 0;
+}
+
+.section-photo-card img {
+  display: block;
+  width: 100%;
+  height: clamp(280px, 34vw, 480px);
+  object-fit: cover;
+  border-radius: var(--radius-lg);
+  background: var(--surface-warm);
+}
+
+.section-photo-card--small img {
+  height: clamp(220px, 28vw, 360px);
+}
+
+.section-photo-card figcaption {
+  margin-top: var(--space-3);
+  color: var(--muted);
+  font-size: var(--text-sm);
+  line-height: 1.45;
+}
+
+/* Infrastructure 3-4-3 photo grid */
+.infra-photos {
+  margin: 0 0 clamp(40px, 5vw, 64px);
+}
+
+.photo-row {
+  display: grid;
+  gap: var(--space-5);
+  margin-bottom: var(--space-5);
+}
+
+.photo-row--3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.photo-row--4 {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.photo-row .section-photo-card img {
+  height: clamp(200px, 22vw, 320px);
+}
+
+.section-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 440px);
+  gap: var(--space-8);
+  align-items: end;
+  margin-bottom: clamp(40px, 5vw, 64px);
+}
+
+.section-kicker {
+  margin: 0 0 var(--space-3);
+  color: var(--muted);
+  font: 600 var(--text-xs)/1 var(--font-mono);
+  letter-spacing: .08em;
+}
+
+.section-title {
+  max-width: 18ch;
+  margin: 0;
+  font: 700 clamp(36px, 4.2vw, 56px)/1.08 var(--font-display);
+  letter-spacing: -.03em;
+  text-wrap: balance;
+}
+
+.section-intro {
+  max-width: 54ch;
+  margin: 0;
+  color: var(--muted);
+  font-size: clamp(16px, 1.3vw, 19px);
+  line-height: 1.55;
+  text-wrap: pretty;
+}
+
+.page-section--dark .section-kicker,
+.page-section--dark .section-intro { color: color-mix(in srgb, var(--surface) 70%, transparent); }
+
+.plain-list {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.plain-list li {
+  position: relative;
+  padding-left: 18px;
+  line-height: 1.45;
+}
+
+.plain-list li::before {
+  content: "";
+  position: absolute;
+  top: .67em;
+  left: 0;
+  width: 5px;
+  height: 5px;
+  border-radius: var(--radius-pill);
+  background: currentColor;
+  opacity: .52;
+}
+
+.infrastructure-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  border-top: 1px solid var(--border);
+  border-left: 1px solid var(--border);
+}
+
+.facility-group {
+  padding: clamp(24px, 2.4vw, 32px);
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.facility-group h3,
+.split-panel h3,
+.room-card h3,
+.audience-panel h3 {
+  margin: 0 0 var(--space-5);
+  font: 600 var(--text-xl)/1.2 var(--font-display);
+  letter-spacing: var(--tracking-display);
+}
+
+.facility-group .plain-list { color: var(--fg-2); font-size: 15px; }
+
+.notice {
+  display: grid;
+  grid-template-columns: minmax(180px, 260px) minmax(0, 1fr);
+  gap: var(--space-8);
+  margin-top: var(--space-8);
+  padding: clamp(24px, 3vw, 40px);
+  border-radius: var(--radius-lg);
+  background: var(--surface-warm);
+}
+
+.notice strong { font-size: var(--text-lg); line-height: 1.25; }
+.notice p { max-width: 72ch; margin: 0; color: var(--muted); line-height: 1.6; }
+
+.food-photo {
+  margin: 0 0 clamp(40px, 5vw, 64px);
+}
+
+.food-photo img {
+  display: block;
+  width: 100%;
+  height: clamp(280px, 34vw, 480px);
+  object-fit: cover;
+  border-radius: var(--radius-lg);
+  background: var(--surface-warm);
+}
+
+.food-layout,
+.location-layout,
+.contacts-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(320px, .8fr);
+  gap: clamp(40px, 7vw, 96px);
+  align-items: start;
+}
+
+.food-copy h2,
+.location-copy h2,
+.contacts-copy h2 {
+  max-width: 16ch;
+  margin: 0 0 var(--space-6);
+  font: 700 clamp(36px, 4.2vw, 56px)/1.08 var(--font-display);
+  letter-spacing: -.03em;
+  text-wrap: balance;
+}
+
+.food-copy p,
+.location-copy p,
+.contacts-copy p { max-width: 58ch; margin: 0; font-size: clamp(17px, 1.5vw, 20px); line-height: 1.55; }
+.food-copy p { color: var(--muted); }
+
+.fact-stack { border-top: 1px solid var(--border); }
+.fact-row { display: flex; justify-content: space-between; gap: var(--space-6); padding: var(--space-4) 0; border-bottom: 1px solid var(--border); }
+.fact-row span:last-child { color: var(--muted); text-align: right; }
+
+.action-link {
+  min-height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: var(--space-6);
+  padding: 0 var(--space-6);
+  border: 1px solid var(--fg);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--fg);
+  font-weight: 600;
+  letter-spacing: .02em;
+  text-decoration: none;
+  transition: background var(--motion-fast) var(--ease-standard), color var(--motion-fast) var(--ease-standard), transform var(--motion-fast) var(--ease-standard);
+}
+
+.action-link:hover { background: var(--fg); color: var(--surface); }
+.action-link:active { transform: scale(.97); }
+
+.room-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  border-top: 1px solid var(--border);
+  border-left: 1px solid var(--border);
+}
+
+.room-card {
+  min-height: 250px;
+  padding: clamp(24px, 2.5vw, 32px);
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.room-capacity { display: block; margin-bottom: var(--space-8); color: var(--muted); font: 600 var(--text-xs)/1 var(--font-mono); letter-spacing: .06em; }
+.room-card p { margin: 0; color: var(--muted); line-height: var(--leading-body); }
+
+.room-standard {
+  display: grid;
+  grid-template-columns: minmax(180px, 260px) minmax(0, 1fr);
+  gap: var(--space-8);
+  margin-top: var(--space-8);
+  padding: clamp(24px, 3vw, 40px);
+  border-radius: var(--radius-lg);
+  background: var(--surface-warm);
+}
+
+.room-standard h3 { margin: 0; font-size: var(--text-lg); }
+.room-standard p { max-width: 76ch; margin: 0; color: var(--muted); line-height: 1.6; }
+.room-note { margin: var(--space-4) 0 0; color: var(--muted); font-size: var(--text-sm); }
+
+.location-map-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 320px;
+  object-fit: cover;
+  border-radius: var(--radius-lg);
+  margin-bottom: var(--space-8);
+}
+
+.location-facts { display: grid; gap: 0; border-top: 1px solid color-mix(in srgb, var(--surface) 22%, transparent); }
+.location-fact { display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: var(--space-4); padding: var(--space-5) 0; border-bottom: 1px solid color-mix(in srgb, var(--surface) 22%, transparent); }
+.location-fact strong { font: 600 var(--text-xs)/1 var(--font-mono); letter-spacing: .08em; }
+.location-fact span { line-height: 1.5; }
+.page-section--dark .action-link { border-color: var(--surface); background: transparent; color: var(--surface); }
+.page-section--dark .action-link:hover { background: var(--surface); color: var(--fg); }
+
+.reviews-top { display: grid; grid-template-columns: 260px minmax(0, 1fr); gap: clamp(32px, 6vw, 80px); align-items: center; margin-bottom: var(--space-12); }
+.rating { font: 700 clamp(72px, 9vw, 124px)/.9 var(--font-display); letter-spacing: -.06em; }
+.rating small { display: block; margin-top: var(--space-3); color: var(--muted); font: 600 var(--text-xs)/1.2 var(--font-mono); letter-spacing: .08em; }
+.reviews-lead { max-width: 64ch; margin: 0; font-size: clamp(20px, 2vw, 28px); line-height: 1.35; text-wrap: pretty; }
+.review-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border-top: 1px solid var(--border); border-left: 1px solid var(--border); }
+.review-card { min-height: 220px; padding: clamp(24px, 3vw, 40px); border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+.review-card blockquote { margin: 0 0 var(--space-8); font-size: clamp(18px, 1.7vw, 22px); line-height: 1.45; text-wrap: pretty; }
+.review-card cite { color: var(--muted); font-style: normal; }
+.review-links { display: flex; flex-wrap: wrap; gap: var(--space-5); margin-top: var(--space-6); }
+.review-links a, .footer a { color: inherit; text-underline-offset: 4px; }
+
+.split-grid,
+.audience-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-6); }
+.split-panel,
+.audience-panel { padding: clamp(24px, 3vw, 40px); border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--surface); }
+.split-panel--paid,
+.audience-panel--no { background: var(--surface-warm); }
+.split-panel .plain-list,
+.audience-panel .plain-list { color: var(--fg-2); }
+.laundry-note { margin: var(--space-6) 0 0; padding-top: var(--space-5); border-top: 1px solid var(--border); color: var(--muted); line-height: 1.5; }
+
+.faq-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: clamp(32px, 6vw, 80px); border-top: 1px solid var(--border); }
+.faq-item { border-bottom: 1px solid var(--border); }
+.faq-item summary { min-height: 72px; display: flex; align-items: center; justify-content: space-between; gap: var(--space-5); cursor: pointer; font-weight: 600; list-style: none; }
+.faq-item summary::-webkit-details-marker { display: none; }
+.faq-item summary::after { content: "+"; flex: 0 0 auto; color: var(--muted); font-size: 24px; font-weight: 500; }
+.faq-item[open] summary::after { content: "−"; }
+.faq-item p { max-width: 58ch; margin: 0; padding: 0 var(--space-8) var(--space-6) 0; color: var(--muted); line-height: 1.55; }
+.faq-item summary:focus-visible { outline: none; box-shadow: inset 0 0 0 2px var(--fg); }
+
+.contacts-actions { display: flex; flex-wrap: wrap; gap: var(--space-3); margin-top: var(--space-8); }
+.contacts-actions .book-button { margin-top: 0; }
+.contacts-actions .action-link { margin-top: 0; }
+.contact-list { border-top: 1px solid color-mix(in srgb, var(--surface) 22%, transparent); }
+.contact-row { display: grid; grid-template-columns: 120px minmax(0, 1fr); gap: var(--space-5); padding: var(--space-4) 0; border-bottom: 1px solid color-mix(in srgb, var(--surface) 22%, transparent); }
+.contact-row span:first-child { color: color-mix(in srgb, var(--surface) 62%, transparent); }
+.contact-row a { color: var(--surface); text-underline-offset: 4px; }
+.contact-meta { display: flex; flex-wrap: wrap; gap: var(--space-4); margin-top: var(--space-6); color: color-mix(in srgb, var(--surface) 70%, transparent); }
+
+.footer { padding: var(--section-y-tablet) max(var(--container-gutter-desktop), calc((100% - var(--container-max)) / 2)); background: var(--surface-warm); }
+.footer-grid { display: grid; grid-template-columns: minmax(240px, 1fr) minmax(280px, 1fr) minmax(320px, 1.3fr); gap: var(--space-8); }
+.footer h2 { margin: 0 0 var(--space-3); font-size: var(--text-lg); }
+.footer p { margin: 0; color: var(--muted); font-size: var(--text-sm); line-height: 1.6; }
+.footer-links { display: grid; gap: var(--space-3); align-content: start; }
+.footer-links a { color: var(--fg); font-size: var(--text-sm); }
+.footer-bottom { margin-top: var(--space-8); padding-top: var(--space-5); border-top: 1px solid var(--border); color: var(--muted); font-size: var(--text-xs); }
+
+@media (max-width: 1100px) {
+  .infrastructure-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .room-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .footer-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .footer-links { grid-column: 1 / -1; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .photo-row--3,
+  .photo-row--4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 760px) {
+  .page-section { padding-inline: var(--container-gutter-tablet); }
+  .section-photo-grid,
+  .section-head,
+  .food-layout,
+  .location-layout,
+  .contacts-layout,
+  .reviews-top { grid-template-columns: 1fr; }
+  .section-head { align-items: start; }
+  .food-layout,
+  .location-layout,
+  .contacts-layout { gap: var(--space-12); }
+  .notice,
+  .room-standard { grid-template-columns: 1fr; gap: var(--space-4); }
+  .review-grid,
+  .split-grid,
+  .audience-grid,
+  .faq-list { grid-template-columns: 1fr; }
+  .reviews-top { margin-bottom: var(--space-8); }
+  .footer { padding-inline: var(--container-gutter-tablet); }
+}
+
+@media (max-width: 560px) {
+  .page-section { padding: 64px var(--container-gutter-phone); }
+  .section-photo-card img,
+  .section-photo-card--small img { height: 260px; }
+  .infrastructure-grid,
+  .room-grid { grid-template-columns: 1fr; }
+  .facility-group,
+  .room-card { min-height: 0; padding: var(--space-6); }
+  .photo-row--3,
+  .photo-row--4 { grid-template-columns: 1fr; }
+  .photo-row .section-photo-card img { height: 260px; }
+  .food-photo img { height: 260px; }
+  .location-map-img { max-height: 260px; }
+  .food-copy h2,
+  .location-copy h2,
+  .contacts-copy h2,
+  .section-title { font-size: clamp(32px, 10vw, 44px); }
+  .rating { font-size: 80px; }
+  .contacts-actions { display: grid; }
+  .contacts-actions > * { width: 100%; }
+  .contact-row { grid-template-columns: 1fr; gap: var(--space-1); }
+  .footer { padding: var(--section-y-phone) var(--container-gutter-phone); }
+  .footer-grid { grid-template-columns: 1fr; }
+  .footer-links { grid-column: auto; grid-template-columns: 1fr; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .action-link { transition: none; }
+}
+
+</style>
+</head>
+<body>
+  <main>
+  <section class="hero" data-od-id="hero-family">
+    <header class="header">
+      <a class="brand" href="#" aria-label="Гранд Камелия, на главную">
+        <span class="logo" aria-hidden="true">ГК</span>
+        <span class="brand-copy"><strong>Гранд Камелия</strong><small>Парк-отель в Кучугурах</small></span>
+      </a>
+      <nav class="nav" id="main-nav" aria-label="Основная навигация">
+        <a href="#rooms">Номера</a>
+        <a href="#infrastructure">Территория</a>
+        <a href="#food">Ресторан</a>
+        <a href="#contacts">Контакты</a>
+      </nav>
+      <button class="menu" type="button" aria-label="Открыть меню" aria-controls="main-nav" aria-expanded="false">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+    </header>
+
+    <section class="stage" role="region" tabindex="0" aria-roledescription="карусель" aria-label="Фотографии парк-отеля">
+      <div class="slides" aria-live="polite">
+        <figure class="slide active" data-state="loading" aria-hidden="false">
+          <img src="assets/hero-garden.svg" alt="Зелёный двор парк-отеля с детской площадкой" fetchpriority="high" decoding="async">
+        </figure>
+        <figure class="slide" data-state="loading" aria-hidden="true">
+          <img src="assets/hero-pool.svg" alt="Бассейны у зелёной террасы парк-отеля" loading="lazy" decoding="async">
+        </figure>
+        <figure class="slide" data-state="loading" aria-hidden="true">
+          <img src="assets/hero-terrace.svg" alt="Терраса с зоной отдыха" loading="lazy" decoding="async">
+        </figure>
+        <figure class="slide" data-state="loading" aria-hidden="true">
+          <img src="assets/hero-restaurant.svg" alt="Ресторан и бар для гостей отеля" loading="lazy" decoding="async">
+        </figure>
+        <figure class="slide" data-state="loading" aria-hidden="true">
+          <img src="assets/hero-kids.svg" alt="Детская игровая зона" loading="lazy" decoding="async">
+        </figure>
+        <figure class="slide" data-state="loading" aria-hidden="true">
+          <img src="assets/hero-room.svg" alt="Уютный номер в парк-отеле" loading="lazy" decoding="async">
+        </figure>
+        <figure class="slide" data-state="loading" aria-hidden="true">
+          <img src="assets/hero-entrance.svg" alt="Вход и фасад парк-отеля Гранд Камелия" loading="lazy" decoding="async">
+        </figure>
+        <figure class="slide" data-state="loading" aria-hidden="true">
+          <img src="assets/hero-sunset.svg" alt="Вечерняя атмосфера на территории отеля" loading="lazy" decoding="async">
+        </figure>
+      </div>
+      <span class="sr-only image-status" aria-live="polite"></span>
+      <div class="shade"></div>
+
+      <div class="content">
+        <div class="copy">
+          <p class="location">Азовское море · Кучугуры</p>
+          <h1>Семейный отдых в Кучугурах у Азовского моря</h1>
+          <p class="lead">Зелёный закрытый двор, два бассейна и игровая с няней — всё рядом, чтобы отдыхать вместе и по‑настоящему переключиться.</p>
+          <a class="book-button" id="booking" href="https://reservationsteps.ru/rooms/index/c22a3bbc-83e7-485d-b881-b05cf2b64ab1" aria-label="Забронировать номер в Гранд Камелии">Забронировать</a>
+        </div>
+      </div>
+
+      <div class="slider-controls" aria-label="Управление фотографиями">
+        <span class="slide-count" aria-live="polite">01 / 08</span>
+        <button type="button" data-toggle-autoplay aria-label="Приостановить слайдер" aria-pressed="false">
+          <svg class="icon-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6v12M15 6v12"/></svg>
+          <svg class="icon-play" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 7 8 5-8 5Z"/></svg>
+        </button>
+        <button type="button" data-prev aria-label="Предыдущее фото">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+        </button>
+        <button type="button" data-next aria-label="Следующее фото">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+        </button>
+      </div>
+    </section>
+  </section>
+
+  <section class="benefits" id="kids" data-od-id="family-benefits" aria-labelledby="benefits-title">
+    <h2 class="benefits-heading" id="benefits-title">Почему семьи выбирают Гранд Камелию</h2>
+    <div class="benefits-grid">
+      <article class="benefit-card">
+        <span class="benefit-number" aria-hidden="true">01</span>
+        <h3>Детям есть чем заняться</h3>
+        <p>Игровые зоны, батут, детская комната, няня и активности на территории.</p>
+      </article>
+      <article class="benefit-card">
+        <span class="benefit-number" aria-hidden="true">02</span>
+        <h3>Родители тоже отдыхают</h3>
+        <p>Можно спокойно провести время у бассейна, в ресторане или на территории, пока дети заняты.</p>
+      </article>
+      <article class="benefit-card">
+        <span class="benefit-number" aria-hidden="true">03</span>
+        <h3>Бассейны выручают в жару</h3>
+        <p>Два бассейна на территории, чтобы не зависеть только от моря и пляжа.</p>
+      </article>
+      <article class="benefit-card">
+        <span class="benefit-number" aria-hidden="true">04</span>
+        <h3>Еда рядом</h3>
+        <p>Завтраки, обеды, ужины, детское меню и бар на территории отеля.</p>
+      </article>
+      <article class="benefit-card">
+        <span class="benefit-number" aria-hidden="true">05</span>
+        <h3>Зелёная территория вместо суеты</h3>
+        <p>Цветы, дорожки, зоны отдыха и ощущение спокойного семейного мира.</p>
+      </article>
+      <article class="benefit-card">
+        <span class="benefit-number" aria-hidden="true">06</span>
+        <h3>Спокойный формат отдыха</h3>
+        <p>Мы за семейный отдых без шумных компаний; с 22:00 до 8:00 на территории соблюдается тишина.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="page-section" id="infrastructure" data-od-id="infrastructure" aria-labelledby="infrastructure-title">
+    <div class="section-head">
+      <div>
+        <p class="section-kicker">03 · Территория и инфраструктура</p>
+        <h2 class="section-title" id="infrastructure-title">Здесь можно провести весь день</h2>
+      </div>
+      <p class="section-intro">От спокойного утра у бассейна до вечерней игры в бильярд — всё нужное для семейного дня находится на территории.</p>
+    </div>
+    <div class="infra-photos" aria-label="Фотографии территории и удобств">
+      <div class="photo-row photo-row--3">
+        <figure class="section-photo-card">
+          <img src="assets/pools.svg" alt="Два бассейна с подогревом: взрослый 1,5 м и детский 1 м" loading="lazy" decoding="async">
+          <figcaption>Два бассейна с подогревом — взрослый и детский</figcaption>
+        </figure>
+        <figure class="section-photo-card">
+          <img src="assets/garden.svg" alt="Зелёная территория парк-отеля с дорожками и цветами" loading="lazy" decoding="async">
+          <figcaption>Закрытый зелёный двор с цветами и зонами отдыха</figcaption>
+        </figure>
+        <figure class="section-photo-card">
+          <img src="assets/kids-room.svg" alt="Детская веранда с няней" loading="lazy" decoding="async">
+          <figcaption>Детская веранда с няней 6 дней в неделю</figcaption>
+        </figure>
+      </div>
+      <div class="photo-row photo-row--4">
+        <figure class="section-photo-card">
+          <img src="assets/playground.svg" alt="Детская площадка с лабиринтом и батутом" loading="lazy" decoding="async">
+          <figcaption>Детский лабиринт, площадка и батут</figcaption>
+        </figure>
+        <figure class="section-photo-card">
+          <img src="assets/restaurant.svg" alt="Ресторан и бар для гостей отеля" loading="lazy" decoding="async">
+          <figcaption>Ресторан с детским меню и бар</figcaption>
+        </figure>
+        <figure class="section-photo-card">
+          <img src="assets/bar.svg" alt="Бар на территории отеля" loading="lazy" decoding="async">
+          <figcaption>Бар работает с 8:00 до 22:00</figcaption>
+        </figure>
+        <figure class="section-photo-card">
+          <img src="assets/game-room.svg" alt="Игровой зал с бильярдом и аэрохоккеем" loading="lazy" decoding="async">
+          <figcaption>Игровой зал: бильярд, аэрохоккей, настольный теннис</figcaption>
+        </figure>
+      </div>
+      <div class="photo-row photo-row--3">
+        <figure class="section-photo-card">
+          <img src="assets/billiard.svg" alt="Бильярдный стол" loading="lazy" decoding="async">
+          <figcaption>Бильярд для вечернего досуга</figcaption>
+        </figure>
+        <figure class="section-photo-card">
+          <img src="assets/bicycles.svg" alt="Велосипеды для гостей" loading="lazy" decoding="async">
+          <figcaption>Велосипеды, фрисби, баскетбол</figcaption>
+        </figure>
+        <figure class="section-photo-card">
+          <img src="assets/barbecue.svg" alt="Мангальная зона" loading="lazy" decoding="async">
+          <figcaption>Мангальная зона для вечерних посиделок</figcaption>
+        </figure>
+      </div>
+    </div>
+    <div class="infrastructure-grid">
+      <article class="facility-group">
+        <h3>Для детей</h3>
+        <ul class="plain-list">
+          <li>Детская веранда с няней</li>
+          <li>Детский лабиринт</li>
+          <li>Детская площадка</li>
+          <li>Батут</li>
+          <li>Детский бассейн</li>
+          <li>Мини-гольф</li>
+          <li>Мастер-классы по вторникам и субботам — 350 ₽</li>
+        </ul>
+      </article>
+      <article class="facility-group">
+        <h3>Для отдыха</h3>
+        <ul class="plain-list">
+          <li>Два бассейна с подогревом</li>
+          <li>Зелёная территория, сад и зоны отдыха</li>
+          <li>Мангальная зона</li>
+          <li>Ресторан и бар</li>
+          <li>Лежаки, зонты и полотенца для бассейна</li>
+        </ul>
+      </article>
+      <article class="facility-group">
+        <h3>Для активности</h3>
+        <ul class="plain-list">
+          <li>Игровой зал</li>
+          <li>Бильярд</li>
+          <li>Аэрохоккей</li>
+          <li>Настольный теннис</li>
+          <li>Баскетбол</li>
+          <li>Фрисби</li>
+          <li>Велосипеды</li>
+        </ul>
+      </article>
+      <article class="facility-group">
+        <h3>Для удобства</h3>
+        <ul class="plain-list">
+          <li>Парковка</li>
+          <li>Wi-Fi</li>
+          <li>Термопот с кипятком на баре</li>
+          <li>Две микроволновки рядом</li>
+          <li>Гладильная доска и утюг</li>
+          <li>Прачечная</li>
+        </ul>
+      </article>
+    </div>
+    <aside class="notice" aria-label="Условия работы няни">
+      <strong>Няня — бесплатно для гостей</strong>
+      <p>Няня работает с 9:00 до 16:00 шесть дней в неделю; выходной может меняться. Самостоятельные дети примерно с 3 лет могут оставаться с няней. Если ребёнку нужен индивидуальный присмотр, родители остаются рядом.</p>
+    </aside>
+  </section>
+
+  <section class="page-section page-section--muted" id="food" data-od-id="food" aria-labelledby="food-title">
+    <figure class="food-photo">
+      <img src="assets/food-restaurant.svg" alt="Ресторан и бар для гостей отеля Гранд Камелия" loading="lazy" decoding="async">
+    </figure>
+    <div class="food-layout">
+      <div class="food-copy">
+        <p class="section-kicker">04 · Ресторан и питание</p>
+        <h2 id="food-title">Еда рядом, без ежедневного поиска кафе</h2>
+        <p>На территории работает ресторан и бар для гостей отеля. Можно заказать блюда по меню или заранее выбрать завтрак, обед и ужин ко времени — удобно, если вы отдыхаете с детьми и не хотите каждый раз искать кафе в посёлке.</p>
+        <a class="action-link" href="/menu" aria-label="Посмотреть актуальное меню ресторана">Посмотреть меню</a>
+      </div>
+      <div class="fact-stack" aria-label="Режим работы ресторана и бара">
+        <div class="fact-row"><span>Детское меню</span><span>Есть</span></div>
+        <div class="fact-row"><span>Цены</span><span>Актуальные — в меню</span></div>
+        <div class="fact-row"><span>Кафе-ресторан</span><span>8:00–21:00</span></div>
+        <div class="fact-row"><span>Бар</span><span>8:00–22:00</span></div>
+        <div class="fact-row"><span>Доступ</span><span>Для гостей отеля</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="page-section" id="rooms" data-od-id="rooms" aria-labelledby="rooms-title">
+    <div class="section-head">
+      <div>
+        <p class="section-kicker">05 · Номера</p>
+        <h2 class="section-title" id="rooms-title">Выберите пространство под состав семьи</h2>
+      </div>
+      <p class="section-intro">От компактного стандарта для пары до трёхкомнатного номера для большой семьи.</p>
+    </div>
+    <div class="section-photo-grid" aria-label="Фотографии номеров">
+      <figure class="section-photo-card">
+        <img src="assets/room-standart.svg" alt="Номер Стандарт — двуспальная кровать, кондиционер, телевизор, Wi-Fi, терраса" loading="lazy" decoding="async">
+        <figcaption>Стандарт — уютный номер для пары или небольшой семьи</figcaption>
+      </figure>
+      <figure class="section-photo-card section-photo-card--small">
+        <img src="assets/room-comfort-1room.svg" alt="Номер Однокомнатный комфорт — двуспальная кровать и раскладной диван" loading="lazy" decoding="async">
+        <figcaption>Однокомнатный комфорт — двуспальная кровать и раскладной диван</figcaption>
+      </figure>
+    </div>
+    <div class="section-photo-grid" aria-label="Фотографии номеров">
+      <figure class="section-photo-card">
+        <img src="assets/room-premium-1room.svg" alt="Номер Однокомнатный премиум — просторный номер с двуспальной кроватью и диваном" loading="lazy" decoding="async">
+        <figcaption>Однокомнатный премиум — больше пространства и комфорта</figcaption>
+      </figure>
+      <figure class="section-photo-card section-photo-card--small">
+        <img src="assets/room-comfort-2room.svg" alt="Номер Двухкомнатный комфорт — две комнаты, терраса" loading="lazy" decoding="async">
+        <figcaption>Двухкомнатный комфорт — идеально для семьи с детьми</figcaption>
+      </figure>
+    </div>
+    <div class="section-photo-grid" aria-label="Фотографии номеров">
+      <figure class="section-photo-card">
+        <img src="assets/room-premium-2room.svg" alt="Номер Двухкомнатный премиум — больше пространства для семьи" loading="lazy" decoding="async">
+        <figcaption>Двухкомнатный премиум — простор для семьи до 5 гостей</figcaption>
+      </figure>
+      <figure class="section-photo-card section-photo-card--small">
+        <img src="assets/room-premium-3room.svg" alt="Номер Трёхкомнатный премиум — две спальни и зал, два санузла" loading="lazy" decoding="async">
+        <figcaption>Трёхкомнатный премиум — для большой семьи или компании</figcaption>
+      </figure>
+    </div>
+    <div class="room-grid">
+      <article class="room-card">
+        <span class="room-capacity">2–3 ГОСТЯ</span>
+        <h3>Стандарт</h3>
+        <p>Двуспальная кровать или две односпальные; в части номеров есть раскладное кресло.</p>
+      </article>
+      <article class="room-card">
+        <span class="room-capacity">ДО 4 ГОСТЕЙ</span>
+        <h3>Однокомнатный комфорт</h3>
+        <p>Двуспальная кровать и раскладной диван.</p>
+      </article>
+      <article class="room-card">
+        <span class="room-capacity">ДО 4 ГОСТЕЙ</span>
+        <h3>Однокомнатный премиум</h3>
+        <p>Просторный однокомнатный номер с двуспальной кроватью и раскладным диваном.</p>
+      </article>
+      <article class="room-card">
+        <span class="room-capacity">ДО 5 ГОСТЕЙ</span>
+        <h3>Двухкомнатный комфорт</h3>
+        <p>Двуспальная кровать, односпальная кровать и раскладной диван.</p>
+      </article>
+      <article class="room-card">
+        <span class="room-capacity">ДО 5 ГОСТЕЙ</span>
+        <h3>Двухкомнатный премиум</h3>
+        <p>Больше пространства для семьи: двуспальная кровать, односпальная кровать и раскладной диван.</p>
+      </article>
+      <article class="room-card">
+        <span class="room-capacity">ДО 7 ГОСТЕЙ</span>
+        <h3>Трёхкомнатный премиум</h3>
+        <p>Две спальни и зал: две двуспальные кровати, односпальная кровать и раскладной диван.</p>
+      </article>
+    </div>
+    <div class="room-standard">
+      <h3>Во всех номерах</h3>
+      <p>Кондиционер, холодильник, телевизор, Wi-Fi, собственный санузел с душем, фен, места для хранения, полотенца, постельное бельё и сушилка для вещей. У каждого номера есть терраса со столиком и двумя стульями.</p>
+    </div>
+    <p class="room-note">При бронировании можно указать пожелания по этажу.</p>
+  </section>
+
+  <section class="page-section page-section--dark" id="location" data-od-id="location" aria-labelledby="location-title">
+    <div class="location-layout">
+      <div class="location-copy">
+        <img class="location-map-img" src="assets/location-map.svg" alt="Карта расположения отеля Гранд Камелия, ул. Лучистая, 36, п. Кучугуры" loading="lazy" decoding="async">
+        <p class="section-kicker">06 · Море и расположение</p>
+        <h2 id="location-title">Не первая линия. Зато тишина и свой ритм</h2>
+        <p>Мы не в шумном центре. Зато у нас спокойная зелёная территория, бассейны, ресторан и инфраструктура для семейного отдыха.</p>
+        <a class="action-link" href="https://yandex.ru/maps/?text=%D0%9A%D1%83%D1%87%D1%83%D0%B3%D1%83%D1%80%D1%8B%2C%20%D1%83%D0%BB.%20%D0%9B%D1%83%D1%87%D0%B8%D1%81%D1%82%D0%B0%D1%8F%2C%2036" target="_blank" rel="noopener">Построить маршрут</a>
+      </div>
+      <div class="location-facts">
+        <div class="location-fact"><strong>01</strong><span>До моря 10–15 минут пешком.</span></div>
+        <div class="location-fact"><strong>02</strong><span>До центра удобнее добираться на машине, такси или велосипеде.</span></div>
+        <div class="location-fact"><strong>03</strong><span>Ближайший магазин — примерно в 550 метрах.</span></div>
+        <div class="location-fact"><strong>04</strong><span>Последние 300 метров до отеля проходят по грунтовой дороге.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="page-section" id="reviews" data-od-id="reviews" aria-labelledby="reviews-title">
+    <div class="reviews-top">
+      <div class="rating" aria-label="Рейтинг 4,9 из 5">4.9<small>РЕЙТИНГ ГОСТЕЙ</small></div>
+      <div>
+        <p class="section-kicker">07 · Отзывы гостей</p>
+        <h2 class="sr-only" id="reviews-title">Отзывы гостей</h2>
+        <p class="reviews-lead">Гости чаще всего отмечают зелёную территорию, детские зоны, вкусную еду, чистые бассейны и спокойную атмосферу.</p>
+      </div>
+    </div>
+    <div class="review-grid">
+      <figure class="review-card"><blockquote>«Детям всегда было чем заняться, а я благодаря этому смогла полноценно отдохнуть».</blockquote><figcaption><cite>Екатерина К.</cite></figcaption></figure>
+      <figure class="review-card"><blockquote>«Это просто уголочек Кипра в наших Кучугурах».</blockquote><figcaption><cite>Дарья Меркулова</cite></figcaption></figure>
+      <figure class="review-card"><blockquote>«Вкусная еда, всё очень чисто, бассейн чистый».</blockquote><figcaption><cite>Анна Николаевна</cite></figcaption></figure>
+      <figure class="review-card"><blockquote>«Замечательный тихий отель, чисто, спокойно, зелено».</blockquote><figcaption><cite>Олег Чичков</cite></figcaption></figure>
+    </div>
+    <div class="review-links">
+      <a href="https://yandex.ru/maps/?text=%D0%93%D1%80%D0%B0%D0%BD%D0%B4%20%D0%9A%D0%B0%D0%BC%D0%B5%D0%BB%D0%B8%D1%8F%20%D0%9A%D1%83%D1%87%D1%83%D0%B3%D1%83%D1%80%D1%8B" target="_blank" rel="noopener">Отзывы на Яндекс.Картах</a>
+      <a href="https://2gis.ru/search/%D0%93%D1%80%D0%B0%D0%BD%D0%B4%20%D0%9A%D0%B0%D0%BC%D0%B5%D0%BB%D0%B8%D1%8F%20%D0%9A%D1%83%D1%87%D1%83%D0%B3%D1%83%D1%80%D1%8B" target="_blank" rel="noopener">Отзывы в 2ГИС</a>
+    </div>
+  </section>
+
+  <section class="page-section page-section--muted" id="terms" data-od-id="included-and-paid" aria-labelledby="terms-title">
+    <div class="section-head">
+      <div>
+        <p class="section-kicker">08 · Условия</p>
+        <h2 class="section-title" id="terms-title">Что включено, а что оплачивается отдельно</h2>
+      </div>
+      <p class="section-intro">Без мелкого шрифта и неожиданных доплат после заезда.</p>
+    </div>
+    <div class="split-grid">
+      <article class="split-panel">
+        <h3>Включено в проживание</h3>
+        <ul class="plain-list">
+          <li>Два бассейна с подогревом</li>
+          <li>Лежаки, зонты и полотенца для бассейна</li>
+          <li>Детская веранда с няней 6 дней в неделю</li>
+          <li>Площадка, батут и детский лабиринт</li>
+          <li>Игровой зал, бильярд, аэрохоккей и настольный теннис</li>
+          <li>Баскетбол, фрисби, мини-гольф и велосипеды</li>
+          <li>Мангальная зона, парковка и Wi-Fi</li>
+          <li>Термопот, две микроволновки, гладильная доска и утюг</li>
+        </ul>
+      </article>
+      <article class="split-panel split-panel--paid">
+        <h3>Оплачивается отдельно</h3>
+        <ul class="plain-list">
+          <li>Ресторан и бар</li>
+          <li>Мастер-классы по вторникам и субботам — 350 ₽</li>
+          <li>Стирка — 350 ₽</li>
+          <li>Трансфер от/до аэропорта или вокзала — по действующим тарифам</li>
+          <li>Зарядка электромобиля — 20 ₽/кВт</li>
+        </ul>
+        <p class="laundry-note">Можно постирать вещи; капсула для стирки покупается на ресепшене — 350 ₽.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="page-section" id="audience" data-od-id="audience-fit" aria-labelledby="audience-title">
+    <div class="section-head">
+      <div>
+        <p class="section-kicker">09 · Для кого этот отель</p>
+        <h2 class="section-title" id="audience-title">Совпадём ли мы по формату отдыха?</h2>
+      </div>
+      <p class="section-intro">Лучше честно сверить ожидания до бронирования.</p>
+    </div>
+    <div class="audience-grid">
+      <article class="audience-panel">
+        <h3>Гранд Камелия подойдёт вам, если</h3>
+        <ul class="plain-list">
+          <li>вы едете с детьми и хотите, чтобы им было чем заняться;</li>
+          <li>вам важны бассейны, зелёная территория и питание на месте;</li>
+          <li>вы любите спокойный отдых без ночного шума;</li>
+          <li>вы приезжаете на машине или готовы пользоваться такси и велосипедом;</li>
+          <li>вы выбираете тихую семейную атмосферу вместо центра посёлка.</li>
+        </ul>
+      </article>
+      <article class="audience-panel audience-panel--no">
+        <h3>Скорее не подойдёт, если</h3>
+        <ul class="plain-list">
+          <li>вы ищете тусовочный отель и шумные вечеринки;</li>
+          <li>вам принципиально жить прямо на первой линии у моря;</li>
+          <li>вы хотите быть в самом центре посёлка;</li>
+          <li>вы не готовы соблюдать режим тишины с 22:00 до 8:00.</li>
+        </ul>
+      </article>
+    </div>
+  </section>
+
+  <section class="page-section page-section--muted" id="faq" data-od-id="faq" aria-labelledby="faq-title">
+    <div class="section-head">
+      <div>
+        <p class="section-kicker">10 · FAQ</p>
+        <h2 class="section-title" id="faq-title">Ответы до поездки</h2>
+      </div>
+      <p class="section-intro">Самое важное о заезде, территории, правилах и дополнительных услугах.</p>
+    </div>
+    <div class="faq-list">
+      <details class="faq-item"><summary>Во сколько заезд и выезд?</summary><p>Заезд с 15:00, выезд до 12:00.</p></details>
+      <details class="faq-item"><summary>Сколько идти до моря?</summary><p>Около 10–15 минут пешком.</p></details>
+      <details class="faq-item"><summary>Где отель относительно центра?</summary><p>В спокойной части Кучугур, вдали от шума. До центра удобнее добираться на машине, такси или велосипеде.</p></details>
+      <details class="faq-item"><summary>Какая дорога к отелю?</summary><p>Последние 300 метров проходят по грунтовой дороге.</p></details>
+      <details class="faq-item"><summary>Как работает детская веранда с няней?</summary><p>С 9:00 до 16:00 шесть дней в неделю. Выходной день может меняться.</p></details>
+      <details class="faq-item"><summary>Можно оставить ребёнка без родителей?</summary><p>Самостоятельные дети примерно с 3 лет могут оставаться с няней. Если нужен индивидуальный присмотр, родители остаются рядом.</p></details>
+      <details class="faq-item"><summary>Есть платные мастер-классы?</summary><p>Да, по вторникам и субботам. Стоимость — 350 ₽.</p></details>
+      <details class="faq-item"><summary>До какого времени работают бассейны?</summary><p>До 22:00.</p></details>
+      <details class="faq-item"><summary>Есть питание на территории?</summary><p>Да. Ресторан работает с 8:00 до 21:00, бар — с 8:00 до 22:00. Есть детское меню.</p></details>
+      <details class="faq-item"><summary>Есть чайники в номерах?</summary><p>В номерах чайников нет. Кипяток доступен в термопоте на баре; рядом находятся две микроволновки.</p></details>
+      <details class="faq-item"><summary>Можно постирать вещи?</summary><p>Да. Капсула приобретается на ресепшене, стоимость стирки — 350 ₽.</p></details>
+      <details class="faq-item"><summary>Есть парковка?</summary><p>Да, парковка включена в проживание.</p></details>
+      <details class="faq-item"><summary>Есть зарядка для электромобиля?</summary><p>Да, стоимость — 20 ₽/кВт.</p></details>
+      <details class="faq-item"><summary>Можно с питомцами?</summary><p>Размещение с питомцами не предусмотрено.</p></details>
+      <details class="faq-item"><summary>Как часто проводится уборка?</summary><p>Плановая уборка — раз в 2–3 дня. Бельё и полотенца меняют раз в 5–7 дней. Внеочередная смена полотенец бесплатна, постельного белья — 300 ₽ за единицу.</p></details>
+      <details class="faq-item"><summary>Можно курить на территории?</summary><p>Нет, включая электронные сигареты. Штраф — 5000 ₽. Место для курения предусмотрено за территорией отеля.</p></details>
+      <details class="faq-item"><summary>Можно включать музыку?</summary><p>Просим не включать громкую музыку. После 22:00 действует режим тишины.</p></details>
+      <details class="faq-item"><summary>Можно приглашать гостей?</summary><p>Гостей, не проживающих в отеле, необходимо заранее согласовать с администрацией.</p></details>
+      <details class="faq-item"><summary>Есть правила для бассейна?</summary><p>Да, актуальные правила размещены у бассейнов. Бассейны работают до 22:00.</p></details>
+      <details class="faq-item"><summary>Что при раннем выезде?</summary><p>При выезде раньше забронированного срока оплата не возвращается.</p></details>
+    </div>
+  </section>
+
+  <section class="page-section page-section--dark" id="contacts" data-od-id="contacts" aria-labelledby="contacts-title">
+    <div class="contacts-layout">
+      <div class="contacts-copy">
+        <p class="section-kicker">11 · Контакты и бронирование</p>
+        <h2 id="contacts-title">Забронируйте спокойный семейный отдых в Гранд Камелии</h2>
+        <p>Проверьте свободные даты онлайн или свяжитесь с нами удобным способом.</p>
+        <div class="contacts-actions">
+          <a class="book-button" href="https://reservationsteps.ru/rooms/index/c22a3bbc-83e7-485d-b881-b05cf2b64ab1">Забронировать</a>
+          <a class="action-link" href="https://wa.me/79122615328" target="_blank" rel="noopener">Написать в WhatsApp</a>
+        </div>
+        <div class="contact-meta"><span>Заезд с 15:00</span><span>Выезд до 12:00</span></div>
+      </div>
+      <div class="contact-list">
+        <div class="contact-row"><span>Телефон</span><a href="tel:+79122615328">+7 912 261-53-28</a></div>
+        <div class="contact-row"><span>Telegram</span><a href="tg://resolve?phone=79122615328">Открыть чат</a></div>
+        <div class="contact-row"><span>Адрес</span><span>п. Кучугуры, ул. Лучистая, 36</span></div>
+        <div class="contact-row"><span>Маршрут</span><a href="https://yandex.ru/maps/?text=%D0%9A%D1%83%D1%87%D1%83%D0%B3%D1%83%D1%80%D1%8B%2C%20%D1%83%D0%BB.%20%D0%9B%D1%83%D1%87%D0%B8%D1%81%D1%82%D0%B0%D1%8F%2C%2036" target="_blank" rel="noopener">Построить на карте</a></div>
+        <div class="contact-row"><span>Отзывы</span><span><a href="https://yandex.ru/maps/?text=%D0%93%D1%80%D0%B0%D0%BD%D0%B4%20%D0%9A%D0%B0%D0%BC%D0%B5%D0%BB%D0%B8%D1%8F%20%D0%9A%D1%83%D1%87%D1%83%D0%B3%D1%83%D1%80%D1%8B" target="_blank" rel="noopener">Яндекс.Карты</a> · <a href="https://2gis.ru/search/%D0%93%D1%80%D0%B0%D0%BD%D0%B4%20%D0%9A%D0%B0%D0%BC%D0%B5%D0%BB%D0%B8%D1%8F%20%D0%9A%D1%83%D1%87%D1%83%D0%B3%D1%83%D1%80%D1%8B" target="_blank" rel="noopener">2ГИС</a></span></div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer" data-od-id="footer">
+    <div class="footer-grid">
+      <div>
+        <h2>Гранд Камелия, гостиница</h2>
+        <p>п. Кучугуры, ул. Лучистая, 36</p>
+      </div>
+      <div>
+        <p>Исполнитель услуг:<br>ИП Бессонова Ирина Александровна<br>ИНН 667203659678<br>ОГРНИП 315665800037090</p>
+      </div>
+      <nav class="footer-links" aria-label="Юридическая информация">
+        <a href="/documents/rules">Правила проживания</a>
+        <a href="/documents/booking">Условия бронирования и отмены</a>
+        <a href="/documents/privacy">Политика обработки персональных данных</a>
+        <a href="/documents/consent">Согласие на обработку персональных данных</a>
+        <a href="/documents/registry">Реестр средства размещения</a>
+        <a href="https://yandex.ru/maps/?text=%D0%93%D1%80%D0%B0%D0%BD%D0%B4%20%D0%9A%D0%B0%D0%BC%D0%B5%D0%BB%D0%B8%D1%8F%20%D0%9A%D1%83%D1%87%D1%83%D0%B3%D1%83%D1%80%D1%8B" target="_blank" rel="noopener">Яндекс.Карты</a>
+        <a href="https://2gis.ru/search/%D0%93%D1%80%D0%B0%D0%BD%D0%B4%20%D0%9A%D0%B0%D0%BC%D0%B5%D0%BB%D0%B8%D1%8F%20%D0%9A%D1%83%D1%87%D1%83%D0%B3%D1%83%D1%80%D1%8B" target="_blank" rel="noopener">2ГИС</a>
+      </nav>
+    </div>
+    <p class="footer-bottom">Реестровая запись средства размещения: С232026021841</p>
+  </footer>
+  </main>
+
+  <script>
+    (() => {
+      const slides = [...document.querySelectorAll('.slide')];
+      const stage = document.querySelector('.stage');
+      const counter = document.querySelector('.slide-count');
+      const menu = document.querySelector('.menu');
+      const nav = document.querySelector('.nav');
+      const autoplayButton = document.querySelector('[data-toggle-autoplay]');
+      const imageStatus = document.querySelector('.image-status');
+      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+      let current = 0;
+      let timer;
+      let userPaused = false;
+      let pointerStartX = 0;
+      let pointerStartY = 0;
+
+      const show = next => {
+        current = (next + slides.length) % slides.length;
+        slides.forEach((slide, index) => {
+          const active = index === current;
+          slide.classList.toggle('active', active);
+          slide.setAttribute('aria-hidden', String(!active));
+        });
+        counter.textContent = `0${current + 1} / 0${slides.length}`;
+        if (timer) {
+          stage.dataset.autoplay = 'paused';
+          requestAnimationFrame(() => {
+            if (timer) stage.dataset.autoplay = 'running';
+          });
+        }
+      };
+
+      const stop = () => {
+        clearInterval(timer);
+        timer = undefined;
+        stage.dataset.autoplay = 'paused';
+      };
+      const autoplay = () => {
+        stop();
+        if (!userPaused && !reducedMotion.matches && !document.hidden && !stage.matches(':hover') && !stage.matches(':focus-within')) {
+          timer = setInterval(() => show(current + 1), 7000);
+          stage.dataset.autoplay = 'running';
+        }
+      };
+
+      slides.forEach((slide, index) => {
+        const image = slide.querySelector('img');
+        const ready = () => slide.setAttribute('data-state', 'ready');
+        const failed = () => {
+          slide.setAttribute('data-state', 'error');
+          imageStatus.textContent = `Не удалось загрузить фото ${index + 1} из ${slides.length}.`;
+        };
+        if (image.complete) {
+          image.naturalWidth > 0 ? ready() : failed();
+        } else {
+          image.addEventListener('load', ready, { once: true });
+          image.addEventListener('error', failed, { once: true });
+        }
+      });
+
+      const closeMenu = (restoreFocus = false) => {
+        if (!nav.classList.contains('open')) return;
+        nav.classList.remove('open');
+        menu.setAttribute('aria-expanded', 'false');
+        menu.setAttribute('aria-label', 'Открыть меню');
+        if (restoreFocus) menu.focus();
+      };
+
+      document.querySelector('[data-prev]').addEventListener('click', () => { show(current - 1); autoplay(); });
+      document.querySelector('[data-next]').addEventListener('click', () => { show(current + 1); autoplay(); });
+      autoplayButton.addEventListener('click', () => {
+        userPaused = !userPaused;
+        autoplayButton.setAttribute('aria-pressed', String(userPaused));
+        autoplayButton.setAttribute('aria-label', userPaused ? 'Продолжить слайдер' : 'Приостановить слайдер');
+        userPaused ? stop() : autoplay();
+      });
+      stage.addEventListener('mouseenter', stop);
+      stage.addEventListener('mouseleave', autoplay);
+      stage.addEventListener('focusin', stop);
+      stage.addEventListener('focusout', event => {
+        if (!stage.contains(event.relatedTarget)) autoplay();
+      });
+      stage.addEventListener('keydown', event => {
+        if (event.key === 'ArrowLeft') { event.preventDefault(); show(current - 1); }
+        if (event.key === 'ArrowRight') { event.preventDefault(); show(current + 1); }
+      });
+      stage.addEventListener('pointerdown', event => {
+        if (event.pointerType !== 'touch') return;
+        pointerStartX = event.clientX;
+        pointerStartY = event.clientY;
+      });
+      stage.addEventListener('pointerup', event => {
+        if (event.pointerType !== 'touch') return;
+        const deltaX = event.clientX - pointerStartX;
+        const deltaY = event.clientY - pointerStartY;
+        if (Math.abs(deltaX) < 48 || Math.abs(deltaX) <= Math.abs(deltaY)) return;
+        show(current + (deltaX < 0 ? 1 : -1));
+        autoplay();
+      });
+      const syncMotionPreference = () => {
+        autoplayButton.hidden = reducedMotion.matches;
+        autoplay();
+      };
+      reducedMotion.addEventListener('change', syncMotionPreference);
+      document.addEventListener('visibilitychange', autoplay);
+
+      menu.addEventListener('click', () => {
+        const open = nav.classList.toggle('open');
+        menu.setAttribute('aria-expanded', String(open));
+        menu.setAttribute('aria-label', open ? 'Закрыть меню' : 'Открыть меню');
+      });
+      nav.addEventListener('click', () => closeMenu());
+      document.addEventListener('pointerdown', event => {
+        if (!nav.contains(event.target) && !menu.contains(event.target)) closeMenu();
+      });
+      document.addEventListener('keydown', event => {
+        if (event.key === 'Escape') closeMenu(true);
+      });
+
+      syncMotionPreference();
+    })();
+  </script>
+</body>
+</html>
