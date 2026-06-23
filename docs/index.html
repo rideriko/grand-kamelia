@@ -130,7 +130,7 @@
     }
 
     * { box-sizing: border-box; }
-    html { color-scheme: light; }
+    html { color-scheme: light; scroll-behavior: smooth; scroll-padding-top: 72px; }
     body {
       margin: 0;
       min-width: 320px;
@@ -153,17 +153,20 @@
       white-space: nowrap;
       border: 0;
     }
-    .hero { min-height: 100svh; display: grid; grid-template-rows: 80px minmax(0, 1fr); overflow: hidden; }
+    .hero { min-height: 100svh; display: grid; grid-template-rows: minmax(0, 1fr); overflow: hidden; }
     .header {
-      position: relative;
-      z-index: 20;
+      position: sticky;
+      top: 0;
+      z-index: 100;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: var(--space-6);
+      height: 72px;
       padding-inline: max(var(--container-gutter-desktop), calc((100% - var(--container-max)) / 2));
-      background: var(--surface);
+      background: rgba(255,255,255,.92);
       border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(12px);
     }
     .brand { display: inline-flex; align-items: center; gap: var(--space-3); color: var(--fg); text-decoration: none; }
     .logo {
@@ -264,6 +267,66 @@
     .copy > *:nth-child(4) { animation-delay: 180ms; }
     @keyframes hero-copy-in {
       from { opacity: 0; transform: translate3d(0, 14px, 0); }
+    }
+
+    /* ─── Scroll reveal ─────────────────────────────────────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translate3d(0, 28px, 0);
+      transition: opacity 620ms var(--ease-standard), transform 620ms var(--ease-standard);
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
+    .reveal:nth-child(2) { transition-delay: 0ms; }
+    .reveal:nth-child(3) { transition-delay: 60ms; }
+    .reveal:nth-child(4) { transition-delay: 110ms; }
+    .reveal:nth-child(5) { transition-delay: 150ms; }
+
+    /* ─── Collapsible sections ──────────────────────────────────────── */
+    .section-toggle {
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+      padding: 0 var(--space-5);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-pill);
+      background: var(--surface);
+      color: var(--fg);
+      font: 500 var(--text-sm)/1 var(--font-body);
+      cursor: pointer;
+      transition: background var(--motion-fast) var(--ease-standard), border-color var(--motion-fast) var(--ease-standard);
+      white-space: nowrap;
+      user-select: none;
+    }
+    .section-toggle:hover { background: var(--surface-warm); border-color: var(--fg); }
+    .section-toggle:focus-visible { box-shadow: var(--focus-ring); }
+    .section-toggle .toggle-icon {
+      display: inline-block;
+      transition: transform 300ms var(--ease-standard);
+      font-size: 18px;
+      line-height: 1;
+    }
+    .section-toggle[aria-expanded="false"] .toggle-icon {
+      transform: rotate(-90deg);
+    }
+    .collapsible-body {
+      overflow: hidden;
+      transition: max-height 500ms var(--ease-standard), opacity 400ms var(--ease-standard);
+      max-height: 8000px;
+      opacity: 1;
+    }
+    .collapsible-body.collapsed {
+      max-height: 0;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .reveal { transition: none; opacity: 1; transform: none; }
+      .collapsible-body { transition: none; }
     }
     .location { margin: 0 0 var(--space-4); font-size: var(--text-sm); font-weight: 600; letter-spacing: .02em; }
     h1 {
@@ -405,7 +468,6 @@
     }
 
     @media (max-width: 900px) {
-      .hero { grid-template-rows: 72px minmax(0, 1fr); }
       .header { padding-inline: var(--container-gutter-tablet); }
       .menu { display: grid; }
       .nav {
@@ -435,7 +497,6 @@
     }
 
     @media (max-width: 560px) {
-      .hero { grid-template-rows: 72px minmax(0, 1fr); }
       .header { padding-inline: var(--container-gutter-phone); }
       .brand small { display: none; }
       .nav { right: var(--container-gutter-phone); width: min(280px, calc(100% - 32px)); }
@@ -476,7 +537,6 @@
   </style>
   <style data-od-inline-asset="hotel-sections.css">
 .page-section {
-  scroll-margin-top: 24px;
   padding: clamp(72px, 8vw, 112px) max(var(--container-gutter-desktop), calc((100% - var(--container-max)) / 2));
 }
 
@@ -856,9 +916,7 @@
 </style>
 </head>
 <body>
-  <main>
-  <section class="hero" data-od-id="hero-family">
-    <header class="header">
+  <header class="header" id="site-header">
       <a class="brand" href="#" aria-label="Гранд Камелия, на главную">
         <span class="logo" aria-hidden="true">ГК</span>
         <span class="brand-copy"><strong>Гранд Камелия</strong><small>Парк-отель в Кучугурах</small></span>
@@ -872,9 +930,11 @@
       <button class="menu" type="button" aria-label="Открыть меню" aria-controls="main-nav" aria-expanded="false">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
       </button>
-    </header>
+  </header>
 
-    <section class="stage" role="region" tabindex="0" aria-roledescription="карусель" aria-label="Фотографии парк-отеля">
+  <main>
+    <section class="hero" data-od-id="hero-family">
+      <section class="stage" role="region" tabindex="0" aria-roledescription="карусель" aria-label="Фотографии парк-отеля">
       <div class="slides" aria-live="polite">
         <figure class="slide active" data-state="loading" aria-hidden="false">
           <img src="assets/hero-garden.svg" alt="Зелёный двор парк-отеля с детской площадкой" fetchpriority="high" decoding="async">
@@ -932,32 +992,32 @@
   <section class="benefits" id="kids" data-od-id="family-benefits" aria-labelledby="benefits-title">
     <h2 class="benefits-heading" id="benefits-title">Почему семьи выбирают Гранд Камелию</h2>
     <div class="benefits-grid">
-      <article class="benefit-card">
+      <article class="benefit-card reveal">
         <span class="benefit-number" aria-hidden="true">01</span>
         <h3>Детям есть чем заняться</h3>
         <p>Игровые зоны, батут, детская комната, няня и активности на территории.</p>
       </article>
-      <article class="benefit-card">
+      <article class="benefit-card reveal">
         <span class="benefit-number" aria-hidden="true">02</span>
         <h3>Родители тоже отдыхают</h3>
         <p>Можно спокойно провести время у бассейна, в ресторане или на территории, пока дети заняты.</p>
       </article>
-      <article class="benefit-card">
+      <article class="benefit-card reveal">
         <span class="benefit-number" aria-hidden="true">03</span>
         <h3>Бассейны выручают в жару</h3>
         <p>Два бассейна на территории, чтобы не зависеть только от моря и пляжа.</p>
       </article>
-      <article class="benefit-card">
+      <article class="benefit-card reveal">
         <span class="benefit-number" aria-hidden="true">04</span>
         <h3>Еда рядом</h3>
         <p>Завтраки, обеды, ужины, детское меню и бар на территории отеля.</p>
       </article>
-      <article class="benefit-card">
+      <article class="benefit-card reveal">
         <span class="benefit-number" aria-hidden="true">05</span>
         <h3>Зелёная территория вместо суеты</h3>
         <p>Цветы, дорожки, зоны отдыха и ощущение спокойного семейного мира.</p>
       </article>
-      <article class="benefit-card">
+      <article class="benefit-card reveal">
         <span class="benefit-number" aria-hidden="true">06</span>
         <h3>Спокойный формат отдыха</h3>
         <p>Мы за семейный отдых без шумных компаний; с 22:00 до 8:00 на территории соблюдается тишина.</p>
@@ -971,8 +1031,14 @@
         <p class="section-kicker">03 · Территория и инфраструктура</p>
         <h2 class="section-title" id="infrastructure-title">Здесь можно провести весь день</h2>
       </div>
-      <p class="section-intro">От спокойного утра у бассейна до вечерней игры в бильярд — всё нужное для семейного дня находится на территории.</p>
+      <div>
+        <p class="section-intro">От спокойного утра у бассейна до вечерней игры в бильярд — всё нужное для семейного дня находится на территории.</p>
+        <button class="section-toggle" type="button" data-collapse="infrastructure-body" aria-expanded="true">
+          <span class="toggle-icon" aria-hidden="true">▾</span> Свернуть
+        </button>
+      </div>
     </div>
+    <div class="collapsible-body" id="infrastructure-body">
     <div class="infra-photos" aria-label="Фотографии территории и удобств">
       <div class="photo-row photo-row--3">
         <figure class="section-photo-card">
@@ -1068,6 +1134,7 @@
         </ul>
       </article>
     </div>
+    </div><!-- /collapsible-body -->
     <aside class="notice" aria-label="Условия работы няни">
       <strong>Няня — бесплатно для гостей</strong>
       <p>Няня работает с 9:00 до 16:00 шесть дней в неделю; выходной может меняться. Самостоятельные дети примерно с 3 лет могут оставаться с няней. Если ребёнку нужен индивидуальный присмотр, родители остаются рядом.</p>
@@ -1075,17 +1142,24 @@
   </section>
 
   <section class="page-section page-section--muted" id="food" data-od-id="food" aria-labelledby="food-title">
-    <figure class="food-photo">
+    <figure class="food-photo reveal">
       <img src="assets/food-restaurant.svg" alt="Ресторан и бар для гостей отеля Гранд Камелия" loading="lazy" decoding="async">
     </figure>
+    <div class="collapsible-body" id="food-body">
     <div class="food-layout">
-      <div class="food-copy">
+      <div class="food-copy reveal">
         <p class="section-kicker">04 · Ресторан и питание</p>
         <h2 id="food-title">Еда рядом, без ежедневного поиска кафе</h2>
         <p>На территории работает ресторан и бар для гостей отеля. Можно заказать блюда по меню или заранее выбрать завтрак, обед и ужин ко времени — удобно, если вы отдыхаете с детьми и не хотите каждый раз искать кафе в посёлке.</p>
-        <a class="action-link" href="/menu" aria-label="Посмотреть актуальное меню ресторана">Посмотреть меню</a>
+        <div style="display:flex; gap:var(--space-3); flex-wrap:wrap; align-items:center;">
+          <a class="action-link" href="/menu" aria-label="Посмотреть актуальное меню ресторана" style="margin-top:0">Посмотреть меню</a>
+          <button class="section-toggle" type="button" data-collapse="food-body" aria-expanded="true">
+            <span class="toggle-icon" aria-hidden="true">▾</span> Свернуть
+          </button>
+        </div>
       </div>
-      <div class="fact-stack" aria-label="Режим работы ресторана и бара">
+      <div class="reveal">
+        <div class="fact-stack" aria-label="Режим работы ресторана и бара">
         <div class="fact-row"><span>Детское меню</span><span>Есть</span></div>
         <div class="fact-row"><span>Цены</span><span>Актуальные — в меню</span></div>
         <div class="fact-row"><span>Кафе-ресторан</span><span>8:00–21:00</span></div>
@@ -1093,6 +1167,7 @@
         <div class="fact-row"><span>Доступ</span><span>Для гостей отеля</span></div>
       </div>
     </div>
+    </div><!-- /collapsible-body -->
   </section>
 
   <section class="page-section" id="rooms" data-od-id="rooms" aria-labelledby="rooms-title">
@@ -1101,8 +1176,13 @@
         <p class="section-kicker">05 · Номера</p>
         <h2 class="section-title" id="rooms-title">Выберите пространство под состав семьи</h2>
       </div>
-      <p class="section-intro">От компактного стандарта для пары до трёхкомнатного номера для большой семьи.</p>
+      <p class="section-intro" style="margin-bottom:0">От компактного стандарта для пары до трёхкомнатного номера для большой семьи.</p>
+        <button class="section-toggle" type="button" data-collapse="rooms-body" aria-expanded="true" style="margin-top:var(--space-3)">
+          <span class="toggle-icon" aria-hidden="true">▾</span> Свернуть
+        </button>
+      </div>
     </div>
+    <div class="collapsible-body" id="rooms-body">
     <div class="section-photo-grid" aria-label="Фотографии номеров">
       <figure class="section-photo-card">
         <img src="assets/room-standart.svg" alt="Номер Стандарт — двуспальная кровать, кондиционер, телевизор, Wi-Fi, терраса" loading="lazy" decoding="async">
@@ -1169,12 +1249,13 @@
       <h3>Во всех номерах</h3>
       <p>Кондиционер, холодильник, телевизор, Wi-Fi, собственный санузел с душем, фен, места для хранения, полотенца, постельное бельё и сушилка для вещей. У каждого номера есть терраса со столиком и двумя стульями.</p>
     </div>
+    </div><!-- /collapsible-body -->
     <p class="room-note">При бронировании можно указать пожелания по этажу.</p>
   </section>
 
   <section class="page-section page-section--dark" id="location" data-od-id="location" aria-labelledby="location-title">
     <div class="location-layout">
-      <div class="location-copy">
+      <div class="location-copy reveal">
         <img class="location-map-img" src="assets/location-map.svg" alt="Карта расположения отеля Гранд Камелия, ул. Лучистая, 36, п. Кучугуры" loading="lazy" decoding="async">
         <p class="section-kicker">06 · Море и расположение</p>
         <h2 id="location-title">Не первая линия. Зато тишина и свой ритм</h2>
@@ -1191,7 +1272,7 @@
   </section>
 
   <section class="page-section" id="reviews" data-od-id="reviews" aria-labelledby="reviews-title">
-    <div class="reviews-top">
+    <div class="reviews-top reveal">
       <div class="rating" aria-label="Рейтинг 4,9 из 5">4.9<small>РЕЙТИНГ ГОСТЕЙ</small></div>
       <div>
         <p class="section-kicker">07 · Отзывы гостей</p>
@@ -1200,10 +1281,10 @@
       </div>
     </div>
     <div class="review-grid">
-      <figure class="review-card"><blockquote>«Детям всегда было чем заняться, а я благодаря этому смогла полноценно отдохнуть».</blockquote><figcaption><cite>Екатерина К.</cite></figcaption></figure>
-      <figure class="review-card"><blockquote>«Это просто уголочек Кипра в наших Кучугурах».</blockquote><figcaption><cite>Дарья Меркулова</cite></figcaption></figure>
-      <figure class="review-card"><blockquote>«Вкусная еда, всё очень чисто, бассейн чистый».</blockquote><figcaption><cite>Анна Николаевна</cite></figcaption></figure>
-      <figure class="review-card"><blockquote>«Замечательный тихий отель, чисто, спокойно, зелено».</blockquote><figcaption><cite>Олег Чичков</cite></figcaption></figure>
+      <figure class="review-card reveal"><blockquote>«Детям всегда было чем заняться, а я благодаря этому смогла полноценно отдохнуть».</blockquote><figcaption><cite>Екатерина К.</cite></figcaption></figure>
+      <figure class="review-card reveal"><blockquote>«Это просто уголочек Кипра в наших Кучугурах».</blockquote><figcaption><cite>Дарья Меркулова</cite></figcaption></figure>
+      <figure class="review-card reveal"><blockquote>«Вкусная еда, всё очень чисто, бассейн чистый».</blockquote><figcaption><cite>Анна Николаевна</cite></figcaption></figure>
+      <figure class="review-card reveal"><blockquote>«Замечательный тихий отель, чисто, спокойно, зелено».</blockquote><figcaption><cite>Олег Чичков</cite></figcaption></figure>
     </div>
     <div class="review-links">
       <a href="https://yandex.ru/maps/?text=%D0%93%D1%80%D0%B0%D0%BD%D0%B4%20%D0%9A%D0%B0%D0%BC%D0%B5%D0%BB%D0%B8%D1%8F%20%D0%9A%D1%83%D1%87%D1%83%D0%B3%D1%83%D1%80%D1%8B" target="_blank" rel="noopener">Отзывы на Яндекс.Картах</a>
@@ -1217,8 +1298,13 @@
         <p class="section-kicker">08 · Условия</p>
         <h2 class="section-title" id="terms-title">Что включено, а что оплачивается отдельно</h2>
       </div>
-      <p class="section-intro">Без мелкого шрифта и неожиданных доплат после заезда.</p>
+      <p class="section-intro" style="margin-bottom:0">Без мелкого шрифта и неожиданных доплат после заезда.</p>
+        <button class="section-toggle" type="button" data-collapse="terms-body" aria-expanded="true" style="margin-top:var(--space-3)">
+          <span class="toggle-icon" aria-hidden="true">▾</span> Свернуть
+        </button>
+      </div>
     </div>
+    <div class="collapsible-body" id="terms-body">
     <div class="split-grid">
       <article class="split-panel">
         <h3>Включено в проживание</h3>
@@ -1245,6 +1331,7 @@
         <p class="laundry-note">Можно постирать вещи; капсула для стирки покупается на ресепшене — 350 ₽.</p>
       </article>
     </div>
+    </div><!-- /collapsible-body -->
   </section>
 
   <section class="page-section" id="audience" data-od-id="audience-fit" aria-labelledby="audience-title">
@@ -1253,8 +1340,13 @@
         <p class="section-kicker">09 · Для кого этот отель</p>
         <h2 class="section-title" id="audience-title">Совпадём ли мы по формату отдыха?</h2>
       </div>
-      <p class="section-intro">Лучше честно сверить ожидания до бронирования.</p>
+      <p class="section-intro" style="margin-bottom:0">Лучше честно сверить ожидания до бронирования.</p>
+        <button class="section-toggle" type="button" data-collapse="audience-body" aria-expanded="true" style="margin-top:var(--space-3)">
+          <span class="toggle-icon" aria-hidden="true">▾</span> Свернуть
+        </button>
+      </div>
     </div>
+    <div class="collapsible-body" id="audience-body">
     <div class="audience-grid">
       <article class="audience-panel">
         <h3>Гранд Камелия подойдёт вам, если</h3>
@@ -1276,6 +1368,7 @@
         </ul>
       </article>
     </div>
+    </div><!-- /collapsible-body -->
   </section>
 
   <section class="page-section page-section--muted" id="faq" data-od-id="faq" aria-labelledby="faq-title">
@@ -1284,8 +1377,13 @@
         <p class="section-kicker">10 · FAQ</p>
         <h2 class="section-title" id="faq-title">Ответы до поездки</h2>
       </div>
-      <p class="section-intro">Самое важное о заезде, территории, правилах и дополнительных услугах.</p>
+      <p class="section-intro" style="margin-bottom:0">Самое важное о заезде, территории, правилах и дополнительных услугах.</p>
+        <button class="section-toggle" type="button" data-collapse="faq-body" aria-expanded="true" style="margin-top:var(--space-3)">
+          <span class="toggle-icon" aria-hidden="true">▾</span> Свернуть
+        </button>
+      </div>
     </div>
+    <div class="collapsible-body" id="faq-body">
     <div class="faq-list">
       <details class="faq-item"><summary>Во сколько заезд и выезд?</summary><p>Заезд с 15:00, выезд до 12:00.</p></details>
       <details class="faq-item"><summary>Сколько идти до моря?</summary><p>Около 10–15 минут пешком.</p></details>
@@ -1308,11 +1406,12 @@
       <details class="faq-item"><summary>Есть правила для бассейна?</summary><p>Да, актуальные правила размещены у бассейнов. Бассейны работают до 22:00.</p></details>
       <details class="faq-item"><summary>Что при раннем выезде?</summary><p>При выезде раньше забронированного срока оплата не возвращается.</p></details>
     </div>
+    </div><!-- /collapsible-body -->
   </section>
 
   <section class="page-section page-section--dark" id="contacts" data-od-id="contacts" aria-labelledby="contacts-title">
     <div class="contacts-layout">
-      <div class="contacts-copy">
+      <div class="contacts-copy reveal">
         <p class="section-kicker">11 · Контакты и бронирование</p>
         <h2 id="contacts-title">Забронируйте спокойный семейный отдых в Гранд Камелии</h2>
         <p>Проверьте свободные даты онлайн или свяжитесь с нами удобным способом.</p>
@@ -1475,6 +1574,74 @@
       });
 
       syncMotionPreference();
+
+      /* ─── Scroll reveal ───────────────────────────────────────────── */
+      const revealObserver = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            revealObserver.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12, rootMargin: '0px 0px -42px 0px' });
+
+      document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+      /* ─── Collapsible sections ────────────────────────────────────── */
+      document.querySelectorAll('.section-toggle').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const bodyId = btn.dataset.collapse;
+          const body = document.getElementById(bodyId);
+          if (!body) return;
+          const expanded = btn.getAttribute('aria-expanded') === 'true';
+          if (expanded) {
+            body.classList.add('collapsed');
+            btn.setAttribute('aria-expanded', 'false');
+            btn.innerHTML = '<span class="toggle-icon" aria-hidden="true">▸</span> Развернуть';
+          } else {
+            body.classList.remove('collapsed');
+            btn.setAttribute('aria-expanded', 'true');
+            btn.innerHTML = '<span class="toggle-icon" aria-hidden="true">▾</span> Свернуть';
+          }
+        });
+      });
+
+      /* ─── Nav click: expand target if collapsed, then scroll to it ─ */
+      const headerEl = document.getElementById('site-header');
+      const scrollToSection = (id) => {
+        const target = document.querySelector(id);
+        if (!target) return;
+        // Auto-expand collapsed bodies first
+        let expanded = false;
+        target.querySelectorAll('.collapsible-body.collapsed').forEach(body => {
+          body.classList.remove('collapsed');
+          const btn = document.querySelector(`[data-collapse="${body.id}"]`);
+          if (btn) {
+            btn.setAttribute('aria-expanded', 'true');
+            btn.innerHTML = '<span class="toggle-icon" aria-hidden="true">▾</span> Свернуть';
+          }
+          expanded = true;
+        });
+        const doScroll = () => {
+          const h = headerEl ? headerEl.offsetHeight : 72;
+          const top = target.getBoundingClientRect().top + window.scrollY - h;
+          window.scrollTo({ top, behavior: 'smooth' });
+        };
+        if (expanded) {
+          // Wait for collapse animation (500ms) before scrolling
+          setTimeout(doScroll, 520);
+        } else {
+          doScroll();
+        }
+      };
+
+      document.querySelectorAll('.nav a[href^="#"]').forEach(link => {
+        link.addEventListener('click', e => {
+          e.preventDefault();
+          scrollToSection(link.getAttribute('href'));
+          if (nav.classList.contains('open')) closeMenu();
+        });
+      });
     })();
   </script>
 </body>
