@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Семейный отдых в парк-отеле «Гранд Камелия» — зелёный двор, бассейны и море рядом.">
   <title>Гранд Камелия — семейный отдых у моря</title>
-  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="icon" href="grand-camellia-favicon.ico">
   <link rel="apple-touch-icon" href="assets/favicon-coral.svg">
   <style>
     :root {
@@ -172,20 +172,30 @@
     }
     .brand { display: inline-flex; align-items: center; gap: var(--space-3); color: var(--fg); text-decoration: none; }
     .logo {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 42px;
-      height: 42px;
+      display: block;
+      height: 36px;
+      width: auto;
       flex: 0 0 auto;
     }
-    .logo svg { display: block; width: 42px; height: 42px; }
-    .brand-copy { display: grid; gap: 1px; }
-    .brand strong { font-size: 15px; font-weight: 700; }
-    .brand small { color: var(--muted); font-size: 11px; letter-spacing: .02em; }
-    .nav { display: flex; align-items: center; gap: clamp(18px, 2.2vw, 32px); }
-    .nav a { color: var(--fg); text-decoration: none; font-size: var(--text-sm); font-weight: 500; letter-spacing: .02em; }
-    .nav a:hover { text-decoration: underline; text-underline-offset: 5px; }
+    .nav { display: flex; align-items: center; gap: clamp(10px, 1.5vw, 28px); }
+    .nav a { color: var(--fg); text-decoration: none; font-size: var(--text-sm); font-weight: 500; letter-spacing: .02em; transition: color var(--motion-fast) var(--ease-standard); }
+    .nav a:not(.nav-book):hover { color: var(--accent); text-decoration: underline; text-underline-offset: 5px; }
+    .nav a.active { color: var(--accent); }
+    .nav-book {
+      min-height: 40px;
+      display: inline-flex !important;
+      align-items: center;
+      padding-inline: var(--space-5) !important;
+      border: 0;
+      border-radius: var(--radius-sm);
+      background: var(--accent) !important;
+      color: var(--accent-on) !important;
+      font-weight: 600;
+      white-space: nowrap;
+      transition: background var(--motion-fast) var(--ease-standard), transform var(--motion-fast) var(--ease-standard);
+    }
+    .nav-book:hover { background: var(--accent-active) !important; text-decoration: none !important; }
+    .nav-book:active { transform: scale(.96); }
     .menu {
       display: none;
       width: 44px;
@@ -437,7 +447,10 @@
       }
       .nav.open { opacity: 1; visibility: visible; transform: translateY(0); }
       .nav a { min-height: 44px; display: flex; align-items: center; padding-inline: var(--space-3); border-radius: var(--radius-sm); }
-      .nav a:hover { background: var(--surface-warm); text-decoration: none; }
+      .nav a:not(.nav-book):hover { background: var(--surface-warm); text-decoration: none; }
+      .nav a.active { background: rgba(255,56,92,.08); }
+      .nav-book { margin-top: var(--space-2); justify-content: center; border-radius: var(--radius-sm) !important; }
+      .nav-book:hover { background: var(--accent-active) !important; }
       .content { width: min(calc(100% - (2 * var(--container-gutter-tablet))), 760px); padding-block: var(--section-y-tablet) 120px; }
       .slider-controls { right: var(--container-gutter-tablet); bottom: var(--space-6); }
       .benefits-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -947,23 +960,18 @@
 <body>
   <header class="header" id="site-header">
       <a class="brand" href="#" aria-label="Гранд Камелия, на главную">
-        <span class="logo" aria-hidden="true">
-          <svg viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="21" cy="11.5" r="9.5" fill="#222" opacity=".82"/>
-            <circle cx="32.5" cy="19" r="9.5" fill="#222" opacity=".82"/>
-            <circle cx="28" cy="31.5" r="9.5" fill="#222" opacity=".82"/>
-            <circle cx="14" cy="31.5" r="9.5" fill="#222" opacity=".82"/>
-            <circle cx="9.5" cy="19" r="9.5" fill="#222" opacity=".82"/>
-            <circle cx="21" cy="21.5" r="6" fill="#222"/>
-          </svg>
-        </span>
-        <span class="brand-copy"><strong>Гранд Камелия</strong><small>Парк-отель в Кучугурах</small></span>
+        <img class="logo" src="grand-camellia-logo-header.png" alt="Гранд Камелия" height="36">
       </a>
       <nav class="nav" id="main-nav" aria-label="Основная навигация">
-        <a href="#rooms">Номера</a>
+        <a href="#kids">Почему мы</a>
         <a href="#infrastructure">Территория</a>
         <a href="#food">Ресторан</a>
+        <a href="#rooms">Номера</a>
+        <a href="#location">Море</a>
+        <a href="#reviews">Отзывы</a>
+        <a href="#terms">Условия</a>
         <a href="#contacts">Контакты</a>
+        <a class="nav-book" href="https://reservationsteps.ru/rooms/index/c22a3bbc-83e7-485d-b881-b05cf2b64ab1">Забронировать</a>
       </nav>
       <button class="menu" type="button" aria-label="Открыть меню" aria-controls="main-nav" aria-expanded="false">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
@@ -1642,6 +1650,25 @@
           if (nav.classList.contains('open')) closeMenu();
         });
       });
+
+      /* ─── Scroll spy: highlight active nav link ───────────────────── */
+      const navLinks = document.querySelectorAll('.nav a[href^="#"]');
+      const sectionIds = Array.from(navLinks).map(a => a.getAttribute('href'));
+      const sections = sectionIds.map(id => document.querySelector(id)).filter(Boolean);
+
+      const spyObserver = new IntersectionObserver(entries => {
+        // Find the first section that's significantly intersecting
+        const visible = entries.filter(e => e.isIntersecting);
+        if (!visible.length) return;
+        // Pick the one with the highest ratio
+        const best = visible.reduce((a, b) => b.intersectionRatio > a.intersectionRatio ? b : a);
+        const id = '#' + best.target.id;
+        navLinks.forEach(a => {
+          a.classList.toggle('active', a.getAttribute('href') === id);
+        });
+      }, { threshold: [0, 0.25, 0.5, 0.75], rootMargin: '-72px 0px -60% 0px' });
+
+      sections.forEach(s => spyObserver.observe(s));
     })();
   </script>
 </body>
