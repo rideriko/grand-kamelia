@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Семейный отдых в парк-отеле «Гранд Камелия» — зелёный двор, бассейны и море рядом.">
   <title>Гранд Камелия — семейный отдых у моря</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="apple-touch-icon" href="assets/favicon-coral.svg">
   <style>
     :root {
       /* ─── Surface (3 levels) ────────────────────────────────────────
@@ -170,16 +172,14 @@
     }
     .brand { display: inline-flex; align-items: center; gap: var(--space-3); color: var(--fg); text-decoration: none; }
     .logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
       width: 42px;
       height: 42px;
-      display: grid;
-      place-items: center;
-      border-radius: var(--radius-pill);
-      background: var(--fg);
-      color: var(--surface);
-      font-weight: 700;
-      letter-spacing: var(--tracking-display);
+      flex: 0 0 auto;
     }
+    .logo svg { display: block; width: 42px; height: 42px; }
     .brand-copy { display: grid; gap: 1px; }
     .brand strong { font-size: 15px; font-weight: 700; }
     .brand small { color: var(--muted); font-size: 11px; letter-spacing: .02em; }
@@ -284,49 +284,8 @@
     .reveal:nth-child(4) { transition-delay: 110ms; }
     .reveal:nth-child(5) { transition-delay: 150ms; }
 
-    /* ─── Collapsible sections ──────────────────────────────────────── */
-    .section-toggle {
-      min-height: 44px;
-      display: inline-flex;
-      align-items: center;
-      gap: var(--space-2);
-      padding: 0 var(--space-5);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-pill);
-      background: var(--surface);
-      color: var(--fg);
-      font: 500 var(--text-sm)/1 var(--font-body);
-      cursor: pointer;
-      transition: background var(--motion-fast) var(--ease-standard), border-color var(--motion-fast) var(--ease-standard);
-      white-space: nowrap;
-      user-select: none;
-    }
-    .section-toggle:hover { background: var(--surface-warm); border-color: var(--fg); }
-    .section-toggle:focus-visible { box-shadow: var(--focus-ring); }
-    .section-toggle .toggle-icon {
-      display: inline-block;
-      transition: transform 300ms var(--ease-standard);
-      font-size: 18px;
-      line-height: 1;
-    }
-    .section-toggle[aria-expanded="false"] .toggle-icon {
-      transform: rotate(-90deg);
-    }
-    .collapsible-body {
-      overflow: hidden;
-      transition: max-height 500ms var(--ease-standard), opacity 400ms var(--ease-standard);
-      max-height: 8000px;
-      opacity: 1;
-    }
-    .collapsible-body.collapsed {
-      max-height: 0;
-      opacity: 0;
-      pointer-events: none;
-    }
-
     @media (prefers-reduced-motion: reduce) {
       .reveal { transition: none; opacity: 1; transform: none; }
-      .collapsible-body { transition: none; }
     }
     .location { margin: 0 0 var(--space-4); font-size: var(--text-sm); font-weight: 600; letter-spacing: .02em; }
     h1 {
@@ -814,8 +773,6 @@
 .food-section .fact-row { border-bottom-color: rgba(255,255,255,.18); }
 .food-section .fact-row span:last-child { color: rgba(255,255,255,.78); }
 .food-section .food-copy p { color: rgba(255,255,255,.78); max-width: 58ch; margin: 0; font-size: clamp(17px, 1.5vw, 20px); line-height: 1.55; }
-.section-toggle--light { border-color: rgba(255,255,255,.48); color: var(--surface); background: rgba(0,0,0,.28); }
-.section-toggle--light:hover { border-color: rgba(255,255,255,.8); background: rgba(0,0,0,.48); }
 .action-link--light { border-color: var(--surface); background: transparent; color: var(--surface); }
 .action-link--light:hover { background: var(--surface); color: var(--fg); }
 
@@ -990,7 +947,16 @@
 <body>
   <header class="header" id="site-header">
       <a class="brand" href="#" aria-label="Гранд Камелия, на главную">
-        <span class="logo" aria-hidden="true">ГК</span>
+        <span class="logo" aria-hidden="true">
+          <svg viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="21" cy="11.5" r="9.5" fill="#222" opacity=".82"/>
+            <circle cx="32.5" cy="19" r="9.5" fill="#222" opacity=".82"/>
+            <circle cx="28" cy="31.5" r="9.5" fill="#222" opacity=".82"/>
+            <circle cx="14" cy="31.5" r="9.5" fill="#222" opacity=".82"/>
+            <circle cx="9.5" cy="19" r="9.5" fill="#222" opacity=".82"/>
+            <circle cx="21" cy="21.5" r="6" fill="#222"/>
+          </svg>
+        </span>
         <span class="brand-copy"><strong>Гранд Камелия</strong><small>Парк-отель в Кучугурах</small></span>
       </a>
       <nav class="nav" id="main-nav" aria-label="Основная навигация">
@@ -1111,12 +1077,8 @@
       </div>
       <div>
         <p class="section-intro">От спокойного утра у бассейна до вечерней игры в бильярд — всё нужное для семейного дня находится на территории.</p>
-        <button class="section-toggle" type="button" data-collapse="infrastructure-body" aria-expanded="true">
-          <span class="toggle-icon" aria-hidden="true">▾</span> Свернуть
-        </button>
       </div>
     </div>
-    <div class="collapsible-body" id="infrastructure-body">
     <div class="gallery-grid" aria-label="Фотографии территории и удобств">
       <figure class="gallery-card">
         <img src="assets/pools.svg" alt="Два бассейна с подогревом: взрослый 1,5 м и детский 1 м" loading="lazy" decoding="async">
@@ -1206,7 +1168,6 @@
         </ul>
       </article>
     </div>
-    </div><!-- /collapsible-body -->
     <aside class="notice" aria-label="Условия работы няни">
       <strong>Няня — бесплатно для гостей</strong>
       <p>Няня работает с 9:00 до 16:00 шесть дней в неделю; выходной может меняться. Самостоятельные дети примерно с 3 лет могут оставаться с няней. Если ребёнку нужен индивидуальный присмотр, родители остаются рядом.</p>
@@ -1224,12 +1185,8 @@
         </div>
         <div>
           <p class="section-intro">На территории работает ресторан и бар для гостей отеля. Можно заказать блюда по меню или заранее выбрать завтрак, обед и ужин ко времени.</p>
-          <button class="section-toggle section-toggle--light" type="button" data-collapse="food-body" aria-expanded="true">
-            <span class="toggle-icon" aria-hidden="true">▾</span> Свернуть
-          </button>
         </div>
       </div>
-      <div class="collapsible-body" id="food-body">
       <div class="food-layout">
         <div class="food-copy reveal">
           <p>Можно заказать блюда по меню или заранее выбрать завтрак, обед и ужин ко времени — удобно, если вы отдыхаете с детьми и не хотите каждый раз искать кафе в посёлке.</p>
@@ -1244,7 +1201,6 @@
           <div class="fact-row"><span>Доступ</span><span>Для гостей отеля</span></div>
         </div>
       </div>
-      </div><!-- /collapsible-body -->
     </div>
   </section>
 
@@ -1255,12 +1211,8 @@
         <h2 class="section-title" id="rooms-title">Выберите пространство под состав семьи</h2>
       </div>
       <p class="section-intro" style="margin-bottom:0">От компактного стандарта для пары до трёхкомнатного номера для большой семьи.</p>
-        <button class="section-toggle" type="button" data-collapse="rooms-body" aria-expanded="true" style="margin-top:var(--space-3)">
-          <span class="toggle-icon" aria-hidden="true">▾</span> Свернуть
-        </button>
       </div>
     </div>
-    <div class="collapsible-body" id="rooms-body">
     <div class="rooms-gallery" aria-label="Номера — фотографии и описание">
       <article class="room-post" data-room="standart">
         <div class="room-post-media">
@@ -1339,7 +1291,6 @@
       <h3>Во всех номерах</h3>
       <p>Кондиционер, холодильник, телевизор, Wi-Fi, собственный санузел с душем, фен, места для хранения, полотенца, постельное бельё и сушилка для вещей. У каждого номера есть терраса со столиком и двумя стульями.</p>
     </div>
-    </div><!-- /collapsible-body -->
     <p class="room-note">При бронировании можно указать пожелания по этажу.</p>
   </section>
 
@@ -1396,12 +1347,8 @@
         <h2 class="section-title" id="terms-title">Что включено, а что оплачивается отдельно</h2>
       </div>
       <p class="section-intro" style="margin-bottom:0">Без мелкого шрифта и неожиданных доплат после заезда.</p>
-        <button class="section-toggle" type="button" data-collapse="terms-body" aria-expanded="true" style="margin-top:var(--space-3)">
-          <span class="toggle-icon" aria-hidden="true">▾</span> Свернуть
-        </button>
       </div>
     </div>
-    <div class="collapsible-body" id="terms-body">
     <div class="split-grid">
       <article class="split-panel">
         <h3>Включено в проживание</h3>
@@ -1428,7 +1375,6 @@
         <p class="laundry-note">Можно постирать вещи; капсула для стирки покупается на ресепшене — 350 ₽.</p>
       </article>
     </div>
-    </div><!-- /collapsible-body -->
   </section>
 
   <section class="page-section" id="audience" data-od-id="audience-fit" aria-labelledby="audience-title">
@@ -1438,12 +1384,8 @@
         <h2 class="section-title" id="audience-title">Совпадём ли мы по формату отдыха?</h2>
       </div>
       <p class="section-intro" style="margin-bottom:0">Лучше честно сверить ожидания до бронирования.</p>
-        <button class="section-toggle" type="button" data-collapse="audience-body" aria-expanded="true" style="margin-top:var(--space-3)">
-          <span class="toggle-icon" aria-hidden="true">▾</span> Свернуть
-        </button>
       </div>
     </div>
-    <div class="collapsible-body" id="audience-body">
     <div class="audience-grid">
       <article class="audience-panel">
         <h3>Гранд Камелия подойдёт вам, если</h3>
@@ -1465,7 +1407,6 @@
         </ul>
       </article>
     </div>
-    </div><!-- /collapsible-body -->
   </section>
 
   <section class="page-section page-section--muted" id="faq" data-od-id="faq" aria-labelledby="faq-title">
@@ -1475,12 +1416,8 @@
         <h2 class="section-title" id="faq-title">Ответы до поездки</h2>
       </div>
       <p class="section-intro" style="margin-bottom:0">Самое важное о заезде, территории, правилах и дополнительных услугах.</p>
-        <button class="section-toggle" type="button" data-collapse="faq-body" aria-expanded="true" style="margin-top:var(--space-3)">
-          <span class="toggle-icon" aria-hidden="true">▾</span> Свернуть
-        </button>
       </div>
     </div>
-    <div class="collapsible-body" id="faq-body">
     <div class="faq-list">
       <details class="faq-item"><summary>Во сколько заезд и выезд?</summary><p>Заезд с 15:00, выезд до 12:00.</p></details>
       <details class="faq-item"><summary>Сколько идти до моря?</summary><p>Около 10–15 минут пешком.</p></details>
@@ -1503,7 +1440,6 @@
       <details class="faq-item"><summary>Есть правила для бассейна?</summary><p>Да, актуальные правила размещены у бассейнов. Бассейны работают до 22:00.</p></details>
       <details class="faq-item"><summary>Что при раннем выезде?</summary><p>При выезде раньше забронированного срока оплата не возвращается.</p></details>
     </div>
-    </div><!-- /collapsible-body -->
   </section>
 
   <section class="page-section page-section--dark" id="contacts" data-od-id="contacts" aria-labelledby="contacts-title">
@@ -1689,52 +1625,14 @@
 
       document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 
-      /* ─── Collapsible sections ────────────────────────────────────── */
-      document.querySelectorAll('.section-toggle').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const bodyId = btn.dataset.collapse;
-          const body = document.getElementById(bodyId);
-          if (!body) return;
-          const expanded = btn.getAttribute('aria-expanded') === 'true';
-          if (expanded) {
-            body.classList.add('collapsed');
-            btn.setAttribute('aria-expanded', 'false');
-            btn.innerHTML = '<span class="toggle-icon" aria-hidden="true">▸</span> Развернуть';
-          } else {
-            body.classList.remove('collapsed');
-            btn.setAttribute('aria-expanded', 'true');
-            btn.innerHTML = '<span class="toggle-icon" aria-hidden="true">▾</span> Свернуть';
-          }
-        });
-      });
-
-      /* ─── Nav click: expand target if collapsed, then scroll to it ─ */
+      /* ─── Nav click: scroll to section ────────────────────────────── */
       const headerEl = document.getElementById('site-header');
       const scrollToSection = (id) => {
         const target = document.querySelector(id);
         if (!target) return;
-        // Auto-expand collapsed bodies first
-        let expanded = false;
-        target.querySelectorAll('.collapsible-body.collapsed').forEach(body => {
-          body.classList.remove('collapsed');
-          const btn = document.querySelector(`[data-collapse="${body.id}"]`);
-          if (btn) {
-            btn.setAttribute('aria-expanded', 'true');
-            btn.innerHTML = '<span class="toggle-icon" aria-hidden="true">▾</span> Свернуть';
-          }
-          expanded = true;
-        });
-        const doScroll = () => {
-          const h = headerEl ? headerEl.offsetHeight : 72;
-          const top = target.getBoundingClientRect().top + window.scrollY - h;
-          window.scrollTo({ top, behavior: 'smooth' });
-        };
-        if (expanded) {
-          // Wait for collapse animation (500ms) before scrolling
-          setTimeout(doScroll, 520);
-        } else {
-          doScroll();
-        }
+        const h = headerEl ? headerEl.offsetHeight : 72;
+        const top = target.getBoundingClientRect().top + window.scrollY - h;
+        window.scrollTo({ top, behavior: 'smooth' });
       };
 
       document.querySelectorAll('.nav a[href^="#"]').forEach(link => {
