@@ -419,17 +419,6 @@
     [data-toggle-autoplay][aria-pressed="true"] .icon-pause { display: none; }
     [data-toggle-autoplay][aria-pressed="true"] .icon-play { display: block; }
 
-    .benefits {
-      padding: clamp(72px, 8vw, 112px) max(var(--container-gutter-desktop), calc((100% - var(--container-max)) / 2));
-      background: var(--surface);
-    }
-    .benefits-heading {
-      max-width: 780px;
-      margin: 0 0 clamp(40px, 5vw, 64px);
-      font: 700 clamp(36px, 4.2vw, 56px)/1.08 var(--font-display);
-      letter-spacing: -.03em;
-      text-wrap: balance;
-    }
     .benefits-grid {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -492,7 +481,6 @@
       .nav a:hover { background: var(--surface-warm); text-decoration: none; }
       .content { width: min(calc(100% - (2 * var(--container-gutter-tablet))), 760px); padding-block: var(--section-y-tablet) 120px; }
       .slider-controls { right: var(--container-gutter-tablet); bottom: var(--space-6); }
-      .benefits { padding-inline: var(--container-gutter-tablet); }
       .benefits-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
 
@@ -513,8 +501,6 @@
       .book-button { width: 100%; margin-top: var(--space-6); }
       .slider-controls { right: var(--container-gutter-phone); bottom: var(--space-4); }
       .slide-count { display: none; }
-      .benefits { padding: 64px var(--container-gutter-phone); }
-      .benefits-heading { margin-bottom: var(--space-8); font-size: clamp(32px, 10vw, 44px); }
       .benefits-grid { grid-template-columns: 1fr; }
       .benefit-card { min-height: 0; padding: var(--space-6); }
       .benefit-number { margin-bottom: var(--space-12); }
@@ -543,58 +529,161 @@
 .page-section--muted { background: var(--surface-warm); }
 .page-section--dark { background: var(--fg); color: var(--surface); }
 
-.section-photo-grid {
+/* ─── Rooms IG gallery ──────────────────────────────────────────────── */
+.rooms-gallery {
   display: grid;
-  grid-template-columns: minmax(0, 1.18fr) minmax(280px, .82fr);
-  gap: var(--space-5);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 4px;
   margin: 0 0 clamp(40px, 5vw, 64px);
 }
 
-.section-photo-card {
-  margin: 0;
+.room-post {
+  background: var(--surface);
+  border-radius: 0;
+  overflow: hidden;
+  cursor: pointer;
+  transition: box-shadow 200ms var(--ease-standard);
 }
 
-.section-photo-card img {
-  display: block;
-  width: 100%;
-  height: clamp(280px, 34vw, 480px);
-  object-fit: cover;
-  border-radius: var(--radius-lg);
+.room-post:focus-visible { box-shadow: var(--focus-ring); outline: none; }
+
+.room-post-media {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
   background: var(--surface-warm);
 }
 
-.section-photo-card--small img {
-  height: clamp(220px, 28vw, 360px);
+.room-post-slides {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
 }
 
-.section-photo-card figcaption {
-  margin-top: var(--space-3);
+.room-post-slides::-webkit-scrollbar { display: none; }
+
+.room-post-slides img {
+  flex: 0 0 100%;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  scroll-snap-align: start;
+}
+
+.room-post-badge {
+  position: absolute;
+  top: var(--space-3);
+  right: var(--space-3);
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+  background: rgba(0,0,0,.58);
+  color: var(--surface);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .04em;
+  backdrop-filter: blur(6px);
+  pointer-events: none;
+}
+
+.room-post-body {
+  padding: var(--space-4);
+}
+
+.room-post-body h3 {
+  margin: 0 0 var(--space-1);
+  font: 600 16px/1.25 var(--font-display);
+  letter-spacing: var(--tracking-display);
+}
+
+.room-post-body p {
+  margin: 0;
   color: var(--muted);
   font-size: var(--text-sm);
   line-height: 1.45;
 }
 
-/* Infrastructure 3-4-3 photo grid */
-.infra-photos {
+/* ─── Room card detail hover ──────────────────────────────────── */
+.room-post-media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(0deg, rgba(0,0,0,.18) 0%, transparent 60%);
+  opacity: 0;
+  transition: opacity 200ms var(--ease-standard);
+  pointer-events: none;
+}
+
+.room-post:hover .room-post-media::after { opacity: 1; }
+.room-post:hover .room-post-media img { transform: scale(1.03); }
+.room-post-media img { transition: transform 400ms var(--ease-standard); }
+
+@media (hover: none) {
+  .room-post-media::after { opacity: 1; }
+}
+
+.room-standard {
+  display: grid;
+  grid-template-columns: minmax(180px, 260px) minmax(0, 1fr);
+  gap: var(--space-8);
+  margin-top: var(--space-8);
+  padding: clamp(24px, 3vw, 40px);
+  border-radius: var(--radius-lg);
+  background: var(--surface-warm);
+}
+
+.room-standard h3 { margin: 0; font-size: var(--text-lg); }
+.room-standard p { max-width: 76ch; margin: 0; color: var(--muted); line-height: 1.6; }
+.room-note { margin: var(--space-4) 0 0; color: var(--muted); font-size: var(--text-sm); }
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 4px;
   margin: 0 0 clamp(40px, 5vw, 64px);
 }
 
-.photo-row {
-  display: grid;
-  gap: var(--space-5);
-  margin-bottom: var(--space-5);
+.gallery-card {
+  position: relative;
+  margin: 0;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  cursor: pointer;
+  background: var(--surface-warm);
 }
 
-.photo-row--3 {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+.gallery-card img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 400ms var(--ease-standard);
 }
 
-.photo-row--4 {
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+.gallery-card:hover img { transform: scale(1.04); }
+
+.gallery-card figcaption {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: end;
+  padding: var(--space-5);
+  background: linear-gradient(0deg, rgba(0,0,0,.52) 0%, transparent 48%);
+  color: var(--surface);
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.3;
+  opacity: 0;
+  transition: opacity 220ms var(--ease-standard);
+  pointer-events: none;
 }
 
-.photo-row .section-photo-card img {
-  height: clamp(200px, 22vw, 320px);
+.gallery-card:hover figcaption { opacity: 1; }
+
+@media (hover: none) {
+  .gallery-card figcaption { opacity: 1; background: linear-gradient(0deg, rgba(0,0,0,.48) 0%, transparent 56%); }
 }
 
 .section-head {
@@ -673,7 +762,6 @@
 
 .facility-group h3,
 .split-panel h3,
-.room-card h3,
 .audience-panel h3 {
   margin: 0 0 var(--space-5);
   font: 600 var(--text-xl)/1.2 var(--font-display);
@@ -695,18 +783,41 @@
 .notice strong { font-size: var(--text-lg); line-height: 1.25; }
 .notice p { max-width: 72ch; margin: 0; color: var(--muted); line-height: 1.6; }
 
-.food-photo {
-  margin: 0 0 clamp(40px, 5vw, 64px);
+/* ─── Food section with background photo ──────────────────────────── */
+.food-section {
+  position: relative;
+  overflow: hidden;
+  color: var(--surface);
+  background: var(--fg-2); /* fallback */
 }
-
-.food-photo img {
-  display: block;
+.food-bg {
+  position: absolute;
+  inset: 0;
   width: 100%;
-  height: clamp(280px, 34vw, 480px);
+  height: 100%;
   object-fit: cover;
-  border-radius: var(--radius-lg);
-  background: var(--surface-warm);
+  z-index: 0;
 }
+.food-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(0deg, rgba(0,0,0,.72) 0%, rgba(0,0,0,.48) 50%, rgba(0,0,0,.64) 100%);
+}
+.food-content {
+  position: relative;
+  z-index: 2;
+}
+.food-section .section-kicker,
+.food-section .section-intro { color: rgba(255,255,255,.74); }
+.food-section .fact-stack { border-top-color: rgba(255,255,255,.22); }
+.food-section .fact-row { border-bottom-color: rgba(255,255,255,.18); }
+.food-section .fact-row span:last-child { color: rgba(255,255,255,.78); }
+.food-section .food-copy p { color: rgba(255,255,255,.78); max-width: 58ch; margin: 0; font-size: clamp(17px, 1.5vw, 20px); line-height: 1.55; }
+.section-toggle--light { border-color: rgba(255,255,255,.48); color: var(--surface); background: rgba(0,0,0,.28); }
+.section-toggle--light:hover { border-color: rgba(255,255,255,.8); background: rgba(0,0,0,.48); }
+.action-link--light { border-color: var(--surface); background: transparent; color: var(--surface); }
+.action-link--light:hover { background: var(--surface); color: var(--fg); }
 
 .food-layout,
 .location-layout,
@@ -715,16 +826,6 @@
   grid-template-columns: minmax(0, 1.2fr) minmax(320px, .8fr);
   gap: clamp(40px, 7vw, 96px);
   align-items: start;
-}
-
-.food-copy h2,
-.location-copy h2,
-.contacts-copy h2 {
-  max-width: 16ch;
-  margin: 0 0 var(--space-6);
-  font: 700 clamp(36px, 4.2vw, 56px)/1.08 var(--font-display);
-  letter-spacing: -.03em;
-  text-wrap: balance;
 }
 
 .food-copy p,
@@ -756,22 +857,6 @@
 .action-link:hover { background: var(--fg); color: var(--surface); }
 .action-link:active { transform: scale(.97); }
 
-.room-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  border-top: 1px solid var(--border);
-  border-left: 1px solid var(--border);
-}
-
-.room-card {
-  min-height: 250px;
-  padding: clamp(24px, 2.5vw, 32px);
-  border-right: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
-}
-
-.room-capacity { display: block; margin-bottom: var(--space-8); color: var(--muted); font: 600 var(--text-xs)/1 var(--font-mono); letter-spacing: .06em; }
-.room-card p { margin: 0; color: var(--muted); line-height: var(--leading-body); }
 
 .room-standard {
   display: grid;
@@ -804,10 +889,9 @@
 .page-section--dark .action-link { border-color: var(--surface); background: transparent; color: var(--surface); }
 .page-section--dark .action-link:hover { background: var(--surface); color: var(--fg); }
 
-.reviews-top { display: grid; grid-template-columns: 260px minmax(0, 1fr); gap: clamp(32px, 6vw, 80px); align-items: center; margin-bottom: var(--space-12); }
+.reviews-top { margin-bottom: var(--space-12); }
 .rating { font: 700 clamp(72px, 9vw, 124px)/.9 var(--font-display); letter-spacing: -.06em; }
 .rating small { display: block; margin-top: var(--space-3); color: var(--muted); font: 600 var(--text-xs)/1.2 var(--font-mono); letter-spacing: .08em; }
-.reviews-lead { max-width: 64ch; margin: 0; font-size: clamp(20px, 2vw, 28px); line-height: 1.35; text-wrap: pretty; }
 .review-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border-top: 1px solid var(--border); border-left: 1px solid var(--border); }
 .review-card { min-height: 220px; padding: clamp(24px, 3vw, 40px); border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); }
 .review-card blockquote { margin: 0 0 var(--space-8); font-size: clamp(18px, 1.7vw, 22px); line-height: 1.45; text-wrap: pretty; }
@@ -853,21 +937,18 @@
 
 @media (max-width: 1100px) {
   .infrastructure-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .room-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .rooms-gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .footer-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .footer-links { grid-column: 1 / -1; grid-template-columns: repeat(3, minmax(0, 1fr)); }
-  .photo-row--3,
-  .photo-row--4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .gallery-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
 @media (max-width: 760px) {
   .page-section { padding-inline: var(--container-gutter-tablet); }
-  .section-photo-grid,
   .section-head,
   .food-layout,
   .location-layout,
-  .contacts-layout,
-  .reviews-top { grid-template-columns: 1fr; }
+  .contacts-layout { grid-template-columns: 1fr; }
   .section-head { align-items: start; }
   .food-layout,
   .location-layout,
@@ -878,26 +959,17 @@
   .split-grid,
   .audience-grid,
   .faq-list { grid-template-columns: 1fr; }
-  .reviews-top { margin-bottom: var(--space-8); }
   .footer { padding-inline: var(--container-gutter-tablet); }
 }
 
 @media (max-width: 560px) {
   .page-section { padding: 64px var(--container-gutter-phone); }
-  .section-photo-card img,
-  .section-photo-card--small img { height: 260px; }
-  .infrastructure-grid,
-  .room-grid { grid-template-columns: 1fr; }
-  .facility-group,
-  .room-card { min-height: 0; padding: var(--space-6); }
-  .photo-row--3,
-  .photo-row--4 { grid-template-columns: 1fr; }
-  .photo-row .section-photo-card img { height: 260px; }
-  .food-photo img { height: 260px; }
+  .infrastructure-grid { grid-template-columns: 1fr; }
+  .facility-group { min-height: 0; padding: var(--space-6); }
+  .rooms-gallery { grid-template-columns: 1fr; }
+  .gallery-grid { grid-template-columns: 1fr; }
+  .gallery-card { aspect-ratio: 4 / 3; }
   .location-map-img { max-height: 260px; }
-  .food-copy h2,
-  .location-copy h2,
-  .contacts-copy h2,
   .section-title { font-size: clamp(32px, 10vw, 44px); }
   .rating { font-size: 80px; }
   .contacts-actions { display: grid; }
@@ -989,8 +1061,14 @@
     </section>
   </section>
 
-  <section class="benefits" id="kids" data-od-id="family-benefits" aria-labelledby="benefits-title">
-    <h2 class="benefits-heading" id="benefits-title">Почему семьи выбирают Гранд Камелию</h2>
+  <section class="page-section" id="kids" data-od-id="family-benefits" aria-labelledby="benefits-title">
+    <div class="section-head">
+      <div>
+        <p class="section-kicker">01 · Почему мы</p>
+        <h2 class="section-title" id="benefits-title">Почему семьи выбирают Гранд Камелию</h2>
+      </div>
+      <p class="section-intro">Шесть причин, по которым гости возвращаются к нам каждый год.</p>
+    </div>
     <div class="benefits-grid">
       <article class="benefit-card reveal">
         <span class="benefit-number" aria-hidden="true">01</span>
@@ -1028,7 +1106,7 @@
   <section class="page-section" id="infrastructure" data-od-id="infrastructure" aria-labelledby="infrastructure-title">
     <div class="section-head">
       <div>
-        <p class="section-kicker">03 · Территория и инфраструктура</p>
+        <p class="section-kicker">02 · Территория и инфраструктура</p>
         <h2 class="section-title" id="infrastructure-title">Здесь можно провести весь день</h2>
       </div>
       <div>
@@ -1039,53 +1117,47 @@
       </div>
     </div>
     <div class="collapsible-body" id="infrastructure-body">
-    <div class="infra-photos" aria-label="Фотографии территории и удобств">
-      <div class="photo-row photo-row--3">
-        <figure class="section-photo-card">
-          <img src="assets/pools.svg" alt="Два бассейна с подогревом: взрослый 1,5 м и детский 1 м" loading="lazy" decoding="async">
-          <figcaption>Два бассейна с подогревом — взрослый и детский</figcaption>
-        </figure>
-        <figure class="section-photo-card">
-          <img src="assets/garden.svg" alt="Зелёная территория парк-отеля с дорожками и цветами" loading="lazy" decoding="async">
-          <figcaption>Закрытый зелёный двор с цветами и зонами отдыха</figcaption>
-        </figure>
-        <figure class="section-photo-card">
-          <img src="assets/kids-room.svg" alt="Детская веранда с няней" loading="lazy" decoding="async">
-          <figcaption>Детская веранда с няней 6 дней в неделю</figcaption>
-        </figure>
-      </div>
-      <div class="photo-row photo-row--4">
-        <figure class="section-photo-card">
-          <img src="assets/playground.svg" alt="Детская площадка с лабиринтом и батутом" loading="lazy" decoding="async">
-          <figcaption>Детский лабиринт, площадка и батут</figcaption>
-        </figure>
-        <figure class="section-photo-card">
-          <img src="assets/restaurant.svg" alt="Ресторан и бар для гостей отеля" loading="lazy" decoding="async">
-          <figcaption>Ресторан с детским меню и бар</figcaption>
-        </figure>
-        <figure class="section-photo-card">
-          <img src="assets/bar.svg" alt="Бар на территории отеля" loading="lazy" decoding="async">
-          <figcaption>Бар работает с 8:00 до 22:00</figcaption>
-        </figure>
-        <figure class="section-photo-card">
-          <img src="assets/game-room.svg" alt="Игровой зал с бильярдом и аэрохоккеем" loading="lazy" decoding="async">
-          <figcaption>Игровой зал: бильярд, аэрохоккей, настольный теннис</figcaption>
-        </figure>
-      </div>
-      <div class="photo-row photo-row--3">
-        <figure class="section-photo-card">
-          <img src="assets/billiard.svg" alt="Бильярдный стол" loading="lazy" decoding="async">
-          <figcaption>Бильярд для вечернего досуга</figcaption>
-        </figure>
-        <figure class="section-photo-card">
-          <img src="assets/bicycles.svg" alt="Велосипеды для гостей" loading="lazy" decoding="async">
-          <figcaption>Велосипеды, фрисби, баскетбол</figcaption>
-        </figure>
-        <figure class="section-photo-card">
-          <img src="assets/barbecue.svg" alt="Мангальная зона" loading="lazy" decoding="async">
-          <figcaption>Мангальная зона для вечерних посиделок</figcaption>
-        </figure>
-      </div>
+    <div class="gallery-grid" aria-label="Фотографии территории и удобств">
+      <figure class="gallery-card">
+        <img src="assets/pools.svg" alt="Два бассейна с подогревом: взрослый 1,5 м и детский 1 м" loading="lazy" decoding="async">
+        <figcaption>Два бассейна с&nbsp;подогревом — взрослый и&nbsp;детский</figcaption>
+      </figure>
+      <figure class="gallery-card">
+        <img src="assets/garden.svg" alt="Зелёная территория парк-отеля с дорожками и цветами" loading="lazy" decoding="async">
+        <figcaption>Закрытый зелёный двор с&nbsp;цветами и&nbsp;зонами отдыха</figcaption>
+      </figure>
+      <figure class="gallery-card">
+        <img src="assets/kids-room.svg" alt="Детская веранда с няней" loading="lazy" decoding="async">
+        <figcaption>Детская веранда с&nbsp;няней 6&nbsp;дней в&nbsp;неделю</figcaption>
+      </figure>
+      <figure class="gallery-card">
+        <img src="assets/playground.svg" alt="Детская площадка с лабиринтом и батутом" loading="lazy" decoding="async">
+        <figcaption>Детский лабиринт, площадка и&nbsp;батут</figcaption>
+      </figure>
+      <figure class="gallery-card">
+        <img src="assets/restaurant.svg" alt="Ресторан и бар для гостей отеля" loading="lazy" decoding="async">
+        <figcaption>Ресторан с&nbsp;детским меню и&nbsp;бар</figcaption>
+      </figure>
+      <figure class="gallery-card">
+        <img src="assets/bar.svg" alt="Бар на территории отеля" loading="lazy" decoding="async">
+        <figcaption>Бар работает с&nbsp;8:00 до&nbsp;22:00</figcaption>
+      </figure>
+      <figure class="gallery-card">
+        <img src="assets/game-room.svg" alt="Игровой зал с бильярдом и аэрохоккеем" loading="lazy" decoding="async">
+        <figcaption>Игровой зал: бильярд, аэрохоккей</figcaption>
+      </figure>
+      <figure class="gallery-card">
+        <img src="assets/billiard.svg" alt="Бильярдный стол" loading="lazy" decoding="async">
+        <figcaption>Бильярд для вечернего досуга</figcaption>
+      </figure>
+      <figure class="gallery-card">
+        <img src="assets/bicycles.svg" alt="Велосипеды для гостей" loading="lazy" decoding="async">
+        <figcaption>Велосипеды, фрисби, баскетбол</figcaption>
+      </figure>
+      <figure class="gallery-card">
+        <img src="assets/barbecue.svg" alt="Мангальная зона" loading="lazy" decoding="async">
+        <figcaption>Мангальная зона для&nbsp;вечерних посиделок</figcaption>
+      </figure>
     </div>
     <div class="infrastructure-grid">
       <article class="facility-group">
@@ -1141,39 +1213,45 @@
     </aside>
   </section>
 
-  <section class="page-section page-section--muted" id="food" data-od-id="food" aria-labelledby="food-title">
-    <figure class="food-photo reveal">
-      <img src="assets/food-restaurant.svg" alt="Ресторан и бар для гостей отеля Гранд Камелия" loading="lazy" decoding="async">
-    </figure>
-    <div class="collapsible-body" id="food-body">
-    <div class="food-layout">
-      <div class="food-copy reveal">
-        <p class="section-kicker">04 · Ресторан и питание</p>
-        <h2 id="food-title">Еда рядом, без ежедневного поиска кафе</h2>
-        <p>На территории работает ресторан и бар для гостей отеля. Можно заказать блюда по меню или заранее выбрать завтрак, обед и ужин ко времени — удобно, если вы отдыхаете с детьми и не хотите каждый раз искать кафе в посёлке.</p>
-        <div style="display:flex; gap:var(--space-3); flex-wrap:wrap; align-items:center;">
-          <a class="action-link" href="/menu" aria-label="Посмотреть актуальное меню ресторана" style="margin-top:0">Посмотреть меню</a>
-          <button class="section-toggle" type="button" data-collapse="food-body" aria-expanded="true">
+  <section class="page-section food-section" id="food" data-od-id="food" aria-labelledby="food-title">
+    <img class="food-bg" src="assets/food-restaurant.svg" alt="" aria-hidden="true">
+    <div class="food-overlay"></div>
+    <div class="food-content">
+      <div class="section-head">
+        <div>
+          <p class="section-kicker">03 · Ресторан и питание</p>
+          <h2 class="section-title" id="food-title">Еда рядом, без ежедневного поиска кафе</h2>
+        </div>
+        <div>
+          <p class="section-intro">На территории работает ресторан и бар для гостей отеля. Можно заказать блюда по меню или заранее выбрать завтрак, обед и ужин ко времени.</p>
+          <button class="section-toggle section-toggle--light" type="button" data-collapse="food-body" aria-expanded="true">
             <span class="toggle-icon" aria-hidden="true">▾</span> Свернуть
           </button>
         </div>
       </div>
-      <div class="reveal">
-        <div class="fact-stack" aria-label="Режим работы ресторана и бара">
-        <div class="fact-row"><span>Детское меню</span><span>Есть</span></div>
-        <div class="fact-row"><span>Цены</span><span>Актуальные — в меню</span></div>
-        <div class="fact-row"><span>Кафе-ресторан</span><span>8:00–21:00</span></div>
-        <div class="fact-row"><span>Бар</span><span>8:00–22:00</span></div>
-        <div class="fact-row"><span>Доступ</span><span>Для гостей отеля</span></div>
+      <div class="collapsible-body" id="food-body">
+      <div class="food-layout">
+        <div class="food-copy reveal">
+          <p>Можно заказать блюда по меню или заранее выбрать завтрак, обед и ужин ко времени — удобно, если вы отдыхаете с детьми и не хотите каждый раз искать кафе в посёлке.</p>
+          <a class="action-link action-link--light" href="menu.pdf" target="_blank" rel="noopener" aria-label="Открыть меню ресторана в PDF">Посмотреть меню</a>
+        </div>
+        <div class="reveal">
+          <div class="fact-stack" aria-label="Режим работы ресторана и бара">
+          <div class="fact-row"><span>Детское меню</span><span>Есть</span></div>
+          <div class="fact-row"><span>Цены</span><span>Актуальные — в меню</span></div>
+          <div class="fact-row"><span>Кафе-ресторан</span><span>8:00–21:00</span></div>
+          <div class="fact-row"><span>Бар</span><span>8:00–22:00</span></div>
+          <div class="fact-row"><span>Доступ</span><span>Для гостей отеля</span></div>
+        </div>
       </div>
+      </div><!-- /collapsible-body -->
     </div>
-    </div><!-- /collapsible-body -->
   </section>
 
   <section class="page-section" id="rooms" data-od-id="rooms" aria-labelledby="rooms-title">
     <div class="section-head">
       <div>
-        <p class="section-kicker">05 · Номера</p>
+        <p class="section-kicker">04 · Номера</p>
         <h2 class="section-title" id="rooms-title">Выберите пространство под состав семьи</h2>
       </div>
       <p class="section-intro" style="margin-bottom:0">От компактного стандарта для пары до трёхкомнатного номера для большой семьи.</p>
@@ -1183,66 +1261,78 @@
       </div>
     </div>
     <div class="collapsible-body" id="rooms-body">
-    <div class="section-photo-grid" aria-label="Фотографии номеров">
-      <figure class="section-photo-card">
-        <img src="assets/room-standart.svg" alt="Номер Стандарт — двуспальная кровать, кондиционер, телевизор, Wi-Fi, терраса" loading="lazy" decoding="async">
-        <figcaption>Стандарт — уютный номер для пары или небольшой семьи</figcaption>
-      </figure>
-      <figure class="section-photo-card section-photo-card--small">
-        <img src="assets/room-comfort-1room.svg" alt="Номер Однокомнатный комфорт — двуспальная кровать и раскладной диван" loading="lazy" decoding="async">
-        <figcaption>Однокомнатный комфорт — двуспальная кровать и раскладной диван</figcaption>
-      </figure>
-    </div>
-    <div class="section-photo-grid" aria-label="Фотографии номеров">
-      <figure class="section-photo-card">
-        <img src="assets/room-premium-1room.svg" alt="Номер Однокомнатный премиум — просторный номер с двуспальной кроватью и диваном" loading="lazy" decoding="async">
-        <figcaption>Однокомнатный премиум — больше пространства и комфорта</figcaption>
-      </figure>
-      <figure class="section-photo-card section-photo-card--small">
-        <img src="assets/room-comfort-2room.svg" alt="Номер Двухкомнатный комфорт — две комнаты, терраса" loading="lazy" decoding="async">
-        <figcaption>Двухкомнатный комфорт — идеально для семьи с детьми</figcaption>
-      </figure>
-    </div>
-    <div class="section-photo-grid" aria-label="Фотографии номеров">
-      <figure class="section-photo-card">
-        <img src="assets/room-premium-2room.svg" alt="Номер Двухкомнатный премиум — больше пространства для семьи" loading="lazy" decoding="async">
-        <figcaption>Двухкомнатный премиум — простор для семьи до 5 гостей</figcaption>
-      </figure>
-      <figure class="section-photo-card section-photo-card--small">
-        <img src="assets/room-premium-3room.svg" alt="Номер Трёхкомнатный премиум — две спальни и зал, два санузла" loading="lazy" decoding="async">
-        <figcaption>Трёхкомнатный премиум — для большой семьи или компании</figcaption>
-      </figure>
-    </div>
-    <div class="room-grid">
-      <article class="room-card">
-        <span class="room-capacity">2–3 ГОСТЯ</span>
-        <h3>Стандарт</h3>
-        <p>Двуспальная кровать или две односпальные; в части номеров есть раскладное кресло.</p>
+    <div class="rooms-gallery" aria-label="Номера — фотографии и описание">
+      <article class="room-post" data-room="standart">
+        <div class="room-post-media">
+          <div class="room-post-slides">
+            <img src="assets/room-standart.svg" alt="Номер Стандарт — двуспальная кровать, кондиционер, телевизор, Wi-Fi, терраса" loading="lazy" decoding="async">
+          </div>
+          <span class="room-post-badge">2–3 гостя</span>
+        </div>
+        <div class="room-post-body">
+          <h3>Стандарт</h3>
+          <p>Двуспальная кровать или две односпальные; в&nbsp;части номеров есть раскладное кресло.</p>
+        </div>
       </article>
-      <article class="room-card">
-        <span class="room-capacity">ДО 4 ГОСТЕЙ</span>
-        <h3>Однокомнатный комфорт</h3>
-        <p>Двуспальная кровать и раскладной диван.</p>
+      <article class="room-post" data-room="comfort-1room">
+        <div class="room-post-media">
+          <div class="room-post-slides">
+            <img src="assets/room-comfort-1room.svg" alt="Номер Однокомнатный комфорт — двуспальная кровать и раскладной диван" loading="lazy" decoding="async">
+          </div>
+          <span class="room-post-badge">до 4 гостей</span>
+        </div>
+        <div class="room-post-body">
+          <h3>Однокомнатный комфорт</h3>
+          <p>Двуспальная кровать и&nbsp;раскладной диван.</p>
+        </div>
       </article>
-      <article class="room-card">
-        <span class="room-capacity">ДО 4 ГОСТЕЙ</span>
-        <h3>Однокомнатный премиум</h3>
-        <p>Просторный однокомнатный номер с двуспальной кроватью и раскладным диваном.</p>
+      <article class="room-post" data-room="premium-1room">
+        <div class="room-post-media">
+          <div class="room-post-slides">
+            <img src="assets/room-premium-1room.svg" alt="Номер Однокомнатный премиум — просторный номер с двуспальной кроватью и диваном" loading="lazy" decoding="async">
+          </div>
+          <span class="room-post-badge">до 4 гостей</span>
+        </div>
+        <div class="room-post-body">
+          <h3>Однокомнатный премиум</h3>
+          <p>Просторный однокомнатный номер с&nbsp;двуспальной кроватью и&nbsp;раскладным диваном.</p>
+        </div>
       </article>
-      <article class="room-card">
-        <span class="room-capacity">ДО 5 ГОСТЕЙ</span>
-        <h3>Двухкомнатный комфорт</h3>
-        <p>Двуспальная кровать, односпальная кровать и раскладной диван.</p>
+      <article class="room-post" data-room="comfort-2room">
+        <div class="room-post-media">
+          <div class="room-post-slides">
+            <img src="assets/room-comfort-2room.svg" alt="Номер Двухкомнатный комфорт — две комнаты, терраса" loading="lazy" decoding="async">
+          </div>
+          <span class="room-post-badge">до 5 гостей</span>
+        </div>
+        <div class="room-post-body">
+          <h3>Двухкомнатный комфорт</h3>
+          <p>Двуспальная кровать, односпальная кровать и&nbsp;раскладной диван.</p>
+        </div>
       </article>
-      <article class="room-card">
-        <span class="room-capacity">ДО 5 ГОСТЕЙ</span>
-        <h3>Двухкомнатный премиум</h3>
-        <p>Больше пространства для семьи: двуспальная кровать, односпальная кровать и раскладной диван.</p>
+      <article class="room-post" data-room="premium-2room">
+        <div class="room-post-media">
+          <div class="room-post-slides">
+            <img src="assets/room-premium-2room.svg" alt="Номер Двухкомнатный премиум — больше пространства для семьи" loading="lazy" decoding="async">
+          </div>
+          <span class="room-post-badge">до 5 гостей</span>
+        </div>
+        <div class="room-post-body">
+          <h3>Двухкомнатный премиум</h3>
+          <p>Больше пространства для семьи: двуспальная кровать, односпальная кровать и&nbsp;раскладной диван.</p>
+        </div>
       </article>
-      <article class="room-card">
-        <span class="room-capacity">ДО 7 ГОСТЕЙ</span>
-        <h3>Трёхкомнатный премиум</h3>
-        <p>Две спальни и зал: две двуспальные кровати, односпальная кровать и раскладной диван.</p>
+      <article class="room-post" data-room="premium-3room">
+        <div class="room-post-media">
+          <div class="room-post-slides">
+            <img src="assets/room-premium-3room.svg" alt="Номер Трёхкомнатный премиум — две спальни и зал, два санузла" loading="lazy" decoding="async">
+          </div>
+          <span class="room-post-badge">до 7 гостей</span>
+        </div>
+        <div class="room-post-body">
+          <h3>Трёхкомнатный премиум</h3>
+          <p>Две спальни и&nbsp;зал: две двуспальные кровати, односпальная кровать и&nbsp;раскладной диван.</p>
+        </div>
       </article>
     </div>
     <div class="room-standard">
@@ -1254,11 +1344,16 @@
   </section>
 
   <section class="page-section page-section--dark" id="location" data-od-id="location" aria-labelledby="location-title">
+    <div class="section-head">
+      <div>
+        <p class="section-kicker">05 · Море и расположение</p>
+        <h2 class="section-title" id="location-title">Не первая линия. Зато тишина и свой ритм</h2>
+      </div>
+      <p class="section-intro">Мы не в шумном центре. Зато у нас спокойная зелёная территория, бассейны, ресторан и инфраструктура для семейного отдыха.</p>
+    </div>
     <div class="location-layout">
       <div class="location-copy reveal">
         <img class="location-map-img" src="assets/location-map.svg" alt="Карта расположения отеля Гранд Камелия, ул. Лучистая, 36, п. Кучугуры" loading="lazy" decoding="async">
-        <p class="section-kicker">06 · Море и расположение</p>
-        <h2 id="location-title">Не первая линия. Зато тишина и свой ритм</h2>
         <p>Мы не в шумном центре. Зато у нас спокойная зелёная территория, бассейны, ресторан и инфраструктура для семейного отдыха.</p>
         <a class="action-link" href="https://yandex.ru/maps/?text=%D0%9A%D1%83%D1%87%D1%83%D0%B3%D1%83%D1%80%D1%8B%2C%20%D1%83%D0%BB.%20%D0%9B%D1%83%D1%87%D0%B8%D1%81%D1%82%D0%B0%D1%8F%2C%2036" target="_blank" rel="noopener">Построить маршрут</a>
       </div>
@@ -1272,13 +1367,15 @@
   </section>
 
   <section class="page-section" id="reviews" data-od-id="reviews" aria-labelledby="reviews-title">
+    <div class="section-head">
+      <div>
+        <p class="section-kicker">06 · Отзывы гостей</p>
+        <h2 class="section-title" id="reviews-title">Что говорят наши гости</h2>
+      </div>
+      <p class="section-intro">Гости чаще всего отмечают зелёную территорию, детские зоны, вкусную еду, чистые бассейны и спокойную атмосферу.</p>
+    </div>
     <div class="reviews-top reveal">
       <div class="rating" aria-label="Рейтинг 4,9 из 5">4.9<small>РЕЙТИНГ ГОСТЕЙ</small></div>
-      <div>
-        <p class="section-kicker">07 · Отзывы гостей</p>
-        <h2 class="sr-only" id="reviews-title">Отзывы гостей</h2>
-        <p class="reviews-lead">Гости чаще всего отмечают зелёную территорию, детские зоны, вкусную еду, чистые бассейны и спокойную атмосферу.</p>
-      </div>
     </div>
     <div class="review-grid">
       <figure class="review-card reveal"><blockquote>«Детям всегда было чем заняться, а я благодаря этому смогла полноценно отдохнуть».</blockquote><figcaption><cite>Екатерина К.</cite></figcaption></figure>
@@ -1295,7 +1392,7 @@
   <section class="page-section page-section--muted" id="terms" data-od-id="included-and-paid" aria-labelledby="terms-title">
     <div class="section-head">
       <div>
-        <p class="section-kicker">08 · Условия</p>
+        <p class="section-kicker">07 · Условия</p>
         <h2 class="section-title" id="terms-title">Что включено, а что оплачивается отдельно</h2>
       </div>
       <p class="section-intro" style="margin-bottom:0">Без мелкого шрифта и неожиданных доплат после заезда.</p>
@@ -1337,7 +1434,7 @@
   <section class="page-section" id="audience" data-od-id="audience-fit" aria-labelledby="audience-title">
     <div class="section-head">
       <div>
-        <p class="section-kicker">09 · Для кого этот отель</p>
+        <p class="section-kicker">08 · Для кого этот отель</p>
         <h2 class="section-title" id="audience-title">Совпадём ли мы по формату отдыха?</h2>
       </div>
       <p class="section-intro" style="margin-bottom:0">Лучше честно сверить ожидания до бронирования.</p>
@@ -1374,7 +1471,7 @@
   <section class="page-section page-section--muted" id="faq" data-od-id="faq" aria-labelledby="faq-title">
     <div class="section-head">
       <div>
-        <p class="section-kicker">10 · FAQ</p>
+        <p class="section-kicker">09 · FAQ</p>
         <h2 class="section-title" id="faq-title">Ответы до поездки</h2>
       </div>
       <p class="section-intro" style="margin-bottom:0">Самое важное о заезде, территории, правилах и дополнительных услугах.</p>
@@ -1410,10 +1507,15 @@
   </section>
 
   <section class="page-section page-section--dark" id="contacts" data-od-id="contacts" aria-labelledby="contacts-title">
+    <div class="section-head">
+      <div>
+        <p class="section-kicker">10 · Контакты и бронирование</p>
+        <h2 class="section-title" id="contacts-title">Забронируйте спокойный семейный отдых в Гранд Камелии</h2>
+      </div>
+      <p class="section-intro">Проверьте свободные даты онлайн или свяжитесь с нами удобным способом.</p>
+    </div>
     <div class="contacts-layout">
       <div class="contacts-copy reveal">
-        <p class="section-kicker">11 · Контакты и бронирование</p>
-        <h2 id="contacts-title">Забронируйте спокойный семейный отдых в Гранд Камелии</h2>
         <p>Проверьте свободные даты онлайн или свяжитесь с нами удобным способом.</p>
         <div class="contacts-actions">
           <a class="book-button" href="https://reservationsteps.ru/rooms/index/c22a3bbc-83e7-485d-b881-b05cf2b64ab1">Забронировать</a>
