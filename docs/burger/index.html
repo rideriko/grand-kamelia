@@ -180,8 +180,6 @@
 (function() {
 'use strict';
 
-var KEY = 'burger_voted';
-
 // ---- helpers ----
 
 function fetchJSON(url) {
@@ -215,16 +213,6 @@ function getCounts() {
 
 function hitYes() { return fetchJSON(API + '/hit/gcamellia-burger-yes'); }
 function hitNo()  { return fetchJSON(API + '/hit/gcamellia-burger-no');  }
-
-function voted() {
-    try { return localStorage.getItem(KEY) === '1'; } catch(e) { return false; }
-}
-function setVoted() {
-    try { localStorage.setItem(KEY, '1'); } catch(e) {}
-}
-function clearVoted() {
-    try { localStorage.removeItem(KEY); } catch(e) {}
-}
 
 // ---- screens ----
 
@@ -263,13 +251,9 @@ function showResults(yes, no) {
 // ---- vote ----
 
 window.vote = function(choice) {
-    if (voting) return;           // не спамим
-    if (voted()) {                // уже голосовал — просто показываем
-        getCounts().then(function(c) { showResults(c.yes, c.no); });
-        return;
-    }
-
+    if (voting) return;
     voting = true;
+
     var btn = choice === 'yes'
         ? document.querySelector('.btn-yes')
         : document.querySelector('.btn-no');
@@ -280,16 +264,20 @@ window.vote = function(choice) {
     var hit = choice === 'yes' ? hitYes : hitNo;
 
     hit().then(function() {
-        setVoted();
         if (navigator.vibrate) navigator.vibrate(30);
         return getCounts();
     }).then(function(c) {
         showResults(c.yes, c.no);
+        // Через 4 секунды возвращаем кнопки
+        setTimeout(function() {
+            showVoteScreen();
+        }, 4000);
     }).catch(function() {
-        // Если API не ответил — всё равно засчитываем локально и показываем примерные результаты
-        setVoted();
         alert('Голос принят! (результаты обновятся через секунду)');
         getCounts().then(function(c) { showResults(c.yes, c.no); });
+        setTimeout(function() {
+            showVoteScreen();
+        }, 4000);
     }).then(function() {
         voting = false;
         btn.textContent = origText;
@@ -297,29 +285,9 @@ window.vote = function(choice) {
     });
 };
 
-// ---- reset: три быстрых тапа по эмодзи ----
-
-var taps = [];
-document.addEventListener('click', function(e) {
-    if (!e.target.closest('.emoji')) return;
-    var now = Date.now();
-    taps.push(now);
-    taps = taps.filter(function(t) { return now - t < 1500; });
-    if (taps.length >= 3) {
-        taps = [];
-        clearVoted();
-        showVoteScreen();
-        if (navigator.vibrate) navigator.vibrate([50, 50, 50]);
-    }
-});
-
 // ---- init ----
 
-if (voted()) {
-    getCounts().then(function(c) { showResults(c.yes, c.no); });
-} else {
-    getCounts(); // подгружаем фоном
-}
+getCounts(); // подгружаем фоном
 
 })();
 </script>
