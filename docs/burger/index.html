@@ -98,7 +98,17 @@
             font-size: 18px;
             font-weight: 700;
             color: #2d1b0e;
-            margin-bottom: 24px;
+            margin-bottom: 6px;
+        }
+
+        .my-vote {
+            font-size: 14px;
+            color: #8b6f55;
+            margin-bottom: 18px;
+        }
+
+        .my-vote strong {
+            color: #2d1b0e;
         }
 
         .bar-group {
@@ -144,6 +154,29 @@
             font-size: 13px;
             color: #a08870;
         }
+
+        .btn-change {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 24px;
+            font-size: 15px;
+            font-weight: 600;
+            color: #5a4a3a;
+            background: #f5f0eb;
+            border: 1.5px solid #d4c8bc;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+
+        .btn-change:hover {
+            background: #ebe3d9;
+        }
+
+        .btn-change:active {
+            background: #ddd4c8;
+            transform: scale(0.97);
+        }
     </style>
 </head>
 <body>
@@ -153,7 +186,7 @@
     <div id="vote-screen">
         <div class="emoji">🍔</div>
         <h1>Нужна ли помидорка<br>в бургере?</h1>
-        <p class="sub">Голосуйте! Нам важно ваше мнение</p>
+        <p class="sub" id="vote-sub">Голосуйте! Нам важно ваше мнение</p>
         <div class="buttons">
             <button class="btn btn-yes" onclick="vote('yes')">ДА</button>
             <button class="btn btn-no"  onclick="vote('no')">НЕТ</button>
@@ -164,6 +197,7 @@
     <div id="results-screen" class="results">
         <div class="emoji">🍅</div>
         <p class="ty-msg">Спасибо за ваш голос!</p>
+        <p class="my-vote">Ваш выбор: <strong id="my-choice">—</strong></p>
         <div class="bar-group">
             <div class="bar-label"><span>Да, помидорка нужна</span><span id="pct-yes">0%</span></div>
             <div class="bar-track"><div class="bar-fill yes" id="bar-yes" style="width:0%"></div></div>
@@ -173,12 +207,15 @@
             <div class="bar-track"><div class="bar-fill no" id="bar-no" style="width:0%"></div></div>
         </div>
         <p class="total-votes">Всего голосов: <strong id="total">0</strong></p>
+        <button class="btn-change" onclick="changeVote()">🔄 Изменить решение</button>
     </div>
 </div>
 
 <script>
 (function() {
 'use strict';
+
+var CHOICE_KEY = 'burger_choice'; // 'yes' или 'no'
 
 // ---- helpers ----
 
@@ -214,10 +251,22 @@ function getCounts() {
 function hitYes() { return fetchJSON(API + '/hit/gcamellia-burger-yes'); }
 function hitNo()  { return fetchJSON(API + '/hit/gcamellia-burger-no');  }
 
+function getMyChoice() {
+    try { return localStorage.getItem(CHOICE_KEY); } catch(e) { return null; }
+}
+function setMyChoice(choice) {
+    try { localStorage.setItem(CHOICE_KEY, choice); } catch(e) {}
+}
+function clearMyChoice() {
+    try { localStorage.removeItem(CHOICE_KEY); } catch(e) {}
+}
+
 // ---- screens ----
 
 var $vote    = document.getElementById('vote-screen');
 var $results = document.getElementById('results-screen');
+var $voteSub = document.getElementById('vote-sub');
+var $myChoice= document.getElementById('my-choice');
 var $pctYes  = document.getElementById('pct-yes');
 var $pctNo   = document.getElementById('pct-no');
 var $barYes  = document.getElementById('bar-yes');
@@ -226,17 +275,35 @@ var $total   = document.getElementById('total');
 
 var voting = false;
 
-function showVoteScreen() {
+var LABELS = { yes: 'ДА 👍', no: 'НЕТ 👎' };
+var EMOJI  = { yes: '🍅',  no: '🍔' };
+
+function showVoteScreen(changing) {
     $vote.style.display = '';
     $results.classList.remove('show');
+    if (changing) {
+        $voteSub.textContent = 'Ваш выбор: ' + LABELS[getMyChoice()] + ' — измените на:';
+    } else {
+        $voteSub.textContent = 'Голосуйте! Нам важно ваше мнение';
+    }
 }
 
 function showResults(yes, no) {
     $vote.style.display = 'none';
     $results.classList.add('show');
 
+    var choice = getMyChoice();
+    $myChoice.textContent = choice ? LABELS[choice] : '—';
+
     var total = yes + no;
-    if (total === 0) return;
+    if (total === 0) {
+        $pctYes.textContent = '0%';
+        $pctNo.textContent  = '0%';
+        $barYes.style.width = '0%';
+        $barNo.style.width  = '0%';
+        $total.textContent  = '0';
+        return;
+    }
 
     var pctYes = Math.round((yes / total) * 100);
     var pctNo  = 100 - pctYes;
@@ -252,8 +319,16 @@ function showResults(yes, no) {
 
 window.vote = function(choice) {
     if (voting) return;
-    voting = true;
 
+    var prev = getMyChoice();
+
+    // Если уже голосовал и выбрал то же самое — просто показываем результаты
+    if (prev && prev === choice) {
+        getCounts().then(function(c) { showResults(c.yes, c.no); });
+        return;
+    }
+
+    voting = true;
     var btn = choice === 'yes'
         ? document.querySelector('.btn-yes')
         : document.querySelector('.btn-no');
@@ -264,20 +339,14 @@ window.vote = function(choice) {
     var hit = choice === 'yes' ? hitYes : hitNo;
 
     hit().then(function() {
+        setMyChoice(choice);
         if (navigator.vibrate) navigator.vibrate(30);
         return getCounts();
     }).then(function(c) {
         showResults(c.yes, c.no);
-        // Через 4 секунды возвращаем кнопки
-        setTimeout(function() {
-            showVoteScreen();
-        }, 4000);
     }).catch(function() {
-        alert('Голос принят! (результаты обновятся через секунду)');
+        setMyChoice(choice);
         getCounts().then(function(c) { showResults(c.yes, c.no); });
-        setTimeout(function() {
-            showVoteScreen();
-        }, 4000);
     }).then(function() {
         voting = false;
         btn.textContent = origText;
@@ -285,9 +354,20 @@ window.vote = function(choice) {
     });
 };
 
+// ---- change vote ----
+
+window.changeVote = function() {
+    showVoteScreen(true);
+};
+
 // ---- init ----
 
 getCounts(); // подгружаем фоном
+
+// Если уже голосовал — показываем результаты
+if (getMyChoice()) {
+    getCounts().then(function(c) { showResults(c.yes, c.no); });
+}
 
 })();
 </script>
