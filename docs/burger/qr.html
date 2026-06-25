@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QR-домик — Помидорка в бургере</title>
+    <title>QR-домик — Помидорка в бургере · Grand Camellia</title>
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -29,7 +29,7 @@
             padding: 24px 20px 16px;
             text-align: center;
             transform: rotate(180deg);
-            border-bottom: 2px dashed #cbb8a7;
+            border-bottom: 2px dashed #d4c8bc;
         }
 
         /* Сторона Б — нормальная */
@@ -40,24 +40,26 @@
 
         .side-a .emoji,
         .side-b .emoji {
-            font-size: 36px;
+            font-size: 32px;
             line-height: 1;
-            margin-bottom: 2px;
+            margin-bottom: 4px;
+            letter-spacing: 2px;
         }
 
         .side-a h2,
         .side-b h2 {
-            font-size: 20px;
-            font-weight: 900;
-            color: #2d1b0e;
-            line-height: 1.2;
-            margin-bottom: 6px;
+            font-size: 19px;
+            font-weight: 700;
+            color: #3d2b1a;
+            line-height: 1.3;
+            margin-bottom: 4px;
+            font-family: 'Georgia', 'Times New Roman', serif;
         }
 
         .side-a .qr-wrap,
         .side-b .qr-wrap {
             display: inline-block;
-            border: 2.5px solid #2d1b0e;
+            border: 2.5px solid #3d2b1a;
             border-radius: 12px;
             padding: 6px;
             line-height: 0;
@@ -74,27 +76,29 @@
         .side-a .url,
         .side-b .url {
             font-size: 12px;
-            font-weight: 700;
-            color: #5a4a3a;
-            background: #f8f5f0;
+            font-weight: 600;
+            color: #6b5843;
+            background: #faf7f2;
             display: inline-block;
             padding: 4px 14px;
             border-radius: 14px;
             margin-bottom: 6px;
+            letter-spacing: 0.3px;
         }
 
-        .side-a .joke,
-        .side-b .joke {
+        .side-a .tagline,
+        .side-b .tagline {
             font-size: 14px;
-            font-weight: 700;
-            color: #c62828;
-            line-height: 1.3;
+            font-weight: 600;
+            color: #5a3e2b;
+            line-height: 1.4;
+            font-family: 'Georgia', 'Times New Roman', serif;
         }
 
-        .side-a .joke2,
-        .side-b .joke2 {
+        .side-a .tagline2,
+        .side-b .tagline2 {
             font-size: 11px;
-            color: #8b6f55;
+            color: #9b8570;
             font-style: italic;
             margin-top: 2px;
         }
@@ -112,26 +116,26 @@
 <div class="tent">
     <!-- Сторона А — перевёрнутая, смотрит на соседа напротив -->
     <div class="side-a">
-        <div class="emoji">🍅❓🍔</div>
-        <h2>Помидорка<br>в бургере?</h2>
+        <div class="emoji">🍅  🍔</div>
+        <h2>Ваше мнение<br>для нас важно</h2>
         <div class="qr-wrap">
-            <img src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=https://gcamellia.ru/burger&color=2d1b0e" alt="QR">
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=https://gcamellia.ru/burger&color=3d2b1a" alt="QR">
         </div>
         <p class="url">gcamellia.ru/burger</p>
-        <p class="joke">Судьба помидорки —<br>в твоих руках!</p>
-        <p class="joke2">Шеф-повар ждёт вердикта ⚖️</p>
+        <p class="tagline">Нужна ли помидорка<br>в бургере?</p>
+        <p class="tagline2">Помогите нам стать лучше</p>
     </div>
 
     <!-- Сторона Б — нормальная, смотрит на сидящего рядом -->
     <div class="side-b">
-        <div class="emoji">🍔❓🍅</div>
-        <h2>Помидорный<br>вопрос!</h2>
+        <div class="emoji">🍔  🍅</div>
+        <h2>Помогите шефу<br>с выбором</h2>
         <div class="qr-wrap">
-            <img src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=https://gcamellia.ru/burger&color=2d1b0e" alt="QR">
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=https://gcamellia.ru/burger&color=3d2b1a" alt="QR">
         </div>
         <p class="url">gcamellia.ru/burger</p>
-        <p class="joke">Быть или не быть?<br>Решает гость, а не повар!</p>
-        <p class="joke2">Каждый голос важен 🗳️</p>
+        <p class="tagline">Нужна ли помидорка<br>в бургере?</p>
+        <p class="tagline2">Голосование займёт пару секунд</p>
     </div>
 </div>
 
