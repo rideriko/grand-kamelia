@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Опрос — Помидорка в бургере</title>
+    <title>А как вы предпочитаете? — Grand Camellia</title>
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -218,8 +218,8 @@
     <!-- Экран голосования -->
     <div id="vote-screen">
         <div class="emoji">🍔</div>
-        <h1>Нужна ли помидорка<br>в бургере?</h1>
-        <p class="sub" id="vote-sub">Голосуйте! Нам важно ваше мнение</p>
+        <h1>А как вы<br>предпочитаете?</h1>
+        <p class="sub" id="vote-sub">С помидоркой или без?</p>
         <div class="buttons">
             <button class="btn btn-yes" onclick="vote('yes')">ДА</button>
             <button class="btn btn-no"  onclick="vote('no')">НЕТ</button>
@@ -233,11 +233,11 @@
         <p class="ty-msg">Спасибо за ваш голос!</p>
         <p class="my-vote">Ваш выбор: <strong id="my-choice">—</strong></p>
         <div class="bar-group">
-            <div class="bar-label"><span>Да, помидорка нужна</span><span id="pct-yes">0%</span></div>
+            <div class="bar-label"><span>С помидоркой</span><span id="pct-yes">0%</span></div>
             <div class="bar-track"><div class="bar-fill yes" id="bar-yes" style="width:0%"></div></div>
         </div>
         <div class="bar-group">
-            <div class="bar-label"><span>Нет, без помидорки</span><span id="pct-no">0%</span></div>
+            <div class="bar-label"><span>Без помидорки</span><span id="pct-no">0%</span></div>
             <div class="bar-track"><div class="bar-fill no" id="bar-no" style="width:0%"></div></div>
         </div>
         <p class="total-votes">Всего голосов: <strong id="total">0</strong></p>
@@ -310,16 +310,16 @@ var $total   = document.getElementById('total');
 
 var voting = false;
 
-var LABELS = { yes: 'ДА 👍', no: 'НЕТ 👎' };
+var LABELS = { yes: 'С помидоркой 🍅', no: 'Без помидорки 🍔' };
 var EMOJI  = { yes: '🍅',  no: '🍔' };
 
 function showVoteScreen(changing) {
     $vote.style.display = '';
     $results.classList.remove('show');
     if (changing) {
-        $voteSub.textContent = 'Ваш выбор: ' + LABELS[getMyChoice()] + ' — измените на:';
+        $voteSub.textContent = 'Ваш выбор: ' + LABELS[getMyChoice()] + '. Измените:';
     } else {
-        $voteSub.textContent = 'Голосуйте! Нам важно ваше мнение';
+        $voteSub.textContent = 'С помидоркой или без?';
     }
 }
 
