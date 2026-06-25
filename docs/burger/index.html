@@ -177,90 +177,150 @@
 </div>
 
 <script>
-const STORAGE_KEY = 'burger_tomato_poll_voted';
-const API = 'https://api.countapi.xyz';
+(function() {
+'use strict';
 
-async function fetchCounts() {
-    const [yesRes, noRes] = await Promise.all([
-        fetch(API + '/get/gcamellia/burger-yes').then(r => r.json()).catch(() => ({ value: 0 })),
-        fetch(API + '/get/gcamellia/burger-no').then(r => r.json()).catch(() => ({ value: 0 }))
-    ]);
-    return { yes: yesRes.value || 0, no: noRes.value || 0 };
+var KEY = 'burger_voted';
+
+// ---- helpers ----
+
+function fetchJSON(url) {
+    return new Promise(function(resolve, reject) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', url);
+        xhr.timeout = 6000;
+        xhr.onload = function() {
+            if (xhr.status >= 200 && xhr.status < 300) {
+                try { resolve(JSON.parse(xhr.responseText)); } catch(e) { reject(e); }
+            } else {
+                reject(new Error('HTTP ' + xhr.status));
+            }
+        };
+        xhr.onerror = function() { reject(new Error('network')); };
+        xhr.ontimeout = function() { reject(new Error('timeout')); };
+        xhr.send();
+    });
 }
 
-async function voteYes() { await fetch(API + '/hit/gcamellia/burger-yes'); }
-async function voteNo()  { await fetch(API + '/hit/gcamellia/burger-no');  }
+var API = 'https://api.countapi.xyz';
 
-function hasVoted() {
-    try { return localStorage.getItem(STORAGE_KEY) === '1'; } catch { return false; }
+function getCounts() {
+    return Promise.all([
+        fetchJSON(API + '/get/gcamellia/burger-yes').then(function(r) { return r.value || 0; }).catch(function() { return 0; }),
+        fetchJSON(API + '/get/gcamellia/burger-no').then(function(r) { return r.value || 0; }).catch(function() { return 0; })
+    ]).then(function(arr) {
+        return { yes: arr[0], no: arr[1] };
+    });
 }
 
-function markVoted() {
-    try { localStorage.setItem(STORAGE_KEY, '1'); } catch {}
+function hitYes() { return fetchJSON(API + '/hit/gcamellia/burger-yes'); }
+function hitNo()  { return fetchJSON(API + '/hit/gcamellia/burger-no');  }
+
+function voted() {
+    try { return localStorage.getItem(KEY) === '1'; } catch(e) { return false; }
+}
+function setVoted() {
+    try { localStorage.setItem(KEY, '1'); } catch(e) {}
+}
+function clearVoted() {
+    try { localStorage.removeItem(KEY); } catch(e) {}
+}
+
+// ---- screens ----
+
+var $vote    = document.getElementById('vote-screen');
+var $results = document.getElementById('results-screen');
+var $pctYes  = document.getElementById('pct-yes');
+var $pctNo   = document.getElementById('pct-no');
+var $barYes  = document.getElementById('bar-yes');
+var $barNo   = document.getElementById('bar-no');
+var $total   = document.getElementById('total');
+
+var voting = false;
+
+function showVoteScreen() {
+    $vote.style.display = '';
+    $results.classList.remove('show');
 }
 
 function showResults(yes, no) {
-    const total = yes + no;
+    $vote.style.display = 'none';
+    $results.classList.add('show');
 
-    document.getElementById('vote-screen').style.display = 'none';
-    document.getElementById('results-screen').classList.add('show');
-
+    var total = yes + no;
     if (total === 0) return;
 
-    const pctYes = Math.round((yes / total) * 100);
-    const pctNo  = 100 - pctYes;
+    var pctYes = Math.round((yes / total) * 100);
+    var pctNo  = 100 - pctYes;
 
-    document.getElementById('pct-yes').textContent = pctYes + '%';
-    document.getElementById('pct-no').textContent  = pctNo  + '%';
-    document.getElementById('bar-yes').style.width = pctYes + '%';
-    document.getElementById('bar-no').style.width  = pctNo  + '%';
-    document.getElementById('total').textContent = total;
+    $pctYes.textContent = pctYes + '%';
+    $pctNo.textContent  = pctNo  + '%';
+    $barYes.style.width = pctYes + '%';
+    $barNo.style.width  = pctNo  + '%';
+    $total.textContent  = String(total);
 }
 
-async function vote(choice) {
-    if (hasVoted()) {
-        const c = await fetchCounts();
-        showResults(c.yes, c.no);
+// ---- vote ----
+
+window.vote = function(choice) {
+    if (voting) return;           // не спамим
+    if (voted()) {                // уже голосовал — просто показываем
+        getCounts().then(function(c) { showResults(c.yes, c.no); });
         return;
     }
 
-    // Отправляем голос в общий счётчик
-    if (choice === 'yes') await voteYes();
-    else await voteNo();
+    voting = true;
+    var btn = choice === 'yes'
+        ? document.querySelector('.btn-yes')
+        : document.querySelector('.btn-no');
+    var origText = btn.textContent;
+    btn.textContent = '…';
+    btn.disabled = true;
 
-    markVoted();
+    var hit = choice === 'yes' ? hitYes : hitNo;
 
-    if (navigator.vibrate) navigator.vibrate(30);
+    hit().then(function() {
+        setVoted();
+        if (navigator.vibrate) navigator.vibrate(30);
+        return getCounts();
+    }).then(function(c) {
+        showResults(c.yes, c.no);
+    }).catch(function() {
+        // Если API не ответил — всё равно засчитываем локально и показываем примерные результаты
+        setVoted();
+        alert('Голос принят! (результаты обновятся через секунду)');
+        getCounts().then(function(c) { showResults(c.yes, c.no); });
+    }).then(function() {
+        voting = false;
+        btn.textContent = origText;
+        btn.disabled = false;
+    });
+};
 
-    const c = await fetchCounts();
-    showResults(c.yes, c.no);
-}
+// ---- reset: три быстрых тапа по эмодзи ----
 
-// Сброс: 3 быстрых тапа по 🍅
-let tapTimes = [];
-document.getElementById('results-screen').addEventListener('click', function(e) {
+var taps = [];
+document.addEventListener('click', function(e) {
     if (!e.target.closest('.emoji')) return;
-    const now = Date.now();
-    tapTimes.push(now);
-    tapTimes = tapTimes.filter(t => now - t < 1500);
-    if (tapTimes.length >= 3) {
-        tapTimes = [];
-        localStorage.removeItem(STORAGE_KEY);
-        document.getElementById('vote-screen').style.display = '';
-        document.getElementById('results-screen').classList.remove('show');
+    var now = Date.now();
+    taps.push(now);
+    taps = taps.filter(function(t) { return now - t < 1500; });
+    if (taps.length >= 3) {
+        taps = [];
+        clearVoted();
+        showVoteScreen();
         if (navigator.vibrate) navigator.vibrate([50, 50, 50]);
     }
 });
 
-// Загрузка: если голосовал — показать результаты, иначе — экран голосования
-(async function init() {
-    if (hasVoted()) {
-        const c = await fetchCounts();
-        showResults(c.yes, c.no);
-    } else {
-        // Подгружаем текущие результаты в фон (пригодятся после голоса)
-        fetchCounts();
-    }
+// ---- init ----
+
+if (voted()) {
+    getCounts().then(function(c) { showResults(c.yes, c.no); });
+} else {
+    getCounts(); // подгружаем фоном
+}
+
 })();
 </script>
 
