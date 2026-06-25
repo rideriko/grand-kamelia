@@ -158,6 +158,7 @@
         .btn-change {
             display: inline-block;
             margin-top: 20px;
+            margin-bottom: 12px;
             padding: 10px 24px;
             font-size: 15px;
             font-weight: 600;
@@ -200,6 +201,15 @@
             background: #ffcdd2;
             transform: scale(0.97);
         }
+
+        /* Адаптив */
+        @media (max-width: 360px) {
+            .card { padding: 32px 18px 28px; }
+            h1 { font-size: 22px; }
+            .sub { font-size: 13px; margin-bottom: 24px; }
+            .btn { font-size: 18px; padding: 14px 0; }
+            .buttons { gap: 12px; }
+        }
     </style>
 </head>
 <body>
@@ -232,7 +242,6 @@
         </div>
         <p class="total-votes">Всего голосов: <strong id="total">0</strong></p>
         <button class="btn-change" onclick="changeVote()">🔄 Изменить решение</button>
-        <br>
         <button class="btn-reset" id="btn-reset-results" onclick="resetAll()">🗑️ Сбросить всё голосование</button>
     </div>
 </div>
