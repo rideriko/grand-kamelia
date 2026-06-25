@@ -3,212 +3,222 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>А как вы предпочитаете? — Grand Camellia</title>
+    <title>Бургер — с помидоркой или без? · Grand Camellia</title>
+    <link href="https://fonts.cdnfonts.com/css/circular-std" rel="stylesheet">
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: 'Circular Std', 'Circular', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             min-height: 100dvh;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(160deg, #f9373f 0%, #f9373f 30%, #f9a03f 70%, #f9a03f 100%);
-            padding: 20px;
+            background: #ffffff;
+            padding: 24px;
         }
 
         .card {
-            background: #fff;
-            border-radius: 28px;
-            padding: 44px 28px 36px;
-            max-width: 380px;
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 48px 32px 40px;
+            max-width: 400px;
             width: 100%;
             text-align: center;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.25);
-            animation: popIn 0.35s ease-out;
+            border: 1px solid #ebebeb;
+            animation: fadeUp 0.35s ease-out;
         }
 
-        @keyframes popIn {
-            from { opacity: 0; transform: scale(0.9) translateY(20px); }
-            to   { opacity: 1; transform: scale(1) translateY(0); }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(16px); }
+            to   { opacity: 1; transform: translateY(0); }
         }
 
-        .emoji {
-            font-size: 64px;
+        .illustration {
+            margin-bottom: 24px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .illustration .base {
+            font-size: 72px;
             line-height: 1;
-            margin-bottom: 8px;
+        }
+
+        .illustration .ping {
+            position: absolute;
+            top: -6px;
+            right: -18px;
+            font-size: 26px;
+            animation: pulse 1.8s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1);   opacity: 1; }
+            50%      { transform: scale(1.25); opacity: 0.55; }
         }
 
         h1 {
-            font-size: 26px;
-            font-weight: 800;
-            color: #2d1b0e;
-            line-height: 1.25;
-            margin-bottom: 8px;
+            font-size: 22px;
+            font-weight: 600;
+            color: #222222;
+            line-height: 1.18;
+            letter-spacing: -0.44px;
+            margin-bottom: 6px;
         }
 
         .sub {
-            font-size: 15px;
-            color: #8b6f55;
+            font-size: 16px;
+            font-weight: 400;
+            color: #6a6a6a;
+            line-height: 1.43;
             margin-bottom: 32px;
         }
 
         .buttons {
             display: flex;
-            gap: 16px;
+            gap: 12px;
             justify-content: center;
         }
 
         .btn {
             flex: 1;
-            max-width: 140px;
-            padding: 18px 0;
-            font-size: 22px;
-            font-weight: 800;
+            max-width: 156px;
+            padding: 14px 0;
+            font-family: inherit;
+            font-size: 16px;
+            font-weight: 500;
             border: none;
-            border-radius: 18px;
+            border-radius: 32px;
             cursor: pointer;
-            transition: transform 0.15s, box-shadow 0.15s;
-            letter-spacing: 0.5px;
-            color: #fff;
+            transition: transform 0.12s, box-shadow 0.12s, opacity 0.12s;
+            color: #ffffff;
+            background: #ff385c;
+            letter-spacing: 0;
         }
 
-        .btn:active {
-            transform: scale(0.95);
-        }
+        .btn:hover  { background: #e00b41; }
+        .btn:active { background: #d50032; transform: scale(0.97); }
+        .btn:disabled { opacity: 0.5; cursor: default; }
 
-        .btn-yes {
-            background: #4caf50;
-            box-shadow: 0 6px 20px rgba(76,175,80,0.4);
+        .btn-outline {
+            background: #ffffff;
+            color: #222222;
+            border: 1.5px solid #c1c1c1;
         }
-        .btn-yes:hover { background: #43a047; }
-
-        .btn-no {
-            background: #ef5350;
-            box-shadow: 0 6px 20px rgba(239,83,80,0.4);
-        }
-        .btn-no:hover { background: #e53935; }
+        .btn-outline:hover  { background: #f7f7f7; border-color: #222222; }
+        .btn-outline:active { background: #ebebeb; transform: scale(0.97); }
 
         /* Результаты */
         .results { display: none; }
-
         .results.show { display: block; }
 
         .ty-msg {
-            font-size: 18px;
-            font-weight: 700;
-            color: #2d1b0e;
+            font-size: 16px;
+            font-weight: 500;
+            color: #222222;
             margin-bottom: 6px;
         }
 
         .my-vote {
             font-size: 14px;
-            color: #8b6f55;
-            margin-bottom: 18px;
+            color: #6a6a6a;
+            margin-bottom: 28px;
         }
 
         .my-vote strong {
-            color: #2d1b0e;
+            color: #222222;
+            font-weight: 500;
         }
 
         .bar-group {
-            margin-bottom: 18px;
+            margin-bottom: 20px;
             text-align: left;
         }
 
         .bar-label {
             display: flex;
             justify-content: space-between;
-            font-size: 15px;
-            font-weight: 600;
-            margin-bottom: 6px;
-            color: #4a3728;
+            font-size: 14px;
+            font-weight: 400;
+            margin-bottom: 8px;
+            color: #222222;
         }
 
         .bar-track {
-            height: 28px;
-            background: #f0e8e0;
-            border-radius: 14px;
+            height: 8px;
+            background: #f7f7f7;
+            border-radius: 4px;
             overflow: hidden;
         }
 
         .bar-fill {
             height: 100%;
-            border-radius: 14px;
-            transition: width 0.6s cubic-bezier(0.25, 0.8, 0.25, 1.2);
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-            padding-right: 12px;
-            font-size: 13px;
-            font-weight: 700;
-            color: #fff;
+            border-radius: 4px;
+            transition: width 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
             min-width: 0;
         }
 
-        .bar-fill.yes { background: #4caf50; }
-        .bar-fill.no  { background: #ef5350; }
+        .bar-fill.yes { background: #ff385c; }
+        .bar-fill.no  { background: #222222; }
 
         .total-votes {
-            margin-top: 8px;
+            margin-top: 12px;
             font-size: 13px;
-            color: #a08870;
+            color: #6a6a6a;
+            font-weight: 400;
         }
 
         .btn-change {
             display: inline-block;
-            margin-top: 20px;
-            margin-bottom: 12px;
-            padding: 10px 24px;
-            font-size: 15px;
-            font-weight: 600;
-            color: #5a4a3a;
-            background: #f5f0eb;
-            border: 1.5px solid #d4c8bc;
-            border-radius: 12px;
+            margin-top: 24px;
+            padding: 12px 24px;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 500;
+            color: #222222;
+            background: #ffffff;
+            border: 1.5px solid #dddddd;
+            border-radius: 32px;
             cursor: pointer;
-            transition: background 0.15s;
+            transition: background 0.12s, border-color 0.12s;
         }
 
         .btn-change:hover {
-            background: #ebe3d9;
+            background: #f7f7f7;
+            border-color: #222222;
         }
 
         .btn-change:active {
-            background: #ddd4c8;
+            background: #ebebeb;
             transform: scale(0.97);
         }
 
         .btn-reset {
             display: none;
-            margin-top: 12px;
-            padding: 8px 18px;
-            font-size: 13px;
-            font-weight: 600;
-            color: #c62828;
-            background: #fff;
-            border: 1.5px solid #ef9a9a;
-            border-radius: 10px;
+            margin-top: 16px;
+            padding: 10px 20px;
+            font-family: inherit;
+            font-size: 12px;
+            font-weight: 500;
+            color: #6a6a6a;
+            background: #ffffff;
+            border: 1px solid #ebebeb;
+            border-radius: 32px;
             cursor: pointer;
-            transition: background 0.15s;
+            transition: color 0.12s, border-color 0.12s;
         }
 
         .btn-reset.show { display: inline-block; }
-
-        .btn-reset:hover { background: #ffebee; }
-
-        .btn-reset:active {
-            background: #ffcdd2;
-            transform: scale(0.97);
-        }
+        .btn-reset:hover { color: #c13515; border-color: #c13515; }
+        .btn-reset:active { background: #f7f7f7; transform: scale(0.97); }
 
         /* Адаптив */
         @media (max-width: 360px) {
-            .card { padding: 32px 18px 28px; }
-            h1 { font-size: 22px; }
-            .sub { font-size: 13px; margin-bottom: 24px; }
-            .btn { font-size: 18px; padding: 14px 0; }
-            .buttons { gap: 12px; }
+            .card { padding: 36px 20px 32px; }
+            h1 { font-size: 20px; }
+            .btn { padding: 12px 0; font-size: 15px; }
+            .buttons { gap: 10px; }
         }
     </style>
 </head>
@@ -217,21 +227,27 @@
 <div class="card" id="card">
     <!-- Экран голосования -->
     <div id="vote-screen">
-        <div class="emoji">🍔</div>
-        <h1>А как вы<br>предпочитаете?</h1>
-        <p class="sub" id="vote-sub">С помидоркой или без?</p>
-        <div class="buttons">
-            <button class="btn btn-yes" onclick="vote('yes')">ДА</button>
-            <button class="btn btn-no"  onclick="vote('no')">НЕТ</button>
+        <div class="illustration">
+            <span class="base">🍔</span>
+            <span class="ping">🍅</span>
         </div>
-        <button class="btn-reset" id="btn-reset-vote" onclick="resetAll()">🗑️ Сбросить всё голосование</button>
+        <h1>С помидоркой или без?</h1>
+        <p class="sub" id="vote-sub">Помогите шефу решить судьбу бургера</p>
+        <div class="buttons">
+            <button class="btn" onclick="vote('yes')">С помидоркой</button>
+            <button class="btn btn-outline" onclick="vote('no')">Без помидорки</button>
+        </div>
+        <button class="btn-reset" id="btn-reset-vote" onclick="resetAll()">Сбросить голосование</button>
     </div>
 
     <!-- Экран результатов -->
     <div id="results-screen" class="results">
-        <div class="emoji">🍅</div>
+        <div class="illustration">
+            <span class="base">🍔</span>
+            <span class="ping">🍅</span>
+        </div>
         <p class="ty-msg">Спасибо за ваш голос!</p>
-        <p class="my-vote">Ваш выбор: <strong id="my-choice">—</strong></p>
+        <p class="my-vote">Вы предпочитаете: <strong id="my-choice">—</strong></p>
         <div class="bar-group">
             <div class="bar-label"><span>С помидоркой</span><span id="pct-yes">0%</span></div>
             <div class="bar-track"><div class="bar-fill yes" id="bar-yes" style="width:0%"></div></div>
@@ -241,8 +257,9 @@
             <div class="bar-track"><div class="bar-fill no" id="bar-no" style="width:0%"></div></div>
         </div>
         <p class="total-votes">Всего голосов: <strong id="total">0</strong></p>
-        <button class="btn-change" onclick="changeVote()">🔄 Изменить решение</button>
-        <button class="btn-reset" id="btn-reset-results" onclick="resetAll()">🗑️ Сбросить всё голосование</button>
+        <button class="btn-change" onclick="changeVote()">Изменить решение</button>
+        <br>
+        <button class="btn-reset" id="btn-reset-results" onclick="resetAll()">Сбросить голосование</button>
     </div>
 </div>
 
@@ -250,9 +267,7 @@
 (function() {
 'use strict';
 
-var CHOICE_KEY = 'burger_choice'; // 'yes' или 'no'
-
-// ---- helpers ----
+var CHOICE_KEY = 'burger_choice';
 
 function fetchJSON(url) {
     return new Promise(function(resolve, reject) {
@@ -262,9 +277,7 @@ function fetchJSON(url) {
         xhr.onload = function() {
             if (xhr.status >= 200 && xhr.status < 300) {
                 try { resolve(JSON.parse(xhr.responseText)); } catch(e) { reject(e); }
-            } else {
-                reject(new Error('HTTP ' + xhr.status));
-            }
+            } else { reject(new Error('HTTP ' + xhr.status)); }
         };
         xhr.onerror = function() { reject(new Error('network')); };
         xhr.ontimeout = function() { reject(new Error('timeout')); };
@@ -278,9 +291,7 @@ function getCounts() {
     return Promise.all([
         fetchJSON(API + '/get/gcamellia-burger-yes').then(function(r) { return r.value || 0; }).catch(function() { return 0; }),
         fetchJSON(API + '/get/gcamellia-burger-no').then(function(r) { return r.value || 0; }).catch(function() { return 0; })
-    ]).then(function(arr) {
-        return { yes: arr[0], no: arr[1] };
-    });
+    ]).then(function(arr) { return { yes: arr[0], no: arr[1] }; });
 }
 
 function hitYes() { return fetchJSON(API + '/hit/gcamellia-burger-yes'); }
@@ -296,8 +307,6 @@ function clearMyChoice() {
     try { localStorage.removeItem(CHOICE_KEY); } catch(e) {}
 }
 
-// ---- screens ----
-
 var $vote    = document.getElementById('vote-screen');
 var $results = document.getElementById('results-screen');
 var $voteSub = document.getElementById('vote-sub');
@@ -310,16 +319,15 @@ var $total   = document.getElementById('total');
 
 var voting = false;
 
-var LABELS = { yes: 'С помидоркой 🍅', no: 'Без помидорки 🍔' };
-var EMOJI  = { yes: '🍅',  no: '🍔' };
+var LABELS = { yes: 'с помидоркой', no: 'без помидорки' };
 
 function showVoteScreen(changing) {
     $vote.style.display = '';
     $results.classList.remove('show');
     if (changing) {
-        $voteSub.textContent = 'Ваш выбор: ' + LABELS[getMyChoice()] + '. Измените:';
+        $voteSub.textContent = 'Вы выбрали «' + LABELS[getMyChoice()] + '». Измените решение:';
     } else {
-        $voteSub.textContent = 'С помидоркой или без?';
+        $voteSub.textContent = 'Помогите шефу решить судьбу бургера';
     }
 }
 
@@ -328,7 +336,7 @@ function showResults(yes, no) {
     $results.classList.add('show');
 
     var choice = getMyChoice();
-    $myChoice.textContent = choice ? LABELS[choice] : '—';
+    $myChoice.textContent = choice ? '«' + LABELS[choice] + '»' : '—';
 
     var total = yes + no;
     if (total === 0) {
@@ -350,29 +358,22 @@ function showResults(yes, no) {
     $total.textContent  = String(total);
 }
 
-// ---- vote ----
-
 window.vote = function(choice) {
     if (voting) return;
-
     var prev = getMyChoice();
-
-    // Если уже голосовал и выбрал то же самое — просто показываем результаты
     if (prev && prev === choice) {
         getCounts().then(function(c) { showResults(c.yes, c.no); });
         return;
     }
-
     voting = true;
     var btn = choice === 'yes'
-        ? document.querySelector('.btn-yes')
-        : document.querySelector('.btn-no');
+        ? document.querySelector('.btn')
+        : document.querySelector('.btn-outline');
     var origText = btn.textContent;
     btn.textContent = '…';
     btn.disabled = true;
 
     var hit = choice === 'yes' ? hitYes : hitNo;
-
     hit().then(function() {
         setMyChoice(choice);
         if (navigator.vibrate) navigator.vibrate(30);
@@ -389,8 +390,6 @@ window.vote = function(choice) {
     });
 };
 
-// ---- change vote ----
-
 window.changeVote = function() {
     showVoteScreen(true);
 };
@@ -405,8 +404,7 @@ var resetting = false;
 
 window.resetAll = function() {
     if (resetting) return;
-    if (!confirm('Точно сбросить ВСЁ голосование? Это обнулит общий счётчик для всех.')) return;
-
+    if (!confirm('Сбросить всё голосование? Это обнулит общий счётчик.')) return;
     resetting = true;
     Promise.all([
         setCounter('gcamellia-burger-yes', 0),
@@ -414,7 +412,7 @@ window.resetAll = function() {
     ]).then(function() {
         clearMyChoice();
         showVoteScreen(false);
-        $voteSub.textContent = 'Голосование сброшено! Голосуйте заново';
+        $voteSub.textContent = 'Голосование сброшено. Голосуйте заново!';
         if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
     }).catch(function() {
         alert('Ошибка сброса. Попробуйте ещё раз.');
@@ -427,32 +425,23 @@ window.resetAll = function() {
 
 var taps = [];
 document.addEventListener('click', function(e) {
-    if (!e.target.closest('.emoji')) return;
+    if (!e.target.closest('.illustration')) return;
     var now = Date.now();
     taps.push(now);
     taps = taps.filter(function(t) { return now - t < 1500; });
-    if (taps.length >= 5) {
-        taps = [];
-        resetAll();
-    }
+    if (taps.length >= 5) { taps = []; resetAll(); }
 });
 
-// ---- admin mode: ?reset в адресной строке ----
+// ---- admin mode ----
 
-function hasParam(name) {
-    return window.location.search.indexOf(name) !== -1;
-}
-
-if (hasParam('reset')) {
+if (window.location.search.indexOf('reset') !== -1) {
     document.getElementById('btn-reset-vote').classList.add('show');
     document.getElementById('btn-reset-results').classList.add('show');
 }
 
 // ---- init ----
 
-getCounts(); // подгружаем фоном
-
-// Если уже голосовал — показываем результаты
+getCounts();
 if (getMyChoice()) {
     getCounts().then(function(c) { showResults(c.yes, c.no); });
 }
