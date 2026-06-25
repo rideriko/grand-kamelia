@@ -177,6 +177,29 @@
             background: #ddd4c8;
             transform: scale(0.97);
         }
+
+        .btn-reset {
+            display: none;
+            margin-top: 12px;
+            padding: 8px 18px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #c62828;
+            background: #fff;
+            border: 1.5px solid #ef9a9a;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+
+        .btn-reset.show { display: inline-block; }
+
+        .btn-reset:hover { background: #ffebee; }
+
+        .btn-reset:active {
+            background: #ffcdd2;
+            transform: scale(0.97);
+        }
     </style>
 </head>
 <body>
@@ -191,6 +214,7 @@
             <button class="btn btn-yes" onclick="vote('yes')">ДА</button>
             <button class="btn btn-no"  onclick="vote('no')">НЕТ</button>
         </div>
+        <button class="btn-reset" id="btn-reset-vote" onclick="resetAll()">🗑️ Сбросить всё голосование</button>
     </div>
 
     <!-- Экран результатов -->
@@ -208,6 +232,8 @@
         </div>
         <p class="total-votes">Всего голосов: <strong id="total">0</strong></p>
         <button class="btn-change" onclick="changeVote()">🔄 Изменить решение</button>
+        <br>
+        <button class="btn-reset" id="btn-reset-results" onclick="resetAll()">🗑️ Сбросить всё голосование</button>
     </div>
 </div>
 
@@ -359,6 +385,59 @@ window.vote = function(choice) {
 window.changeVote = function() {
     showVoteScreen(true);
 };
+
+// ---- reset ----
+
+function setCounter(key, value) {
+    return fetchJSON(API + '/set/' + key + '?value=' + value);
+}
+
+var resetting = false;
+
+window.resetAll = function() {
+    if (resetting) return;
+    if (!confirm('Точно сбросить ВСЁ голосование? Это обнулит общий счётчик для всех.')) return;
+
+    resetting = true;
+    Promise.all([
+        setCounter('gcamellia-burger-yes', 0),
+        setCounter('gcamellia-burger-no', 0)
+    ]).then(function() {
+        clearMyChoice();
+        showVoteScreen(false);
+        $voteSub.textContent = 'Голосование сброшено! Голосуйте заново';
+        if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
+    }).catch(function() {
+        alert('Ошибка сброса. Попробуйте ещё раз.');
+    }).then(function() {
+        resetting = false;
+    });
+};
+
+// ---- triple-tap reset ----
+
+var taps = [];
+document.addEventListener('click', function(e) {
+    if (!e.target.closest('.emoji')) return;
+    var now = Date.now();
+    taps.push(now);
+    taps = taps.filter(function(t) { return now - t < 1500; });
+    if (taps.length >= 5) {
+        taps = [];
+        resetAll();
+    }
+});
+
+// ---- admin mode: ?reset в адресной строке ----
+
+function hasParam(name) {
+    return window.location.search.indexOf(name) !== -1;
+}
+
+if (hasParam('reset')) {
+    document.getElementById('btn-reset-vote').classList.add('show');
+    document.getElementById('btn-reset-results').classList.add('show');
+}
 
 // ---- init ----
 
