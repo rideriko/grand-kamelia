@@ -202,19 +202,19 @@ function fetchJSON(url) {
     });
 }
 
-var API = 'https://api.countapi.xyz';
+var API = 'https://countapi.mileshilliard.com/api/v1';
 
 function getCounts() {
     return Promise.all([
-        fetchJSON(API + '/get/gcamellia/burger-yes').then(function(r) { return r.value || 0; }).catch(function() { return 0; }),
-        fetchJSON(API + '/get/gcamellia/burger-no').then(function(r) { return r.value || 0; }).catch(function() { return 0; })
+        fetchJSON(API + '/get/gcamellia-burger-yes').then(function(r) { return r.value || 0; }).catch(function() { return 0; }),
+        fetchJSON(API + '/get/gcamellia-burger-no').then(function(r) { return r.value || 0; }).catch(function() { return 0; })
     ]).then(function(arr) {
         return { yes: arr[0], no: arr[1] };
     });
 }
 
-function hitYes() { return fetchJSON(API + '/hit/gcamellia/burger-yes'); }
-function hitNo()  { return fetchJSON(API + '/hit/gcamellia/burger-no');  }
+function hitYes() { return fetchJSON(API + '/hit/gcamellia-burger-yes'); }
+function hitNo()  { return fetchJSON(API + '/hit/gcamellia-burger-no');  }
 
 function voted() {
     try { return localStorage.getItem(KEY) === '1'; } catch(e) { return false; }
