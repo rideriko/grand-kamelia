@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QR — Помидорка в бургере</title>
+    <title>QR-домик — Помидорка в бургере</title>
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -13,123 +13,126 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: #f5f0eb;
+            background: #e8e1d9;
             padding: 20px;
         }
 
-        .poster {
+        .tent {
             background: #fff;
-            border-radius: 24px;
-            padding: 40px 32px 32px;
-            max-width: 420px;
             width: 100%;
+            max-width: 500px;
+            box-shadow: 0 4px 30px rgba(0,0,0,0.12);
+        }
+
+        /* Сторона А — перевёрнутая */
+        .side-a {
+            padding: 24px 20px 16px;
             text-align: center;
-            box-shadow: 0 8px 40px rgba(0,0,0,0.1);
-            border: 3px dashed #e0d5c8;
+            transform: rotate(180deg);
+            border-bottom: 2px dashed #cbb8a7;
         }
 
-        .header-emoji {
-            font-size: 56px;
+        /* Сторона Б — нормальная */
+        .side-b {
+            padding: 16px 20px 24px;
+            text-align: center;
+        }
+
+        .side-a .emoji,
+        .side-b .emoji {
+            font-size: 36px;
             line-height: 1;
-            margin-bottom: 4px;
+            margin-bottom: 2px;
         }
 
-        h1 {
-            font-size: 28px;
+        .side-a h2,
+        .side-b h2 {
+            font-size: 20px;
             font-weight: 900;
             color: #2d1b0e;
-            margin-bottom: 6px;
             line-height: 1.2;
+            margin-bottom: 6px;
         }
 
-        .subtitle {
-            font-size: 14px;
-            color: #8b6f55;
-            margin-bottom: 10px;
-        }
-
-        .qr-box {
+        .side-a .qr-wrap,
+        .side-b .qr-wrap {
             display: inline-block;
-            background: #fff;
-            border: 3px solid #2d1b0e;
-            border-radius: 16px;
-            padding: 8px;
-            margin-bottom: 10px;
+            border: 2.5px solid #2d1b0e;
+            border-radius: 12px;
+            padding: 6px;
             line-height: 0;
-        }
-
-        .qr-box img {
-            display: block;
-            width: 220px;
-            height: 220px;
-        }
-
-        .url {
-            font-size: 14px;
-            font-weight: 700;
-            color: #4a3728;
-            background: #f8f5f0;
-            display: inline-block;
-            padding: 6px 18px;
-            border-radius: 20px;
-            margin-bottom: 16px;
-            letter-spacing: 0.5px;
-        }
-
-        .funny-line {
-            font-size: 17px;
-            font-weight: 700;
-            color: #c62828;
-            line-height: 1.4;
             margin-bottom: 4px;
         }
 
-        .funny-line-2 {
-            font-size: 13px;
-            color: #8b6f55;
-            font-style: italic;
+        .side-a .qr-wrap img,
+        .side-b .qr-wrap img {
+            display: block;
+            width: 140px;
+            height: 140px;
         }
 
-        .tomato-row {
-            font-size: 28px;
-            letter-spacing: 4px;
-            margin-top: 10px;
+        .side-a .url,
+        .side-b .url {
+            font-size: 12px;
+            font-weight: 700;
+            color: #5a4a3a;
+            background: #f8f5f0;
+            display: inline-block;
+            padding: 4px 14px;
+            border-radius: 14px;
+            margin-bottom: 6px;
+        }
+
+        .side-a .joke,
+        .side-b .joke {
+            font-size: 14px;
+            font-weight: 700;
+            color: #c62828;
+            line-height: 1.3;
+        }
+
+        .side-a .joke2,
+        .side-b .joke2 {
+            font-size: 11px;
+            color: #8b6f55;
+            font-style: italic;
+            margin-top: 2px;
         }
 
         /* Печать */
         @media print {
-            body { background: #fff; padding: 0; }
-            .poster {
-                box-shadow: none;
-                border: 2px dashed #ccc;
-                border-radius: 0;
-                max-width: 100%;
-            }
-            @page { margin: 10mm; }
+            body { background: #fff; padding: 0; margin: 0; }
+            .tent { box-shadow: none; max-width: 100%; }
+            @page { margin: 0; size: A4 portrait; }
         }
     </style>
 </head>
 <body>
 
-<div class="poster">
-    <div class="header-emoji">🍔❓🍅</div>
-    <h1>Помидорный<br>вопрос!</h1>
-    <p class="subtitle">Наведи камеру на QR-код</p>
-
-    <div class="qr-box">
-        <img src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=https://gcamellia.ru/burger&color=2d1b0e" alt="QR-код голосования">
+<div class="tent">
+    <!-- Сторона А — перевёрнутая, смотрит на соседа напротив -->
+    <div class="side-a">
+        <div class="emoji">🍅❓🍔</div>
+        <h2>Помидорка<br>в бургере?</h2>
+        <div class="qr-wrap">
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=https://gcamellia.ru/burger&color=2d1b0e" alt="QR">
+        </div>
+        <p class="url">gcamellia.ru/burger</p>
+        <p class="joke">Судьба помидорки —<br>в твоих руках!</p>
+        <p class="joke2">Шеф-повар ждёт вердикта ⚖️</p>
     </div>
 
-    <p class="url">gcamellia.ru/burger</p>
-
-    <p class="funny-line">
-        Быть или не быть?<br>Решать тебе, а не шеф-повару!
-    </p>
-    <p class="funny-line-2">
-        Каждый голос — спасённая (или изгнанная) помидорка 🍅
-    </p>
-
-    <div class="tomato-row">🍅🍔🍅🍔🍅</div>
+    <!-- Сторона Б — нормальная, смотрит на сидящего рядом -->
+    <div class="side-b">
+        <div class="emoji">🍔❓🍅</div>
+        <h2>Помидорный<br>вопрос!</h2>
+        <div class="qr-wrap">
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=https://gcamellia.ru/burger&color=2d1b0e" alt="QR">
+        </div>
+        <p class="url">gcamellia.ru/burger</p>
+        <p class="joke">Быть или не быть?<br>Решает гость, а не повар!</p>
+        <p class="joke2">Каждый голос важен 🗳️</p>
+    </div>
 </div>
 
 </body>
