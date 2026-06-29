@@ -210,17 +210,50 @@
     .menu svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; }
     .stage { position: relative; min-height: 0; isolation: isolate; overflow: hidden; touch-action: pan-y; background: var(--fg-2); }
     .stage:focus-visible { outline: 2px solid var(--surface); outline-offset: -6px; }
-    .hero-video {
-      position: absolute;
-      inset: 0;
+    .slides, .slide, .shade { position: absolute; inset: 0; }
+    .slide {
+      margin: 0;
+      opacity: 0;
+      transform: scale(1.018);
+      transition: opacity 520ms var(--ease-standard), transform 700ms var(--ease-standard);
+    }
+    .slide.active { opacity: 1; transform: scale(1); }
+    .slide img {
       width: 100%;
       height: 100%;
       object-fit: cover;
       object-position: center;
-      z-index: 0;
+      opacity: 0;
+      transition: opacity 500ms var(--ease-standard);
     }
+    .slide[data-state="ready"] img { opacity: 1; }
+    .slide[data-state="loading"]::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 34px;
+      height: 34px;
+      margin: -17px;
+      border: 3px solid rgba(255, 255, 255, .36);
+      border-top-color: var(--surface);
+      border-radius: var(--radius-pill);
+      animation: image-loading 800ms linear infinite;
+    }
+    .slide[data-state="error"]::after {
+      content: "Фото временно недоступно";
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      padding: var(--space-6);
+      color: var(--surface);
+      font-size: var(--text-sm);
+      letter-spacing: .02em;
+      text-align: center;
+    }
+    @keyframes image-loading { to { transform: rotate(360deg); } }
     .shade {
-      position: absolute; inset: 0;
       z-index: 1;
       background:
         linear-gradient(90deg, rgba(0, 0, 0, .66) 0%, rgba(0, 0, 0, .38) 46%, rgba(0, 0, 0, .08) 74%),
@@ -302,6 +335,59 @@
       background: color-mix(in oklch, var(--accent-active) 82%, var(--fg));
       transform: scale(.96);
     }
+    .slider-controls {
+      position: absolute;
+      z-index: 4;
+      right: max(var(--container-gutter-desktop), calc((100% - var(--container-max)) / 2));
+      bottom: var(--space-8);
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      color: var(--surface);
+    }
+    .slide-count {
+      min-width: 62px;
+      display: grid;
+      gap: var(--space-2);
+      margin-right: var(--space-2);
+      font: 600 12px/1 var(--font-mono);
+      letter-spacing: .08em;
+      text-align: right;
+    }
+    .slide-count::after {
+      content: "";
+      width: 100%;
+      height: 2px;
+      border-radius: var(--radius-pill);
+      background: rgba(255, 255, 255, .72);
+      transform: scaleX(0);
+      transform-origin: left center;
+    }
+    .stage[data-autoplay="running"] .slide-count::after {
+      animation: autoplay-progress 7000ms linear forwards;
+    }
+    @keyframes autoplay-progress { to { transform: scaleX(1); } }
+    .slider-controls button {
+      width: 44px;
+      height: 44px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(255, 255, 255, .64);
+      border-radius: var(--radius-pill);
+      background: rgba(0, 0, 0, .22);
+      color: var(--surface);
+      cursor: pointer;
+      backdrop-filter: blur(10px);
+      transition: background var(--motion-fast) var(--ease-standard), transform var(--motion-fast) var(--ease-standard);
+    }
+    .slider-controls button:hover { background: rgba(0, 0, 0, .68); }
+    .slider-controls button:active { background: rgba(0, 0, 0, .82); transform: scale(.92); }
+    .slider-controls button:focus-visible { box-shadow: var(--focus-ring), 0 0 0 4px var(--surface); }
+    .slider-controls svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+    [data-toggle-autoplay] .icon-play { display: none; }
+    [data-toggle-autoplay][aria-pressed="true"] .icon-pause { display: none; }
+    [data-toggle-autoplay][aria-pressed="true"] .icon-play { display: block; }
+
     .benefits-grid {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -366,6 +452,7 @@
       .nav-book { margin-top: var(--space-2); justify-content: center; border-radius: var(--radius-sm) !important; }
       .nav-book:hover { background: var(--accent-active) !important; }
       .content { width: min(calc(100% - (2 * var(--container-gutter-tablet))), 760px); padding-block: var(--section-y-tablet) 120px; }
+      .slider-controls { right: var(--container-gutter-tablet); bottom: var(--space-6); }
       .benefits-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
 
@@ -373,6 +460,8 @@
       .header { padding-inline: var(--container-gutter-phone); }
       .brand small { display: none; }
       .nav { right: var(--container-gutter-phone); width: min(280px, calc(100% - 32px)); }
+      .slide:first-child img { object-position: 32% center; }
+      .slide:nth-child(2) img { object-position: 58% center; }
       .shade {
         background:
           linear-gradient(0deg, rgba(0, 0, 0, .7) 0%, rgba(0, 0, 0, .38) 56%, rgba(0, 0, 0, .1) 100%);
@@ -382,6 +471,8 @@
       .location { margin-bottom: var(--space-3); }
       .lead { margin-top: var(--space-4); font-size: var(--text-base); line-height: var(--leading-body); }
       .book-button { width: 100%; margin-top: var(--space-6); }
+      .slider-controls { right: var(--container-gutter-phone); bottom: var(--space-4); }
+      .slide-count { display: none; }
       .benefits-grid { grid-template-columns: 1fr; }
       .benefit-card { min-height: 0; padding: var(--space-6); }
       .benefit-number { margin-bottom: var(--space-12); }
@@ -393,12 +484,13 @@
       h1 { font-size: clamp(36px, 7vh, 56px); }
       .lead { margin-top: var(--space-3); font-size: var(--text-base); line-height: 1.35; }
       .book-button { min-height: 48px; margin-top: var(--space-4); }
+      .slider-controls { bottom: var(--space-4); }
     }
 
     @media (prefers-reduced-motion: reduce) {
-      .nav, .book-button { transition: none; }
-      .copy > * { animation: none; }
-      .hero-video { animation: none; }
+      .slide, .slide img, .nav, .book-button, .slider-controls button { transition: none; }
+      .copy > *, .slide[data-state="loading"]::after, .slide-count::after { animation: none; }
+      .slide-count::after { transform: scaleX(1); }
     }
   </style>
   <style data-od-inline-asset="hotel-sections.css">
@@ -888,9 +980,34 @@
 
   <main>
     <section class="hero" data-od-id="hero-family">
-      <section class="stage" role="region" tabindex="0" aria-label="Видео территории парк-отеля">
-      <video class="hero-video" src="vid.mp4" autoplay muted playsinline preload="auto" aria-hidden="true"></video>
-      <span class="sr-only image-status" aria-live="polite">Видео территории парк-отеля</span>
+      <section class="stage" role="region" tabindex="0" aria-roledescription="карусель" aria-label="Фотографии парк-отеля">
+      <div class="slides" aria-live="polite">
+        <figure class="slide active" data-state="loading" aria-hidden="false">
+          <img src="assets/hero-garden.svg" alt="Зелёный двор парк-отеля с детской площадкой" fetchpriority="high" decoding="async">
+        </figure>
+        <figure class="slide" data-state="loading" aria-hidden="true">
+          <img src="assets/hero-pool.svg" alt="Бассейны у зелёной террасы парк-отеля" loading="lazy" decoding="async">
+        </figure>
+        <figure class="slide" data-state="loading" aria-hidden="true">
+          <img src="assets/hero-terrace.svg" alt="Терраса с зоной отдыха" loading="lazy" decoding="async">
+        </figure>
+        <figure class="slide" data-state="loading" aria-hidden="true">
+          <img src="assets/hero-restaurant.svg" alt="Ресторан и бар для гостей отеля" loading="lazy" decoding="async">
+        </figure>
+        <figure class="slide" data-state="loading" aria-hidden="true">
+          <img src="assets/hero-kids.svg" alt="Детская игровая зона" loading="lazy" decoding="async">
+        </figure>
+        <figure class="slide" data-state="loading" aria-hidden="true">
+          <img src="assets/hero-room.svg" alt="Уютный номер в парк-отеле" loading="lazy" decoding="async">
+        </figure>
+        <figure class="slide" data-state="loading" aria-hidden="true">
+          <img src="assets/hero-entrance.svg" alt="Вход и фасад парк-отеля Гранд Камелия" loading="lazy" decoding="async">
+        </figure>
+        <figure class="slide" data-state="loading" aria-hidden="true">
+          <img src="assets/hero-sunset.svg" alt="Вечерняя атмосфера на территории отеля" loading="lazy" decoding="async">
+        </figure>
+      </div>
+      <span class="sr-only image-status" aria-live="polite"></span>
       <div class="shade"></div>
 
       <div class="content">
@@ -900,6 +1017,20 @@
           <p class="lead">Зелёный закрытый двор, два бассейна и игровая с няней — всё рядом, чтобы отдыхать вместе и по‑настоящему переключиться.</p>
           <a class="book-button" id="booking" href="https://reservationsteps.ru/rooms/index/c22a3bbc-83e7-485d-b881-b05cf2b64ab1" aria-label="Забронировать номер в Гранд Камелии">Забронировать</a>
         </div>
+      </div>
+
+      <div class="slider-controls" aria-label="Управление фотографиями">
+        <span class="slide-count" aria-live="polite">01 / 08</span>
+        <button type="button" data-toggle-autoplay aria-label="Приостановить слайдер" aria-pressed="false">
+          <svg class="icon-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6v12M15 6v12"/></svg>
+          <svg class="icon-play" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 7 8 5-8 5Z"/></svg>
+        </button>
+        <button type="button" data-prev aria-label="Предыдущее фото">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+        </button>
+        <button type="button" data-next aria-label="Следующее фото">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+        </button>
       </div>
     </section>
   </section>
@@ -1371,41 +1502,63 @@
 
   <script>
     (() => {
+      const slides = [...document.querySelectorAll('.slide')];
+      const stage = document.querySelector('.stage');
+      const counter = document.querySelector('.slide-count');
       const menu = document.querySelector('.menu');
       const nav = document.querySelector('.nav');
-      const video = document.querySelector('.hero-video');
+      const autoplayButton = document.querySelector('[data-toggle-autoplay]');
+      const imageStatus = document.querySelector('.image-status');
+      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+      let current = 0;
+      let timer;
+      let userPaused = false;
+      let pointerStartX = 0;
+      let pointerStartY = 0;
 
-      /* ─── Video ping-pong ────────────────────────────────────────────── */
-      (function setupVideoPingPong() {
-        if (!video) return;
-        const SPEED = 0.5;
-        let forward = true;
-        let rafId = null;
-
-        video.playbackRate = SPEED;
-
-        // Отмотка назад вручную (плавно, синхронно с экраном)
-        function rewind() {
-          if (forward) return; // уже переключились обратно, отмена
-          const step = 0.033 * SPEED;
-          video.currentTime = Math.max(0, video.currentTime - step);
-          if (video.currentTime <= 0.05) {
-            forward = true;
-            video.playbackRate = SPEED;
-            video.play();
-            return;
-          }
-          rafId = requestAnimationFrame(rewind);
-        }
-
-        video.addEventListener('ended', () => {
-          forward = false;
-          video.pause();
-          rafId = requestAnimationFrame(rewind);
+      const show = next => {
+        current = (next + slides.length) % slides.length;
+        slides.forEach((slide, index) => {
+          const active = index === current;
+          slide.classList.toggle('active', active);
+          slide.setAttribute('aria-hidden', String(!active));
         });
+        counter.textContent = `0${current + 1} / 0${slides.length}`;
+        if (timer) {
+          stage.dataset.autoplay = 'paused';
+          requestAnimationFrame(() => {
+            if (timer) stage.dataset.autoplay = 'running';
+          });
+        }
+      };
 
-        video.loop = false;
-      })();
+      const stop = () => {
+        clearInterval(timer);
+        timer = undefined;
+        stage.dataset.autoplay = 'paused';
+      };
+      const autoplay = () => {
+        stop();
+        if (!userPaused && !reducedMotion.matches && !document.hidden && !stage.matches(':hover') && !stage.matches(':focus-within')) {
+          timer = setInterval(() => show(current + 1), 7000);
+          stage.dataset.autoplay = 'running';
+        }
+      };
+
+      slides.forEach((slide, index) => {
+        const image = slide.querySelector('img');
+        const ready = () => slide.setAttribute('data-state', 'ready');
+        const failed = () => {
+          slide.setAttribute('data-state', 'error');
+          imageStatus.textContent = `Не удалось загрузить фото ${index + 1} из ${slides.length}.`;
+        };
+        if (image.complete) {
+          image.naturalWidth > 0 ? ready() : failed();
+        } else {
+          image.addEventListener('load', ready, { once: true });
+          image.addEventListener('error', failed, { once: true });
+        }
+      });
 
       const closeMenu = (restoreFocus = false) => {
         if (!nav.classList.contains('open')) return;
@@ -1414,6 +1567,44 @@
         menu.setAttribute('aria-label', 'Открыть меню');
         if (restoreFocus) menu.focus();
       };
+
+      document.querySelector('[data-prev]').addEventListener('click', () => { show(current - 1); autoplay(); });
+      document.querySelector('[data-next]').addEventListener('click', () => { show(current + 1); autoplay(); });
+      autoplayButton.addEventListener('click', () => {
+        userPaused = !userPaused;
+        autoplayButton.setAttribute('aria-pressed', String(userPaused));
+        autoplayButton.setAttribute('aria-label', userPaused ? 'Продолжить слайдер' : 'Приостановить слайдер');
+        userPaused ? stop() : autoplay();
+      });
+      stage.addEventListener('mouseenter', stop);
+      stage.addEventListener('mouseleave', autoplay);
+      stage.addEventListener('focusin', stop);
+      stage.addEventListener('focusout', event => {
+        if (!stage.contains(event.relatedTarget)) autoplay();
+      });
+      stage.addEventListener('keydown', event => {
+        if (event.key === 'ArrowLeft') { event.preventDefault(); show(current - 1); }
+        if (event.key === 'ArrowRight') { event.preventDefault(); show(current + 1); }
+      });
+      stage.addEventListener('pointerdown', event => {
+        if (event.pointerType !== 'touch') return;
+        pointerStartX = event.clientX;
+        pointerStartY = event.clientY;
+      });
+      stage.addEventListener('pointerup', event => {
+        if (event.pointerType !== 'touch') return;
+        const deltaX = event.clientX - pointerStartX;
+        const deltaY = event.clientY - pointerStartY;
+        if (Math.abs(deltaX) < 48 || Math.abs(deltaX) <= Math.abs(deltaY)) return;
+        show(current + (deltaX < 0 ? 1 : -1));
+        autoplay();
+      });
+      const syncMotionPreference = () => {
+        autoplayButton.hidden = reducedMotion.matches;
+        autoplay();
+      };
+      reducedMotion.addEventListener('change', syncMotionPreference);
+      document.addEventListener('visibilitychange', autoplay);
 
       menu.addEventListener('click', () => {
         const open = nav.classList.toggle('open');
@@ -1427,6 +1618,8 @@
       document.addEventListener('keydown', event => {
         if (event.key === 'Escape') closeMenu(true);
       });
+
+      syncMotionPreference();
 
       /* ─── Scroll reveal ───────────────────────────────────────────── */
       const revealObserver = new IntersectionObserver(entries => {
