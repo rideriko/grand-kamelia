@@ -65,7 +65,7 @@
         .topbar {
             background: var(--bg); border-bottom: 1px solid var(--border);
             padding: 0 24px; display: flex; align-items: center;
-            gap: 24px; height: 56px; position: sticky; top: 0; z-index: 10;
+            gap: 16px; height: 56px; position: sticky; top: 0; z-index: 10;
         }
         .topbar .brand { font-weight: 600; font-size: 15px; white-space: nowrap; }
         .topbar .tabs { display: flex; gap: 4px; flex: 1; overflow-x: auto; }
@@ -76,7 +76,7 @@
         }
         .topbar .tab:hover { background: var(--bg2); color: var(--fg); }
         .topbar .tab.active { background: var(--fg); color: #fff; }
-        .topbar .actions { display: flex; gap: 8px; align-items: center; }
+        .topbar .actions { display: flex; gap: 8px; align-items: center; margin-left: auto; }
         .btn-save {
             padding: 8px 20px; border-radius: 20px; font-family: inherit;
             font-size: 14px; font-weight: 500; border: none; cursor: pointer;
@@ -92,7 +92,6 @@
         }
         .btn-logout:hover { border-color: var(--fg); color: var(--fg); }
 
-        /* ─── Save status ─────────────────────────────────────── */
         .save-status {
             font-size: 13px; color: var(--muted); display: flex; align-items: center; gap: 6px;
         }
@@ -107,7 +106,10 @@
 
         /* ─── Tab content ─────────────────────────────────────── */
         .tab-content { display: none; padding: 24px; }
-        .tab-content.active { display: block; }
+        .tab-content.active { display: flex; gap: 24px; }
+
+        .tab-main { flex: 1; min-width: 0; }
+        .tab-sidebar { width: 280px; flex-shrink: 0; }
 
         .tab-header {
             display: flex; align-items: center; justify-content: space-between;
@@ -132,9 +134,11 @@
         }
         .img-card:hover { border-color: #ccc; }
         .img-card .thumb {
-            width: 120px; height: 80px; border-radius: 8px;
+            width: 140px; height: 93px; border-radius: 8px;
             object-fit: cover; background: var(--bg2); flex-shrink: 0;
+            border: 1px solid var(--border);
         }
+        .img-card .thumb[src=""] { display: none; }
         .img-card .fields { flex: 1; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
         .img-card .fields input, .img-card .fields textarea {
             width: 100%; padding: 8px 12px; border: 1.5px solid var(--border);
@@ -145,7 +149,14 @@
         .img-card .fields textarea { min-height: 36px; }
         .img-card .src-row { display: flex; gap: 8px; align-items: center; }
         .img-card .src-row input { flex: 1; font-size: 12px; color: var(--muted); }
-        .img-card .card-actions { display: flex; gap: 4px; flex-direction: column; }
+        .img-card .src-row .btn-pick {
+            padding: 6px 12px; border-radius: 6px; font-family: inherit;
+            font-size: 12px; font-weight: 500; border: 1.5px solid var(--border);
+            cursor: pointer; background: var(--bg); color: var(--fg);
+            white-space: nowrap; transition: all 0.12s;
+        }
+        .img-card .src-row .btn-pick:hover { border-color: var(--fg); }
+        .img-card .card-actions { display: flex; gap: 4px; flex-direction: column; align-items: center; }
         .img-card .card-actions button {
             width: 32px; height: 32px; border-radius: 8px; border: 1px solid var(--border);
             background: var(--bg); cursor: pointer; font-size: 14px; line-height: 1;
@@ -153,60 +164,86 @@
             color: var(--muted); transition: all 0.12s;
         }
         .img-card .card-actions button:hover { border-color: var(--fg); color: var(--fg); }
-        .img-card .card-actions button.del:hover { border-color: #c13515; color: #c13515; }
         .img-card .card-actions button:disabled { opacity: 0.3; cursor: default; }
+        .img-card .card-actions button.del:hover { border-color: #c13515; color: #c13515; }
+        .img-card .index-badge {
+            width: 28px; height: 28px; border-radius: 50%; background: var(--bg2);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 12px; font-weight: 600; color: var(--muted); flex-shrink: 0;
+        }
 
         /* ─── Single-image tab (Food, Location) ────────────────── */
         .single-img { max-width: 480px; }
-        .single-img .thumb { width: 100%; height: auto; max-height: 260px; border-radius: 10px; }
-        .single-img .src-row { margin-top: 12px; }
-        .single-img .btn-replace {
-            margin-top: 8px; padding: 8px 16px; border-radius: 20px; font-family: inherit;
-            font-size: 13px; font-weight: 500; border: 1.5px solid var(--border);
-            cursor: pointer; background: var(--bg); color: var(--fg); transition: all 0.12s;
+        .single-img .thumb-big {
+            width: 100%; height: auto; max-height: 260px; border-radius: 10px;
+            background: var(--bg2); border: 1px solid var(--border);
         }
-        .single-img .btn-replace:hover { border-color: var(--fg); }
-
-        /* ─── Add modal ────────────────────────────────────────── */
-        .modal-overlay {
-            display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4);
-            z-index: 100; align-items: center; justify-content: center;
-        }
-        .modal-overlay.show { display: flex; }
-        .modal {
-            background: var(--bg); border-radius: var(--radius); padding: 28px 24px;
-            max-width: 440px; width: 90%; box-shadow: 0 8px 32px rgba(0,0,0,0.15);
-        }
-        .modal h3 { font-size: 17px; font-weight: 600; margin-bottom: 16px; }
-        .modal .row { margin-bottom: 12px; }
-        .modal label { display: block; font-size: 13px; font-weight: 500; margin-bottom: 4px; }
-        .modal input[type="file"] { display: block; font-family: inherit; font-size: 13px; }
-        .modal input[type="url"], .modal input[type="text"] {
-            width: 100%; padding: 10px 14px; border: 1.5px solid var(--border);
+        .single-img .src-row { margin-top: 12px; display: flex; gap: 8px; }
+        .single-img .src-row input { flex: 1; }
+        .single-img .src-row input {
+            padding: 8px 12px; border: 1.5px solid var(--border);
             border-radius: 8px; font-family: inherit; font-size: 13px; outline: none;
         }
-        .modal input:focus { border-color: var(--accent); }
-        .modal .divider { text-align: center; color: var(--muted); font-size: 12px; margin: 12px 0; }
-        .modal .btn-row { display: flex; gap: 8px; justify-content: flex-end; margin-top: 16px; }
-        .modal .btn-row button {
-            padding: 10px 20px; border-radius: 20px; font-family: inherit;
-            font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.12s;
+        .single-img .src-row input:focus { border-color: var(--accent); }
+        .single-img .btn-pick {
+            padding: 8px 16px; border-radius: 8px; font-family: inherit;
+            font-size: 13px; font-weight: 500; border: 1.5px solid var(--border);
+            cursor: pointer; background: var(--bg); color: var(--fg);
+            white-space: nowrap; transition: all 0.12s;
         }
-        .modal .btn-cancel { background: var(--bg); border: 1.5px solid var(--border); color: var(--fg); }
-        .modal .btn-cancel:hover { border-color: var(--fg); }
-        .modal .btn-confirm { background: var(--accent); border: none; color: #fff; }
-        .modal .btn-confirm:hover { background: #e00b41; }
-        .modal .preview-thumb { max-width: 100%; max-height: 120px; border-radius: 8px; margin-top: 8px; display: none; }
+        .single-img .btn-pick:hover { border-color: var(--fg); }
+
+        /* ─── Photo gallery sidebar ────────────────────────────── */
+        .photo-gallery-sidebar {
+            background: var(--bg); border: 1px solid var(--border);
+            border-radius: var(--radius); padding: 16px; position: sticky; top: 80px;
+            max-height: calc(100dvh - 100px); overflow-y: auto;
+        }
+        .photo-gallery-sidebar h3 {
+            font-size: 14px; font-weight: 600; margin-bottom: 6px;
+        }
+        .photo-gallery-sidebar .gh-link {
+            font-size: 12px; color: var(--accent); display: block; margin-bottom: 12px;
+        }
+        .photo-gallery-sidebar .gh-link:hover { text-decoration: underline; }
+        .photo-gallery-grid {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px;
+        }
+        .photo-gallery-grid .gthumb {
+            aspect-ratio: 3/2; border-radius: 6px; cursor: pointer;
+            border: 2px solid transparent; object-fit: cover;
+            background: var(--bg2); transition: border-color 0.12s;
+        }
+        .photo-gallery-grid .gthumb:hover { border-color: var(--accent); }
+        .photo-gallery-grid .gthumb.selected { border-color: var(--accent); box-shadow: 0 0 0 2px rgba(255,56,92,0.2); }
+        .photo-gallery-sidebar .empty-msg { font-size: 12px; color: var(--muted); text-align: center; padding: 20px 0; }
+        .photo-gallery-sidebar .upload-btn {
+            display: block; width: 100%; margin-top: 12px; padding: 10px 0;
+            border-radius: 10px; font-family: inherit; font-size: 13px; font-weight: 500;
+            border: 1.5px dashed var(--border); cursor: pointer;
+            background: var(--bg2); color: var(--fg); transition: all 0.12s; text-align: center;
+        }
+        .photo-gallery-sidebar .upload-btn:hover { border-color: var(--accent); color: var(--accent); }
+        .photo-gallery-sidebar .upload-status {
+            font-size: 12px; color: var(--muted); margin-top: 8px; text-align: center;
+        }
 
         /* ─── Responsive ───────────────────────────────────────── */
+        @media (max-width: 900px) {
+            .tab-content { flex-direction: column; }
+            .tab-sidebar { width: 100%; }
+            .photo-gallery-sidebar { position: static; max-height: 300px; }
+        }
         @media (max-width: 640px) {
-            .topbar { padding: 0 12px; gap: 8px; }
+            .topbar { padding: 0 12px; gap: 8px; overflow-x: auto; }
             .topbar .tabs { gap: 0; }
             .topbar .tab { padding: 6px 10px; font-size: 12px; }
-            .img-card { flex-direction: column; }
-            .img-card .thumb { width: 100%; height: 140px; }
-            .img-card .card-actions { flex-direction: row; order: -1; align-self: flex-end; }
+            .topbar .brand { display: none; }
+            .img-card { flex-wrap: wrap; }
+            .img-card .thumb { width: 100%; height: 160px; }
+            .img-card .card-actions { flex-direction: row; order: -1; }
             .card-list { gap: 8px; }
+            .photo-gallery-grid { grid-template-columns: repeat(4, 1fr); }
         }
     </style>
 </head>
@@ -250,65 +287,40 @@
 
     <!-- Hero slides -->
     <div class="tab-content active" id="tab-hero"></div>
-
     <!-- Infrastructure gallery -->
     <div class="tab-content" id="tab-infra"></div>
-
     <!-- Food background -->
     <div class="tab-content" id="tab-food"></div>
-
     <!-- Rooms cards -->
     <div class="tab-content" id="tab-rooms"></div>
-
     <!-- Location map -->
     <div class="tab-content" id="tab-location"></div>
 </div>
 
-<!-- ═══ ADD MODAL ═══ -->
-<div class="modal-overlay" id="modal-overlay">
-    <div class="modal">
-        <h3 id="modal-title">Добавить изображение</h3>
-        <div class="row">
-            <label>Загрузить файл</label>
-            <input type="file" id="modal-file" accept="image/*" onchange="previewFile()">
-            <img class="preview-thumb" id="modal-preview">
-        </div>
-        <div class="divider">или</div>
-        <div class="row">
-            <label>Вставить URL картинки</label>
-            <input type="url" id="modal-url" placeholder="https://… или assets/…">
-        </div>
-        <div class="btn-row">
-            <button class="btn-cancel" onclick="closeModal()">Отмена</button>
-            <button class="btn-confirm" id="modal-confirm" onclick="confirmAdd()">Добавить</button>
-        </div>
-    </div>
-</div>
+<!-- ═══ HIDDEN FILE INPUT ═══ -->
+<input type="file" id="hidden-file-input" accept="image/*" style="display:none" onchange="onHiddenFilePicked()">
 
 <script>
 (function() {
 'use strict';
 
-const OWNER = 'rideriko';
-const REPO = 'grand-kamelia';
-const BRANCH = 'main';
-const DATA_PATH = 'docs/data.json';
-const PHOTOS_DIR = 'docs/assets/photos/';
+var OWNER = 'rideriko';
+var REPO = 'grand-kamelia';
+var BRANCH = 'main';
+var DATA_PATH = 'docs/data.json';
+var PHOTOS_DIR = 'docs/assets/photos/';
+var ASSETS_DIR = 'docs/assets/';
 
-const TOKEN_KEY = 'gc_admin_token';
+var TOKEN_KEY = 'gc_admin_token';
 
-/* ─── Token management ──────────────────────────────────── */
+/* ─── Token ─────────────────────────────────── */
 function getToken() {
     try { return localStorage.getItem(TOKEN_KEY); } catch(e) { return null; }
 }
-function setToken(t) {
-    try { localStorage.setItem(TOKEN_KEY, t); } catch(e) {}
-}
-function clearToken() {
-    try { localStorage.removeItem(TOKEN_KEY); } catch(e) {}
-}
+function setToken(t) { try { localStorage.setItem(TOKEN_KEY, t); } catch(e) {} }
+function clearToken() { try { localStorage.removeItem(TOKEN_KEY); } catch(e) {} }
 
-/* ─── GitHub API helpers ─────────────────────────────────── */
+/* ─── GitHub API ────────────────────────────── */
 function ghURL(path) {
     return 'https://api.github.com/repos/' + OWNER + '/' + REPO + '/contents/' + path + '?ref=' + BRANCH;
 }
@@ -320,7 +332,7 @@ function ghHeaders() {
     };
 }
 
-function ghGet(path) {
+function ghGetJSON(path) {
     return fetch(ghURL(path), { headers: ghHeaders() })
         .then(function(r) {
             if (!r.ok) throw new Error('HTTP ' + r.status);
@@ -328,10 +340,10 @@ function ghGet(path) {
         });
 }
 
-function ghPut(path, content, sha) {
+function ghPut(path, contentBase64, sha) {
     var body = {
         message: 'admin: update ' + path,
-        content: btoa(unescape(encodeURIComponent(content))),
+        content: contentBase64,
         branch: BRANCH
     };
     if (sha) body.sha = sha;
@@ -340,19 +352,29 @@ function ghPut(path, content, sha) {
         headers: Object.assign(ghHeaders(), { 'Content-Type': 'application/json' }),
         body: JSON.stringify(body)
     }).then(function(r) {
-        if (!r.ok) throw new Error('HTTP ' + r.status + ' ' + path);
+        if (!r.ok) return r.json().then(function(e) { throw new Error('HTTP ' + r.status + ': ' + (e.message || path)); });
         return r.json();
     });
 }
 
-/* ─── State ──────────────────────────────────────────────── */
-var data = null;       // parsed data.json
-var dataSha = null;    // GitHub blob SHA
-var currentTab = 'hero';
-var addTarget = null;  // which section is the "add" modal for
-var pendingUploads = []; // { path, base64 } files to upload on save
+/* ─── UTF8-safe base64 ──────────────────────── */
+function toBase64(str) {
+    // encodeURIComponent → %XX, unescape → bytes, btoa → base64
+    return btoa(unescape(encodeURIComponent(str)));
+}
+function fromBase64(b64) {
+    return decodeURIComponent(escape(atob(b64)));
+}
 
-/* ─── Login / Logout ─────────────────────────────────────── */
+/* ─── State ─────────────────────────────────── */
+var siteData = null;
+var dataSha = null;
+var currentTab = 'hero';
+var pendingUploads = [];     // { path, base64 } files to upload on save
+var photoLibrary = [];       // { path, download_url, name } — all known photos
+var pendingDataURLs = {};    // temp data URLs for newly added files shown before save
+
+/* ─── Login / Logout ────────────────────────── */
 window.login = function() {
     var tok = document.getElementById('token-input').value.trim();
     var errEl = document.getElementById('login-error');
@@ -360,50 +382,123 @@ window.login = function() {
     errEl.style.display = 'none';
     setToken(tok);
 
-    // Verify by loading data.json
-    ghGet(DATA_PATH).then(function(res) {
+    // Load data.json + photo library in parallel
+    Promise.all([
+        ghGetJSON(DATA_PATH),
+        loadPhotoLibrary()
+    ]).then(function(results) {
+        var res = results[0];
         dataSha = res.sha;
-        data = JSON.parse(decodeURIComponent(escape(atob(res.content))));
+        siteData = JSON.parse(fromBase64(res.content));
         showEditor();
-    }).catch(function() {
+    }).catch(function(e) {
         clearToken();
-        errEl.textContent = 'Ошибка. Проверьте токен и доступ к репозиторию.';
+        errEl.textContent = 'Ошибка: ' + e.message + '. Проверьте токен.';
         errEl.style.display = 'block';
     });
 };
 
 window.logout = function() {
     clearToken();
-    data = null;
+    siteData = null;
     dataSha = null;
     pendingUploads = [];
+    pendingDataURLs = {};
+    photoLibrary = [];
     document.getElementById('editor-screen').classList.remove('show');
     document.getElementById('login-screen').style.display = '';
     document.getElementById('token-input').value = '';
+    document.querySelectorAll('.tab-content').forEach(function(c) { c.classList.remove('active'); });
+    document.getElementById('tab-hero').classList.add('active');
+    currentTab = 'hero';
+    document.querySelectorAll('.topbar .tab').forEach(function(t) { t.classList.remove('active'); });
+    document.querySelector('.topbar .tab').classList.add('active');
 };
 
-/* ─── Editor ─────────────────────────────────────────────── */
+/* ─── Photo library ─────────────────────────── */
+function loadPhotoLibrary() {
+    // Load both assets/photos/ and assets/ directories
+    return Promise.all([
+        ghGetJSON(PHOTOS_DIR).catch(function() { return []; }),
+        ghGetJSON(ASSETS_DIR).catch(function() { return []; })
+    ]).then(function(results) {
+        var all = results[0].concat(results[1]);
+        // dedupe by path, keep only image files
+        var seen = {};
+        photoLibrary = [];
+        all.forEach(function(f) {
+            if (seen[f.path]) return;
+            seen[f.path] = true;
+            var name = f.name.toLowerCase();
+            if (/\.(svg|png|jpg|jpeg|gif|webp|ico)$/.test(name)) {
+                photoLibrary.push({
+                    path: f.path,
+                    download_url: f.download_url,
+                    name: f.name
+                });
+            }
+        });
+        // Sort: photos/ first, then alphabetically
+        photoLibrary.sort(function(a, b) {
+            var aPhoto = a.path.indexOf('photos/') !== -1;
+            var bPhoto = b.path.indexOf('photos/') !== -1;
+            if (aPhoto && !bPhoto) return 1;
+            if (!aPhoto && bPhoto) return -1;
+            return a.name.localeCompare(b.name);
+        });
+    });
+}
+
+function getImageUrl(dataPath) {
+    if (!dataPath) return '';
+    // Try both forms: "assets/..." (data.json) and "docs/assets/..." (GitHub API)
+    var fullPath = 'docs/' + dataPath;
+    // If it's a newly added file (data URL from FileReader)
+    if (pendingDataURLs[fullPath]) return pendingDataURLs[fullPath];
+    if (pendingDataURLs[dataPath]) return pendingDataURLs[dataPath];
+    // Look up in photo library
+    for (var i = 0; i < photoLibrary.length; i++) {
+        if (photoLibrary[i].path === fullPath || photoLibrary[i].path === dataPath) {
+            return photoLibrary[i].download_url;
+        }
+    }
+    // Fallback: relative path from admin/
+    return '../' + dataPath;
+}
+
+/* ─── Editor ────────────────────────────────── */
 function showEditor() {
     document.getElementById('login-screen').style.display = 'none';
     document.getElementById('editor-screen').classList.add('show');
-    renderCurrentTab();
+    renderTab(currentTab);
 }
 
-/* ─── Tab switching ──────────────────────────────────────── */
+/* ─── Tab switching ─────────────────────────── */
 window.switchTab = function(name) {
     currentTab = name;
     document.querySelectorAll('.topbar .tab').forEach(function(t) { t.classList.remove('active'); });
-    document.querySelector('.topbar .tab[onclick*="' + name + '"]').classList.add('active');
+    var tabs = document.querySelectorAll('.topbar .tab');
+    for (var i = 0; i < tabs.length; i++) {
+        if (tabs[i].textContent.toLowerCase().indexOf(name) !== -1 ||
+            (name === 'hero' && tabs[i].textContent === 'Слайдер') ||
+            (name === 'infra' && tabs[i].textContent === 'Территория') ||
+            (name === 'food' && tabs[i].textContent === 'Ресторан') ||
+            (name === 'rooms' && tabs[i].textContent === 'Номера') ||
+            (name === 'location' && tabs[i].textContent === 'Карта')) {
+            tabs[i].classList.add('active');
+        }
+    }
     document.querySelectorAll('.tab-content').forEach(function(c) { c.classList.remove('active'); });
     document.getElementById('tab-' + name).classList.add('active');
     renderTab(name);
 };
 
-function renderCurrentTab() {
-    renderTab(currentTab);
-}
-
 function renderTab(name) {
+    var container = document.getElementById('tab-' + name);
+    container.innerHTML =
+        '<div class="tab-main" id="tab-main-' + name + '"></div>' +
+        '<div class="tab-sidebar" id="tab-sidebar-' + name + '"></div>';
+
     switch (name) {
         case 'hero': renderHero(); break;
         case 'infra': renderInfra(); break;
@@ -411,128 +506,229 @@ function renderTab(name) {
         case 'rooms': renderRooms(); break;
         case 'location': renderLocation(); break;
     }
+    renderPhotoSidebar(name);
 }
 
-/* ─── Hero: slides array ─────────────────────────────────── */
+/* ─── Hero ──────────────────────────────────── */
 function renderHero() {
-    var slides = data.hero.slides;
+    var slides = siteData.hero.slides;
     var html = '<div class="tab-header"><h2>Слайды героя (' + slides.length + ')</h2>' +
-        '<button class="btn-add" onclick="openAddModal(\'hero\')">+ Добавить слайд</button></div>' +
+        '<button class="btn-add" onclick="addNewItem(\'hero\')">+ Добавить слайд</button></div>' +
         '<div class="card-list">';
-    slides.forEach(function(s, i) {
-        html += cardHTML('hero', i, s.src, [{ key: 'alt', label: 'Alt-описание', value: s.alt || '' }], slides.length);
-    });
+    for (var i = 0; i < slides.length; i++) {
+        html += arrayCard('hero', i, slides[i].src, [{ key: 'alt', label: 'Alt-описание', value: slides[i].alt || '' }], slides.length);
+    }
     html += '</div>';
-    document.getElementById('tab-hero').innerHTML = html;
+    document.getElementById('tab-main-hero').innerHTML = html;
 }
 
-/* ─── Infrastructure: gallery array ──────────────────────── */
+/* ─── Infrastructure ────────────────────────── */
 function renderInfra() {
-    var items = data.infrastructure.gallery;
+    var items = siteData.infrastructure.gallery;
     var html = '<div class="tab-header"><h2>Галерея территории (' + items.length + ')</h2>' +
-        '<button class="btn-add" onclick="openAddModal(\'infra\')">+ Добавить фото</button></div>' +
+        '<button class="btn-add" onclick="addNewItem(\'infra\')">+ Добавить фото</button></div>' +
         '<div class="card-list">';
-    items.forEach(function(item, i) {
-        html += cardHTML('infra', i, item.src, [{ key: 'caption', label: 'Подпись', value: item.caption || '' }], items.length);
-    });
+    for (var i = 0; i < items.length; i++) {
+        html += arrayCard('infra', i, items[i].src, [{ key: 'caption', label: 'Подпись', value: items[i].caption || '' }], items.length);
+    }
     html += '</div>';
-    document.getElementById('tab-infra').innerHTML = html;
+    document.getElementById('tab-main-infra').innerHTML = html;
 }
 
-/* ─── Food: single background ────────────────────────────── */
+/* ─── Food ──────────────────────────────────── */
 function renderFood() {
-    var bg = data.food.background || '';
+    var bg = siteData.food.background || '';
     var html = '<div class="tab-header"><h2>Фон ресторана</h2></div>' +
         '<div class="single-img">' +
-        '<img class="thumb" src="' + (bg ? '../' + bg : '') + '" alt="" onerror="this.style.display=\'none\'">' +
+        '<img class="thumb-big" src="' + getImageUrl(bg) + '" alt="" onerror="this.style.display=\'none\'" onload="this.style.display=\'\'">' +
         '<div class="src-row">' +
-        '<input type="text" id="food-src" value="' + esc(bg) + '" placeholder="assets/food-restaurant.svg" style="flex:1;padding:8px 12px;border:1.5px solid var(--border);border-radius:8px;font-family:inherit;font-size:13px;">' +
+        '<input type="text" id="food-src" value="' + esc(bg) + '" placeholder="assets/food-restaurant.svg" onchange="siteData.food.background=this.value">' +
+        '<button class="btn-pick" onclick="pickFromGallery(\'food-src\')">Галерея</button>' +
         '</div>' +
-        '<button class="btn-replace" onclick="changeFoodBg()">Выбрать другой файл</button>' +
         '</div>';
-    document.getElementById('tab-food').innerHTML = html;
+    document.getElementById('tab-main-food').innerHTML = html;
 }
 
-window.changeFoodBg = function() {
-    addTarget = 'food';
-    document.getElementById('modal-title').textContent = 'Заменить фон ресторана';
-    document.getElementById('modal-file').value = '';
-    document.getElementById('modal-url').value = '';
-    document.getElementById('modal-preview').style.display = 'none';
-    document.getElementById('modal-overlay').classList.add('show');
-};
-
-/* ─── Rooms: cards array ─────────────────────────────────── */
+/* ─── Rooms ─────────────────────────────────── */
 function renderRooms() {
-    var cards = data.rooms.cards;
+    var cards = siteData.rooms.cards;
     var html = '<div class="tab-header"><h2>Карточки номеров (' + cards.length + ')</h2>' +
-        '<button class="btn-add" onclick="openAddModal(\'rooms\')">+ Добавить номер</button></div>' +
+        '<button class="btn-add" onclick="addNewItem(\'rooms\')">+ Добавить номер</button></div>' +
         '<div class="card-list">';
-    cards.forEach(function(c, i) {
-        html += cardHTML('rooms', i, c.src, [
-            { key: 'title', label: 'Название', value: c.title || '' },
-            { key: 'badge', label: 'Бейдж (гости)', value: c.badge || '' },
-            { key: 'desc', label: 'Описание', value: c.desc || '', textarea: true }
+    for (var i = 0; i < cards.length; i++) {
+        html += arrayCard('rooms', i, cards[i].src, [
+            { key: 'title', label: 'Название', value: cards[i].title || '' },
+            { key: 'badge', label: 'Бейдж (гости)', value: cards[i].badge || '' },
+            { key: 'desc', label: 'Описание', value: cards[i].desc || '', textarea: true }
         ], cards.length);
-    });
+    }
     html += '</div>';
-    document.getElementById('tab-rooms').innerHTML = html;
+    document.getElementById('tab-main-rooms').innerHTML = html;
 }
 
-/* ─── Location: single map ────────────────────────────────── */
+/* ─── Location ──────────────────────────────── */
 function renderLocation() {
-    var map = data.location.map || '';
+    var map = siteData.location.map || '';
     var html = '<div class="tab-header"><h2>Карта</h2></div>' +
         '<div class="single-img">' +
-        '<img class="thumb" src="' + (map ? '../' + map : '') + '" alt="" onerror="this.style.display=\'none\'">' +
+        '<img class="thumb-big" src="' + getImageUrl(map) + '" alt="" onerror="this.style.display=\'none\'" onload="this.style.display=\'\'">' +
         '<div class="src-row">' +
-        '<input type="text" id="location-src" value="' + esc(map) + '" placeholder="assets/location-map.svg" style="flex:1;padding:8px 12px;border:1.5px solid var(--border);border-radius:8px;font-family:inherit;font-size:13px;">' +
+        '<input type="text" id="location-src" value="' + esc(map) + '" placeholder="assets/location-map.svg" onchange="siteData.location.map=this.value">' +
+        '<button class="btn-pick" onclick="pickFromGallery(\'location-src\')">Галерея</button>' +
         '</div>' +
-        '<button class="btn-replace" onclick="changeLocationMap()">Выбрать другой файл</button>' +
         '</div>';
-    document.getElementById('tab-location').innerHTML = html;
+    document.getElementById('tab-main-location').innerHTML = html;
 }
 
-window.changeLocationMap = function() {
-    addTarget = 'location';
-    document.getElementById('modal-title').textContent = 'Заменить карту';
-    document.getElementById('modal-file').value = '';
-    document.getElementById('modal-url').value = '';
-    document.getElementById('modal-preview').style.display = 'none';
-    document.getElementById('modal-overlay').classList.add('show');
+/* ─── Photo sidebar ─────────────────────────── */
+function renderPhotoSidebar(section) {
+    var sidebar = document.getElementById('tab-sidebar-' + section);
+    if (!sidebar) return;
+    var html = '<div class="photo-gallery-sidebar">' +
+        '<h3>📷 Фото (' + photoLibrary.length + ')</h3>' +
+        '<a class="gh-link" href="https://github.com/' + OWNER + '/' + REPO + '/tree/' + BRANCH + '/docs/assets/" target="_blank" rel="noopener">Открыть папку на GitHub →</a>';
+
+    if (photoLibrary.length === 0) {
+        html += '<p class="empty-msg">Нет загруженных фото.<br>Загрузите первое через кнопку ниже.</p>';
+    } else {
+        html += '<div class="photo-gallery-grid">';
+        for (var i = 0; i < photoLibrary.length; i++) {
+            var p = photoLibrary[i];
+            var shortName = p.name.length > 20 ? p.name.substring(0, 18) + '…' : p.name;
+            html += '<img class="gthumb" src="' + p.download_url + '" alt="' + esc(p.name) + '" title="' + esc(p.name) + '\n' + esc(p.path) + '" loading="lazy" onclick="onGalleryClick(\'' + esc(p.path) + '\', this)">';
+        }
+        html += '</div>';
+    }
+
+    html += '<button class="upload-btn" onclick="uploadNewPhoto()">📤 Загрузить новое фото</button>' +
+        '<p class="upload-status" id="upload-status-' + section + '"></p>' +
+        '</div>';
+    sidebar.innerHTML = html;
+}
+
+/* ─── Gallery click handler ─────────────────── */
+window.onGalleryClick = function(repoPath, el) {
+    // Convert repo path (docs/assets/...) to data.json path (assets/...)
+    var dataPath = repoPath;
+    if (dataPath.indexOf('docs/') === 0) dataPath = dataPath.substring(5);
+
+    // Highlight
+    var prev = document.querySelector('.gthumb.selected');
+    if (prev) prev.classList.remove('selected');
+    if (el) el.classList.add('selected');
+
+    copyToClipboard(dataPath);
+    showToast('Скопирован: ' + dataPath);
 };
 
-/* ─── Card HTML helper ────────────────────────────────────── */
-function cardHTML(section, index, src, fields, total) {
-    return '<div class="img-card" data-section="' + section + '" data-index="' + index + '">' +
-        '<img class="thumb" src="' + (src ? '../' + src : '') + '" alt="" loading="lazy" onerror="this.style.display=\'none\'">' +
+window.pickFromGallery = function(inputId) {
+    var input = document.getElementById(inputId);
+    if (!input) return;
+    showToast('Нажмите на фото в галерее справа, затем вставьте путь (Ctrl+V) в поле');
+    input.focus();
+};
+
+window.uploadNewPhoto = function() {
+    document.getElementById('hidden-file-input').click();
+};
+
+window.onHiddenFilePicked = function() {
+    var file = document.getElementById('hidden-file-input').files[0];
+    if (!file) return;
+    var ext = file.name.split('.').pop().toLowerCase();
+    var baseName = 'photo-' + Date.now() + '.' + ext;
+    var destPath = PHOTOS_DIR + baseName;
+    var displayPath = 'assets/photos/' + baseName;
+
+    var reader = new FileReader();
+    reader.onload = function(e) {
+        var dataURL = e.target.result;
+        var base64 = dataURL.split(',')[1];
+        pendingUploads.push({ path: destPath, base64: base64, mime: file.type || 'image/' + ext });
+
+        // Add to photo library immediately
+        photoLibrary.unshift({
+            path: destPath,
+            download_url: dataURL,
+            name: baseName
+        });
+        pendingDataURLs[destPath] = dataURL;
+
+        // Refresh all tabs
+        refreshAllTabs();
+        showToast('Фото добавлено: ' + displayPath + ' (сохраните изменения)');
+    };
+    reader.readAsDataURL(file);
+    // Reset input for re-upload of same file
+    document.getElementById('hidden-file-input').value = '';
+};
+
+/* ─── Array card builder ─────────────────────── */
+function arrayCard(section, index, src, fields, total) {
+    var imgUrl = src ? getImageUrl(src) : '';
+    var html = '<div class="img-card" data-section="' + section + '" data-index="' + index + '">' +
+        '<span class="index-badge">' + (index + 1) + '</span>' +
+        '<img class="thumb" src="' + imgUrl + '" alt="" loading="lazy" onerror="this.style.display=\'none\'" onload="this.style.display=\'\'">' +
         '<div class="fields">' +
-        '<div class="src-row"><input type="text" value="' + esc(src) + '" data-field="src" placeholder="assets/…" onchange="updateField(\'' + section + '\',' + index + ',\'src\',this.value)"></div>' +
-        fields.map(function(f) {
-            if (f.textarea) {
-                return '<textarea data-field="' + f.key + '" placeholder="' + f.label + '" rows="2" onchange="updateField(\'' + section + '\',' + index + ',\'' + f.key + '\',this.value)">' + esc(f.value) + '</textarea>';
-            } else {
-                return '<input type="text" value="' + esc(f.value) + '" data-field="' + f.key + '" placeholder="' + f.label + '" onchange="updateField(\'' + section + '\',' + index + ',\'' + f.key + '\',this.value)">';
-            }
-        }).join('') +
-        '</div>' +
+        '<div class="src-row">' +
+        '<input type="text" value="' + esc(src) + '" data-field="src" placeholder="assets/…" onchange="updateArrayField(\'' + section + '\',' + index + ',\'src\',this.value)">' +
+        '<button class="btn-pick" onclick="pickFromGalleryForCard(\'' + section + '\',' + index + ')">Галерея</button>' +
+        '</div>';
+
+    for (var f = 0; f < fields.length; f++) {
+        var field = fields[f];
+        if (field.textarea) {
+            html += '<textarea data-field="' + field.key + '" placeholder="' + field.label + '" rows="2" onchange="updateArrayField(\'' + section + '\',' + index + ',\'' + field.key + '\',this.value)">' + esc(field.value) + '</textarea>';
+        } else {
+            html += '<input type="text" value="' + esc(field.value) + '" data-field="' + field.key + '" placeholder="' + field.label + '" onchange="updateArrayField(\'' + section + '\',' + index + ',\'' + field.key + '\',this.value)">';
+        }
+    }
+
+    html += '</div>' +
         '<div class="card-actions">' +
-        '<button onclick="moveItem(\'' + section + '\',' + index + ',-1)"' + (index === 0 ? ' disabled' : '') + ' title="Вверх">▲</button>' +
-        '<button onclick="moveItem(\'' + section + '\',' + index + ',1)"' + (index === total - 1 ? ' disabled' : '') + ' title="Вниз">▼</button>' +
-        '<button class="del" onclick="deleteItem(\'' + section + '\',' + index + ')" title="Удалить">✕</button>' +
+        '<button onclick="moveArrayItem(\'' + section + '\',' + index + ',-1)"' + (index === 0 ? ' disabled' : '') + ' title="Вверх">▲</button>' +
+        '<button onclick="moveArrayItem(\'' + section + '\',' + index + ',1)"' + (index === total - 1 ? ' disabled' : '') + ' title="Вниз">▼</button>' +
+        '<button class="del" onclick="deleteArrayItem(\'' + section + '\',' + index + ')" title="Удалить">✕</button>' +
         '</div>' +
         '</div>';
+    return html;
 }
 
-/* ─── Field update ───────────────────────────────────────── */
-window.updateField = function(section, index, field, value) {
+window.pickFromGalleryForCard = function(section, index) {
+    showToast('Нажмите на фото в галерее справа, затем вставьте путь (Ctrl+V) в поле src');
+};
+
+/* ─── Array operations ──────────────────────── */
+function getArrayRef(section) {
+    if (!siteData) return null;
+    switch (section) {
+        case 'hero': return siteData.hero.slides;
+        case 'infra': return siteData.infrastructure.gallery;
+        case 'rooms': return siteData.rooms.cards;
+        default: return null;
+    }
+}
+
+window.updateArrayField = function(section, index, field, value) {
     var arr = getArrayRef(section);
     if (!arr) return;
     arr[index][field] = value;
+    // If src changed, update the thumbnail live
+    if (field === 'src') {
+        var card = document.querySelector('.img-card[data-section="' + section + '"][data-index="' + index + '"]');
+        if (card) {
+            var thumb = card.querySelector('.thumb');
+            if (thumb) {
+                var newUrl = getImageUrl(value);
+                thumb.src = newUrl;
+                if (newUrl) thumb.style.display = '';
+                else thumb.style.display = 'none';
+            }
+        }
+    }
 };
 
-/* ─── Move item ──────────────────────────────────────────── */
-window.moveItem = function(section, index, dir) {
+window.moveArrayItem = function(section, index, dir) {
     var arr = getArrayRef(section);
     if (!arr) return;
     var newIdx = index + dir;
@@ -543,153 +739,115 @@ window.moveItem = function(section, index, dir) {
     renderTab(section);
 };
 
-/* ─── Delete item ────────────────────────────────────────── */
-window.deleteItem = function(section, index) {
+window.deleteArrayItem = function(section, index) {
     var arr = getArrayRef(section);
     if (!arr) return;
     arr.splice(index, 1);
     renderTab(section);
 };
 
-/* ─── Get array reference by section name ────────────────── */
-function getArrayRef(section) {
-    if (!data) return null;
-    switch (section) {
-        case 'hero': return data.hero.slides;
-        case 'infra': return data.infrastructure.gallery;
-        case 'rooms': return data.rooms.cards;
-        default: return null;
-    }
-}
-
-/* ─── Modal ──────────────────────────────────────────────── */
-window.openAddModal = function(section) {
-    addTarget = section;
-    var titles = {
-        hero: 'Добавить слайд',
-        infra: 'Добавить фото территории',
-        rooms: 'Добавить номер'
-    };
-    document.getElementById('modal-title').textContent = titles[section] || 'Добавить';
-    document.getElementById('modal-file').value = '';
-    document.getElementById('modal-url').value = '';
-    document.getElementById('modal-preview').style.display = 'none';
-    document.getElementById('modal-overlay').classList.add('show');
-};
-
-window.closeModal = function() {
-    document.getElementById('modal-overlay').classList.remove('show');
-    addTarget = null;
-};
-
-window.previewFile = function() {
-    var file = document.getElementById('modal-file').files[0];
-    var preview = document.getElementById('modal-preview');
-    if (!file) { preview.style.display = 'none'; return; }
-    var reader = new FileReader();
-    reader.onload = function(e) {
-        preview.src = e.target.result;
-        preview.style.display = 'block';
-    };
-    reader.readAsDataURL(file);
-};
-
-window.confirmAdd = function() {
-    if (!addTarget) return;
-    var fileInput = document.getElementById('modal-file');
-    var urlInput = document.getElementById('modal-url');
-    var file = fileInput.files[0];
-    var src;
-
-    if (file) {
-        // Will be uploaded on save; use a temp path
-        var ext = file.name.split('.').pop().toLowerCase();
-        var baseName = addTarget + '-' + Date.now() + '.' + ext;
-        src = 'assets/photos/' + baseName;
-        var reader = new FileReader();
-        reader.onload = function(e) {
-            var base64 = e.target.result.split(',')[1];
-            pendingUploads.push({ path: PHOTOS_DIR + baseName, base64: base64, mime: file.type });
-            addItem(addTarget, src);
-            closeModal();
-            renderTab(addTarget);
-        };
-        reader.readAsDataURL(file);
-        return;
-    }
-
-    if (urlInput.value.trim()) {
-        src = urlInput.value.trim();
-        addItem(addTarget, src);
-        closeModal();
-        renderTab(addTarget);
-        return;
-    }
-
-    // No input — just add empty item
-    src = 'assets/placeholder.svg';
-    addItem(addTarget, src);
-    closeModal();
-    renderTab(addTarget);
-};
-
-function addItem(section, src) {
+window.addNewItem = function(section) {
+    var arr = getArrayRef(section);
+    if (!arr) return;
+    var emptySrc = 'assets/placeholder.svg';
     switch (section) {
         case 'hero':
-            data.hero.slides.push({ src: src, alt: '' });
+            arr.push({ src: emptySrc, alt: '' });
             break;
         case 'infra':
-            data.infrastructure.gallery.push({ src: src, caption: '' });
+            arr.push({ src: emptySrc, caption: '' });
             break;
         case 'rooms':
-            data.rooms.cards.push({ src: src, title: 'Новый номер', badge: '', desc: '' });
+            arr.push({ src: emptySrc, title: 'Новый номер', badge: '', desc: '' });
             break;
     }
+    renderTab(section);
+    showToast('Новый элемент добавлен. Выберите фото в галерее или загрузите новое.');
+};
+
+/* ─── Refresh all ───────────────────────────── */
+function refreshAllTabs() {
+    ['hero','infra','food','rooms','location'].forEach(function(name) {
+        var container = document.getElementById('tab-' + name);
+        if (!container || !container.classList.contains('active')) return;
+        renderTab(name);
+    });
 }
 
-/* ─── Save ───────────────────────────────────────────────── */
+/* ─── Toast ─────────────────────────────────── */
+var toastTimer;
+function showToast(msg) {
+    var el = document.getElementById('toast');
+    if (!el) {
+        el = document.createElement('div');
+        el.id = 'toast';
+        el.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#222;color:#fff;padding:10px 24px;border-radius:20px;font-family:inherit;font-size:14px;z-index:999;transition:opacity 0.3s;pointer-events:none;';
+        document.body.appendChild(el);
+    }
+    el.textContent = msg;
+    el.style.opacity = '1';
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function() { el.style.opacity = '0'; }, 3000);
+}
+
+function copyToClipboard(text) {
+    try {
+        var ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+    } catch(e) {}
+}
+
+/* ─── Save ──────────────────────────────────── */
 window.saveAll = function() {
     var btnSave = document.getElementById('btn-save');
     var statusEl = document.getElementById('save-status');
     var spinner = document.getElementById('spinner');
 
-    // Collect single-image values
+    // Collect single-image field values
     var foodSrc = document.getElementById('food-src');
-    if (foodSrc) data.food.background = foodSrc.value;
+    if (foodSrc) siteData.food.background = foodSrc.value;
     var locationSrc = document.getElementById('location-src');
-    if (locationSrc) data.location.map = locationSrc.value;
+    if (locationSrc) siteData.location.map = locationSrc.value;
 
     btnSave.disabled = true;
     spinner.style.display = 'inline-block';
     statusEl.textContent = 'Сохранение…';
     statusEl.className = 'save-status';
 
-    var jsonStr = JSON.stringify(data, null, 2);
+    var jsonStr = JSON.stringify(siteData, null, 2);
 
     // Upload pending photo files first
     var uploadPromises = pendingUploads.map(function(u) {
-        return fetch(ghURL(u.path), {
-            method: 'PUT',
-            headers: Object.assign(ghHeaders(), { 'Content-Type': 'application/json' }),
-            body: JSON.stringify({
-                message: 'admin: upload ' + u.path,
-                content: u.base64,
-                branch: BRANCH
-            })
-        }).then(function(r) {
-            if (!r.ok) throw new Error('Upload failed: ' + u.path);
-            return r.json();
+        return ghPut(u.path, u.base64, undefined).catch(function(e) {
+            // If file exists, try to get its SHA and update
+            return ghGetJSON(u.path).then(function(existing) {
+                return ghPut(u.path, u.base64, existing.sha);
+            }).catch(function() {
+                throw e;
+            });
         });
     });
 
     Promise.all(uploadPromises).then(function() {
+        // Clear pending uploads and data URLs
         pendingUploads = [];
-        // Now save data.json
-        return ghPut(DATA_PATH, jsonStr, dataSha);
+        pendingDataURLs = {};
+        // Reload photo library to get fresh download URLs
+        return loadPhotoLibrary();
+    }).then(function() {
+        // Save data.json
+        return ghPut(DATA_PATH, toBase64(jsonStr), dataSha);
     }).then(function(res) {
         dataSha = res.content.sha;
         statusEl.textContent = '✓ Сохранено';
         statusEl.className = 'save-status success';
+        refreshAllTabs();
     }).catch(function(err) {
         statusEl.textContent = '✕ ' + err.message;
         statusEl.className = 'save-status error';
@@ -701,24 +859,27 @@ window.saveAll = function() {
                 statusEl.textContent = '';
                 statusEl.className = 'save-status';
             }
-        }, 4000);
+        }, 5000);
     });
 };
 
-/* ─── Helpers ────────────────────────────────────────────── */
+/* ─── Helpers ───────────────────────────────── */
 function esc(s) {
     if (!s) return '';
     return s.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
-/* ─── Init ───────────────────────────────────────────────── */
+/* ─── Init ──────────────────────────────────── */
 if (getToken()) {
-    ghGet(DATA_PATH).then(function(res) {
+    Promise.all([
+        ghGetJSON(DATA_PATH),
+        loadPhotoLibrary()
+    ]).then(function(results) {
+        var res = results[0];
         dataSha = res.sha;
-        data = JSON.parse(decodeURIComponent(escape(atob(res.content))));
+        siteData = JSON.parse(fromBase64(res.content));
         showEditor();
     }).catch(function() {
-        // Token expired or invalid — show login
         clearToken();
     });
 }
