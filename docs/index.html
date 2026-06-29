@@ -1378,36 +1378,33 @@
       /* ─── Video ping-pong ────────────────────────────────────────────── */
       (function setupVideoPingPong() {
         if (!video) return;
-        const SPEED = 0.5;          // замедление
-        const REVERSE_SPEED = -0.5; // обратное воспроизведение
+        const SPEED = 0.5;
         let forward = true;
+        let rafId = null;
 
-        // Начинаем с замедленного воспроизведения
         video.playbackRate = SPEED;
 
-        // Функция проверки: если видео дошло до конца или начала — разворачиваем
-        const checkDirection = () => {
-          if (forward && video.currentTime >= video.duration - 0.1) {
-            forward = false;
-            video.playbackRate = REVERSE_SPEED;
-          } else if (!forward && video.currentTime <= 0.1) {
+        // Отмотка назад вручную (плавно, синхронно с экраном)
+        function rewind() {
+          if (forward) return; // уже переключились обратно, отмена
+          const step = 0.033 * SPEED;
+          video.currentTime = Math.max(0, video.currentTime - step);
+          if (video.currentTime <= 0.05) {
             forward = true;
             video.playbackRate = SPEED;
+            video.play();
+            return;
           }
-        };
+          rafId = requestAnimationFrame(rewind);
+        }
 
-        // Проверяем направление по timeupdate (часто, но не нагружает)
-        video.addEventListener('timeupdate', checkDirection);
-
-        // Обработка native loop: отключаем, управляем сами
-        video.loop = false;
-
-        // На случай, если видео закончилось без срабатывания timeupdate
         video.addEventListener('ended', () => {
           forward = false;
-          video.playbackRate = REVERSE_SPEED;
-          video.play();
+          video.pause();
+          rafId = requestAnimationFrame(rewind);
         });
+
+        video.loop = false;
       })();
 
       const closeMenu = (restoreFocus = false) => {
