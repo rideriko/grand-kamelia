@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Админка · Grand Camellia</title>
+    <link href="https://fonts.cdnfonts.com/css/circular-std" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --accent: #ff385c;
+            --fg: #222222;
+            --muted: #6a6a6a;
+            --border: #ebebeb;
+            --bg: #ffffff;
+            --bg2: #f7f7f7;
+            --radius: 14px;
+        }
+
+        body {
+            font-family: 'Circular Std', 'Circular', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg2);
+            color: var(--fg);
+            min-height: 100dvh;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ─── Login ──────────────────────────────────────────── */
+        .login-wrap {
+            display: flex; align-items: center; justify-content: center;
+            min-height: 100dvh; padding: 24px;
+        }
+        .login-card {
+            background: var(--bg); border-radius: var(--radius);
+            border: 1px solid var(--border); padding: 40px 32px;
+            max-width: 420px; width: 100%; text-align: center;
+            box-shadow: 0 2px 16px rgba(0,0,0,0.06);
+        }
+        .login-card h1 { font-size: 22px; font-weight: 600; margin-bottom: 8px; letter-spacing: -0.3px; }
+        .login-card .sub { font-size: 14px; color: var(--muted); margin-bottom: 24px; line-height: 1.5; }
+        .login-card label { display: block; text-align: left; font-size: 13px; font-weight: 500; margin-bottom: 6px; }
+        .login-card input {
+            width: 100%; padding: 12px 16px; border: 1.5px solid var(--border);
+            border-radius: 10px; font-family: inherit; font-size: 14px;
+            outline: none; transition: border-color 0.15s;
+        }
+        .login-card input:focus { border-color: var(--accent); }
+        .login-card button {
+            margin-top: 16px; width: 100%; padding: 13px 0;
+            background: var(--accent); color: #fff; border: none;
+            border-radius: 10px; font-family: inherit; font-size: 15px;
+            font-weight: 500; cursor: pointer; transition: background 0.12s;
+        }
+        .login-card button:hover { background: #e00b41; }
+        .login-card .help { margin-top: 16px; font-size: 12px; color: var(--muted); line-height: 1.5; }
+        .login-card .help a { color: var(--accent); }
+        .login-error { color: #c13515; font-size: 13px; margin-top: 10px; display: none; }
+
+        /* ─── Editor layout ───────────────────────────────────── */
+        .editor { display: none; }
+        .editor.show { display: block; }
+
+        .topbar {
+            background: var(--bg); border-bottom: 1px solid var(--border);
+            padding: 0 24px; display: flex; align-items: center;
+            gap: 24px; height: 56px; position: sticky; top: 0; z-index: 10;
+        }
+        .topbar .brand { font-weight: 600; font-size: 15px; white-space: nowrap; }
+        .topbar .tabs { display: flex; gap: 4px; flex: 1; overflow-x: auto; }
+        .topbar .tab {
+            padding: 8px 14px; border-radius: 8px; font-family: inherit;
+            font-size: 13px; font-weight: 500; border: none; background: transparent;
+            cursor: pointer; white-space: nowrap; color: var(--muted); transition: all 0.12s;
+        }
+        .topbar .tab:hover { background: var(--bg2); color: var(--fg); }
+        .topbar .tab.active { background: var(--fg); color: #fff; }
+        .topbar .actions { display: flex; gap: 8px; align-items: center; }
+        .btn-save {
+            padding: 8px 20px; border-radius: 20px; font-family: inherit;
+            font-size: 14px; font-weight: 500; border: none; cursor: pointer;
+            background: var(--accent); color: #fff; transition: all 0.12s;
+            white-space: nowrap;
+        }
+        .btn-save:hover { background: #e00b41; }
+        .btn-save:disabled { opacity: 0.5; cursor: default; }
+        .btn-logout {
+            padding: 8px 14px; border-radius: 20px; font-family: inherit;
+            font-size: 13px; font-weight: 500; border: 1.5px solid var(--border);
+            cursor: pointer; background: var(--bg); color: var(--muted); transition: all 0.12s;
+        }
+        .btn-logout:hover { border-color: var(--fg); color: var(--fg); }
+
+        /* ─── Save status ─────────────────────────────────────── */
+        .save-status {
+            font-size: 13px; color: var(--muted); display: flex; align-items: center; gap: 6px;
+        }
+        .save-status.success { color: #1a8a3f; }
+        .save-status.error { color: #c13515; }
+        .spinner {
+            width: 16px; height: 16px; border: 2px solid var(--border);
+            border-top-color: var(--accent); border-radius: 50%;
+            animation: spin 0.6s linear infinite; display: none;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* ─── Tab content ─────────────────────────────────────── */
+        .tab-content { display: none; padding: 24px; }
+        .tab-content.active { display: block; }
+
+        .tab-header {
+            display: flex; align-items: center; justify-content: space-between;
+            margin-bottom: 20px; flex-wrap: wrap; gap: 12px;
+        }
+        .tab-header h2 { font-size: 18px; font-weight: 600; }
+
+        .btn-add {
+            padding: 10px 20px; border-radius: 20px; font-family: inherit;
+            font-size: 13px; font-weight: 500; border: 1.5px solid var(--border);
+            cursor: pointer; background: var(--bg); color: var(--fg); transition: all 0.12s;
+        }
+        .btn-add:hover { border-color: var(--fg); }
+
+        /* ─── Image cards ──────────────────────────────────────── */
+        .card-list { display: flex; flex-direction: column; gap: 12px; }
+
+        .img-card {
+            background: var(--bg); border: 1px solid var(--border);
+            border-radius: var(--radius); padding: 16px; display: flex;
+            gap: 16px; align-items: flex-start; transition: border-color 0.12s;
+        }
+        .img-card:hover { border-color: #ccc; }
+        .img-card .thumb {
+            width: 120px; height: 80px; border-radius: 8px;
+            object-fit: cover; background: var(--bg2); flex-shrink: 0;
+        }
+        .img-card .fields { flex: 1; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+        .img-card .fields input, .img-card .fields textarea {
+            width: 100%; padding: 8px 12px; border: 1.5px solid var(--border);
+            border-radius: 8px; font-family: inherit; font-size: 13px; outline: none;
+            transition: border-color 0.12s; resize: vertical;
+        }
+        .img-card .fields input:focus, .img-card .fields textarea:focus { border-color: var(--accent); }
+        .img-card .fields textarea { min-height: 36px; }
+        .img-card .src-row { display: flex; gap: 8px; align-items: center; }
+        .img-card .src-row input { flex: 1; font-size: 12px; color: var(--muted); }
+        .img-card .card-actions { display: flex; gap: 4px; flex-direction: column; }
+        .img-card .card-actions button {
+            width: 32px; height: 32px; border-radius: 8px; border: 1px solid var(--border);
+            background: var(--bg); cursor: pointer; font-size: 14px; line-height: 1;
+            display: flex; align-items: center; justify-content: center;
+            color: var(--muted); transition: all 0.12s;
+        }
+        .img-card .card-actions button:hover { border-color: var(--fg); color: var(--fg); }
+        .img-card .card-actions button.del:hover { border-color: #c13515; color: #c13515; }
+        .img-card .card-actions button:disabled { opacity: 0.3; cursor: default; }
+
+        /* ─── Single-image tab (Food, Location) ────────────────── */
+        .single-img { max-width: 480px; }
+        .single-img .thumb { width: 100%; height: auto; max-height: 260px; border-radius: 10px; }
+        .single-img .src-row { margin-top: 12px; }
+        .single-img .btn-replace {
+            margin-top: 8px; padding: 8px 16px; border-radius: 20px; font-family: inherit;
+            font-size: 13px; font-weight: 500; border: 1.5px solid var(--border);
+            cursor: pointer; background: var(--bg); color: var(--fg); transition: all 0.12s;
+        }
+        .single-img .btn-replace:hover { border-color: var(--fg); }
+
+        /* ─── Add modal ────────────────────────────────────────── */
+        .modal-overlay {
+            display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4);
+            z-index: 100; align-items: center; justify-content: center;
+        }
+        .modal-overlay.show { display: flex; }
+        .modal {
+            background: var(--bg); border-radius: var(--radius); padding: 28px 24px;
+            max-width: 440px; width: 90%; box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+        }
+        .modal h3 { font-size: 17px; font-weight: 600; margin-bottom: 16px; }
+        .modal .row { margin-bottom: 12px; }
+        .modal label { display: block; font-size: 13px; font-weight: 500; margin-bottom: 4px; }
+        .modal input[type="file"] { display: block; font-family: inherit; font-size: 13px; }
+        .modal input[type="url"], .modal input[type="text"] {
+            width: 100%; padding: 10px 14px; border: 1.5px solid var(--border);
+            border-radius: 8px; font-family: inherit; font-size: 13px; outline: none;
+        }
+        .modal input:focus { border-color: var(--accent); }
+        .modal .divider { text-align: center; color: var(--muted); font-size: 12px; margin: 12px 0; }
+        .modal .btn-row { display: flex; gap: 8px; justify-content: flex-end; margin-top: 16px; }
+        .modal .btn-row button {
+            padding: 10px 20px; border-radius: 20px; font-family: inherit;
+            font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.12s;
+        }
+        .modal .btn-cancel { background: var(--bg); border: 1.5px solid var(--border); color: var(--fg); }
+        .modal .btn-cancel:hover { border-color: var(--fg); }
+        .modal .btn-confirm { background: var(--accent); border: none; color: #fff; }
+        .modal .btn-confirm:hover { background: #e00b41; }
+        .modal .preview-thumb { max-width: 100%; max-height: 120px; border-radius: 8px; margin-top: 8px; display: none; }
+
+        /* ─── Responsive ───────────────────────────────────────── */
+        @media (max-width: 640px) {
+            .topbar { padding: 0 12px; gap: 8px; }
+            .topbar .tabs { gap: 0; }
+            .topbar .tab { padding: 6px 10px; font-size: 12px; }
+            .img-card { flex-direction: column; }
+            .img-card .thumb { width: 100%; height: 140px; }
+            .img-card .card-actions { flex-direction: row; order: -1; align-self: flex-end; }
+            .card-list { gap: 8px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ═══ LOGIN ═══ -->
+<div class="login-wrap" id="login-screen">
+    <div class="login-card">
+        <h1>Админка Grand&nbsp;Camellia</h1>
+        <p class="sub">Управление фото на сайте gcamellia.ru</p>
+        <label for="token-input">GitHub Personal Access Token</label>
+        <input id="token-input" type="password" placeholder="ghp_…" autocomplete="off">
+        <button onclick="login()">Войти</button>
+        <p class="login-error" id="login-error"></p>
+        <p class="help">
+            Нужен токен с доступом <code>repo</code>.<br>
+            <a href="https://github.com/settings/tokens/new?scopes=repo&description=gcamellia-admin" target="_blank" rel="noopener">Создать токен →</a>
+            &nbsp;·&nbsp; Кнопка «Generate new token (classic)» → срок 90 дней.
+        </p>
+    </div>
+</div>
+
+<!-- ═══ EDITOR ═══ -->
+<div class="editor" id="editor-screen">
+    <div class="topbar">
+        <span class="brand">GC Admin</span>
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('hero')">Слайдер</button>
+            <button class="tab" onclick="switchTab('infra')">Территория</button>
+            <button class="tab" onclick="switchTab('food')">Ресторан</button>
+            <button class="tab" onclick="switchTab('rooms')">Номера</button>
+            <button class="tab" onclick="switchTab('location')">Карта</button>
+        </div>
+        <div class="actions">
+            <span class="save-status" id="save-status"></span>
+            <div class="spinner" id="spinner"></div>
+            <button class="btn-save" id="btn-save" onclick="saveAll()">💾 Сохранить всё</button>
+            <button class="btn-logout" onclick="logout()">Выйти</button>
+        </div>
+    </div>
+
+    <!-- Hero slides -->
+    <div class="tab-content active" id="tab-hero"></div>
+
+    <!-- Infrastructure gallery -->
+    <div class="tab-content" id="tab-infra"></div>
+
+    <!-- Food background -->
+    <div class="tab-content" id="tab-food"></div>
+
+    <!-- Rooms cards -->
+    <div class="tab-content" id="tab-rooms"></div>
+
+    <!-- Location map -->
+    <div class="tab-content" id="tab-location"></div>
+</div>
+
+<!-- ═══ ADD MODAL ═══ -->
+<div class="modal-overlay" id="modal-overlay">
+    <div class="modal">
+        <h3 id="modal-title">Добавить изображение</h3>
+        <div class="row">
+            <label>Загрузить файл</label>
+            <input type="file" id="modal-file" accept="image/*" onchange="previewFile()">
+            <img class="preview-thumb" id="modal-preview">
+        </div>
+        <div class="divider">или</div>
+        <div class="row">
+            <label>Вставить URL картинки</label>
+            <input type="url" id="modal-url" placeholder="https://… или assets/…">
+        </div>
+        <div class="btn-row">
+            <button class="btn-cancel" onclick="closeModal()">Отмена</button>
+            <button class="btn-confirm" id="modal-confirm" onclick="confirmAdd()">Добавить</button>
+        </div>
+    </div>
+</div>
+
+<script>
+(function() {
+'use strict';
+
+const OWNER = 'rideriko';
+const REPO = 'grand-kamelia';
+const BRANCH = 'main';
+const DATA_PATH = 'docs/data.json';
+const PHOTOS_DIR = 'docs/assets/photos/';
+
+const TOKEN_KEY = 'gc_admin_token';
+
+/* ─── Token management ──────────────────────────────────── */
+function getToken() {
+    try { return localStorage.getItem(TOKEN_KEY); } catch(e) { return null; }
+}
+function setToken(t) {
+    try { localStorage.setItem(TOKEN_KEY, t); } catch(e) {}
+}
+function clearToken() {
+    try { localStorage.removeItem(TOKEN_KEY); } catch(e) {}
+}
+
+/* ─── GitHub API helpers ─────────────────────────────────── */
+function ghURL(path) {
+    return 'https://api.github.com/repos/' + OWNER + '/' + REPO + '/contents/' + path + '?ref=' + BRANCH;
+}
+
+function ghHeaders() {
+    return {
+        'Authorization': 'token ' + getToken(),
+        'Accept': 'application/vnd.github.v3+json'
+    };
+}
+
+function ghGet(path) {
+    return fetch(ghURL(path), { headers: ghHeaders() })
+        .then(function(r) {
+            if (!r.ok) throw new Error('HTTP ' + r.status);
+            return r.json();
+        });
+}
+
+function ghPut(path, content, sha) {
+    var body = {
+        message: 'admin: update ' + path,
+        content: btoa(unescape(encodeURIComponent(content))),
+        branch: BRANCH
+    };
+    if (sha) body.sha = sha;
+    return fetch(ghURL(path), {
+        method: 'PUT',
+        headers: Object.assign(ghHeaders(), { 'Content-Type': 'application/json' }),
+        body: JSON.stringify(body)
+    }).then(function(r) {
+        if (!r.ok) throw new Error('HTTP ' + r.status + ' ' + path);
+        return r.json();
+    });
+}
+
+/* ─── State ──────────────────────────────────────────────── */
+var data = null;       // parsed data.json
+var dataSha = null;    // GitHub blob SHA
+var currentTab = 'hero';
+var addTarget = null;  // which section is the "add" modal for
+var pendingUploads = []; // { path, base64 } files to upload on save
+
+/* ─── Login / Logout ─────────────────────────────────────── */
+window.login = function() {
+    var tok = document.getElementById('token-input').value.trim();
+    var errEl = document.getElementById('login-error');
+    if (!tok) { errEl.textContent = 'Введите токен'; errEl.style.display = 'block'; return; }
+    errEl.style.display = 'none';
+    setToken(tok);
+
+    // Verify by loading data.json
+    ghGet(DATA_PATH).then(function(res) {
+        dataSha = res.sha;
+        data = JSON.parse(decodeURIComponent(escape(atob(res.content))));
+        showEditor();
+    }).catch(function() {
+        clearToken();
+        errEl.textContent = 'Ошибка. Проверьте токен и доступ к репозиторию.';
+        errEl.style.display = 'block';
+    });
+};
+
+window.logout = function() {
+    clearToken();
+    data = null;
+    dataSha = null;
+    pendingUploads = [];
+    document.getElementById('editor-screen').classList.remove('show');
+    document.getElementById('login-screen').style.display = '';
+    document.getElementById('token-input').value = '';
+};
+
+/* ─── Editor ─────────────────────────────────────────────── */
+function showEditor() {
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('editor-screen').classList.add('show');
+    renderCurrentTab();
+}
+
+/* ─── Tab switching ──────────────────────────────────────── */
+window.switchTab = function(name) {
+    currentTab = name;
+    document.querySelectorAll('.topbar .tab').forEach(function(t) { t.classList.remove('active'); });
+    document.querySelector('.topbar .tab[onclick*="' + name + '"]').classList.add('active');
+    document.querySelectorAll('.tab-content').forEach(function(c) { c.classList.remove('active'); });
+    document.getElementById('tab-' + name).classList.add('active');
+    renderTab(name);
+};
+
+function renderCurrentTab() {
+    renderTab(currentTab);
+}
+
+function renderTab(name) {
+    switch (name) {
+        case 'hero': renderHero(); break;
+        case 'infra': renderInfra(); break;
+        case 'food': renderFood(); break;
+        case 'rooms': renderRooms(); break;
+        case 'location': renderLocation(); break;
+    }
+}
+
+/* ─── Hero: slides array ─────────────────────────────────── */
+function renderHero() {
+    var slides = data.hero.slides;
+    var html = '<div class="tab-header"><h2>Слайды героя (' + slides.length + ')</h2>' +
+        '<button class="btn-add" onclick="openAddModal(\'hero\')">+ Добавить слайд</button></div>' +
+        '<div class="card-list">';
+    slides.forEach(function(s, i) {
+        html += cardHTML('hero', i, s.src, [{ key: 'alt', label: 'Alt-описание', value: s.alt || '' }], slides.length);
+    });
+    html += '</div>';
+    document.getElementById('tab-hero').innerHTML = html;
+}
+
+/* ─── Infrastructure: gallery array ──────────────────────── */
+function renderInfra() {
+    var items = data.infrastructure.gallery;
+    var html = '<div class="tab-header"><h2>Галерея территории (' + items.length + ')</h2>' +
+        '<button class="btn-add" onclick="openAddModal(\'infra\')">+ Добавить фото</button></div>' +
+        '<div class="card-list">';
+    items.forEach(function(item, i) {
+        html += cardHTML('infra', i, item.src, [{ key: 'caption', label: 'Подпись', value: item.caption || '' }], items.length);
+    });
+    html += '</div>';
+    document.getElementById('tab-infra').innerHTML = html;
+}
+
+/* ─── Food: single background ────────────────────────────── */
+function renderFood() {
+    var bg = data.food.background || '';
+    var html = '<div class="tab-header"><h2>Фон ресторана</h2></div>' +
+        '<div class="single-img">' +
+        '<img class="thumb" src="' + (bg ? '../' + bg : '') + '" alt="" onerror="this.style.display=\'none\'">' +
+        '<div class="src-row">' +
+        '<input type="text" id="food-src" value="' + esc(bg) + '" placeholder="assets/food-restaurant.svg" style="flex:1;padding:8px 12px;border:1.5px solid var(--border);border-radius:8px;font-family:inherit;font-size:13px;">' +
+        '</div>' +
+        '<button class="btn-replace" onclick="changeFoodBg()">Выбрать другой файл</button>' +
+        '</div>';
+    document.getElementById('tab-food').innerHTML = html;
+}
+
+window.changeFoodBg = function() {
+    addTarget = 'food';
+    document.getElementById('modal-title').textContent = 'Заменить фон ресторана';
+    document.getElementById('modal-file').value = '';
+    document.getElementById('modal-url').value = '';
+    document.getElementById('modal-preview').style.display = 'none';
+    document.getElementById('modal-overlay').classList.add('show');
+};
+
+/* ─── Rooms: cards array ─────────────────────────────────── */
+function renderRooms() {
+    var cards = data.rooms.cards;
+    var html = '<div class="tab-header"><h2>Карточки номеров (' + cards.length + ')</h2>' +
+        '<button class="btn-add" onclick="openAddModal(\'rooms\')">+ Добавить номер</button></div>' +
+        '<div class="card-list">';
+    cards.forEach(function(c, i) {
+        html += cardHTML('rooms', i, c.src, [
+            { key: 'title', label: 'Название', value: c.title || '' },
+            { key: 'badge', label: 'Бейдж (гости)', value: c.badge || '' },
+            { key: 'desc', label: 'Описание', value: c.desc || '', textarea: true }
+        ], cards.length);
+    });
+    html += '</div>';
+    document.getElementById('tab-rooms').innerHTML = html;
+}
+
+/* ─── Location: single map ────────────────────────────────── */
+function renderLocation() {
+    var map = data.location.map || '';
+    var html = '<div class="tab-header"><h2>Карта</h2></div>' +
+        '<div class="single-img">' +
+        '<img class="thumb" src="' + (map ? '../' + map : '') + '" alt="" onerror="this.style.display=\'none\'">' +
+        '<div class="src-row">' +
+        '<input type="text" id="location-src" value="' + esc(map) + '" placeholder="assets/location-map.svg" style="flex:1;padding:8px 12px;border:1.5px solid var(--border);border-radius:8px;font-family:inherit;font-size:13px;">' +
+        '</div>' +
+        '<button class="btn-replace" onclick="changeLocationMap()">Выбрать другой файл</button>' +
+        '</div>';
+    document.getElementById('tab-location').innerHTML = html;
+}
+
+window.changeLocationMap = function() {
+    addTarget = 'location';
+    document.getElementById('modal-title').textContent = 'Заменить карту';
+    document.getElementById('modal-file').value = '';
+    document.getElementById('modal-url').value = '';
+    document.getElementById('modal-preview').style.display = 'none';
+    document.getElementById('modal-overlay').classList.add('show');
+};
+
+/* ─── Card HTML helper ────────────────────────────────────── */
+function cardHTML(section, index, src, fields, total) {
+    return '<div class="img-card" data-section="' + section + '" data-index="' + index + '">' +
+        '<img class="thumb" src="' + (src ? '../' + src : '') + '" alt="" loading="lazy" onerror="this.style.display=\'none\'">' +
+        '<div class="fields">' +
+        '<div class="src-row"><input type="text" value="' + esc(src) + '" data-field="src" placeholder="assets/…" onchange="updateField(\'' + section + '\',' + index + ',\'src\',this.value)"></div>' +
+        fields.map(function(f) {
+            if (f.textarea) {
+                return '<textarea data-field="' + f.key + '" placeholder="' + f.label + '" rows="2" onchange="updateField(\'' + section + '\',' + index + ',\'' + f.key + '\',this.value)">' + esc(f.value) + '</textarea>';
+            } else {
+                return '<input type="text" value="' + esc(f.value) + '" data-field="' + f.key + '" placeholder="' + f.label + '" onchange="updateField(\'' + section + '\',' + index + ',\'' + f.key + '\',this.value)">';
+            }
+        }).join('') +
+        '</div>' +
+        '<div class="card-actions">' +
+        '<button onclick="moveItem(\'' + section + '\',' + index + ',-1)"' + (index === 0 ? ' disabled' : '') + ' title="Вверх">▲</button>' +
+        '<button onclick="moveItem(\'' + section + '\',' + index + ',1)"' + (index === total - 1 ? ' disabled' : '') + ' title="Вниз">▼</button>' +
+        '<button class="del" onclick="deleteItem(\'' + section + '\',' + index + ')" title="Удалить">✕</button>' +
+        '</div>' +
+        '</div>';
+}
+
+/* ─── Field update ───────────────────────────────────────── */
+window.updateField = function(section, index, field, value) {
+    var arr = getArrayRef(section);
+    if (!arr) return;
+    arr[index][field] = value;
+};
+
+/* ─── Move item ──────────────────────────────────────────── */
+window.moveItem = function(section, index, dir) {
+    var arr = getArrayRef(section);
+    if (!arr) return;
+    var newIdx = index + dir;
+    if (newIdx < 0 || newIdx >= arr.length) return;
+    var tmp = arr[index];
+    arr[index] = arr[newIdx];
+    arr[newIdx] = tmp;
+    renderTab(section);
+};
+
+/* ─── Delete item ────────────────────────────────────────── */
+window.deleteItem = function(section, index) {
+    var arr = getArrayRef(section);
+    if (!arr) return;
+    arr.splice(index, 1);
+    renderTab(section);
+};
+
+/* ─── Get array reference by section name ────────────────── */
+function getArrayRef(section) {
+    if (!data) return null;
+    switch (section) {
+        case 'hero': return data.hero.slides;
+        case 'infra': return data.infrastructure.gallery;
+        case 'rooms': return data.rooms.cards;
+        default: return null;
+    }
+}
+
+/* ─── Modal ──────────────────────────────────────────────── */
+window.openAddModal = function(section) {
+    addTarget = section;
+    var titles = {
+        hero: 'Добавить слайд',
+        infra: 'Добавить фото территории',
+        rooms: 'Добавить номер'
+    };
+    document.getElementById('modal-title').textContent = titles[section] || 'Добавить';
+    document.getElementById('modal-file').value = '';
+    document.getElementById('modal-url').value = '';
+    document.getElementById('modal-preview').style.display = 'none';
+    document.getElementById('modal-overlay').classList.add('show');
+};
+
+window.closeModal = function() {
+    document.getElementById('modal-overlay').classList.remove('show');
+    addTarget = null;
+};
+
+window.previewFile = function() {
+    var file = document.getElementById('modal-file').files[0];
+    var preview = document.getElementById('modal-preview');
+    if (!file) { preview.style.display = 'none'; return; }
+    var reader = new FileReader();
+    reader.onload = function(e) {
+        preview.src = e.target.result;
+        preview.style.display = 'block';
+    };
+    reader.readAsDataURL(file);
+};
+
+window.confirmAdd = function() {
+    if (!addTarget) return;
+    var fileInput = document.getElementById('modal-file');
+    var urlInput = document.getElementById('modal-url');
+    var file = fileInput.files[0];
+    var src;
+
+    if (file) {
+        // Will be uploaded on save; use a temp path
+        var ext = file.name.split('.').pop().toLowerCase();
+        var baseName = addTarget + '-' + Date.now() + '.' + ext;
+        src = 'assets/photos/' + baseName;
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            var base64 = e.target.result.split(',')[1];
+            pendingUploads.push({ path: PHOTOS_DIR + baseName, base64: base64, mime: file.type });
+            addItem(addTarget, src);
+            closeModal();
+            renderTab(addTarget);
+        };
+        reader.readAsDataURL(file);
+        return;
+    }
+
+    if (urlInput.value.trim()) {
+        src = urlInput.value.trim();
+        addItem(addTarget, src);
+        closeModal();
+        renderTab(addTarget);
+        return;
+    }
+
+    // No input — just add empty item
+    src = 'assets/placeholder.svg';
+    addItem(addTarget, src);
+    closeModal();
+    renderTab(addTarget);
+};
+
+function addItem(section, src) {
+    switch (section) {
+        case 'hero':
+            data.hero.slides.push({ src: src, alt: '' });
+            break;
+        case 'infra':
+            data.infrastructure.gallery.push({ src: src, caption: '' });
+            break;
+        case 'rooms':
+            data.rooms.cards.push({ src: src, title: 'Новый номер', badge: '', desc: '' });
+            break;
+    }
+}
+
+/* ─── Save ───────────────────────────────────────────────── */
+window.saveAll = function() {
+    var btnSave = document.getElementById('btn-save');
+    var statusEl = document.getElementById('save-status');
+    var spinner = document.getElementById('spinner');
+
+    // Collect single-image values
+    var foodSrc = document.getElementById('food-src');
+    if (foodSrc) data.food.background = foodSrc.value;
+    var locationSrc = document.getElementById('location-src');
+    if (locationSrc) data.location.map = locationSrc.value;
+
+    btnSave.disabled = true;
+    spinner.style.display = 'inline-block';
+    statusEl.textContent = 'Сохранение…';
+    statusEl.className = 'save-status';
+
+    var jsonStr = JSON.stringify(data, null, 2);
+
+    // Upload pending photo files first
+    var uploadPromises = pendingUploads.map(function(u) {
+        return fetch(ghURL(u.path), {
+            method: 'PUT',
+            headers: Object.assign(ghHeaders(), { 'Content-Type': 'application/json' }),
+            body: JSON.stringify({
+                message: 'admin: upload ' + u.path,
+                content: u.base64,
+                branch: BRANCH
+            })
+        }).then(function(r) {
+            if (!r.ok) throw new Error('Upload failed: ' + u.path);
+            return r.json();
+        });
+    });
+
+    Promise.all(uploadPromises).then(function() {
+        pendingUploads = [];
+        // Now save data.json
+        return ghPut(DATA_PATH, jsonStr, dataSha);
+    }).then(function(res) {
+        dataSha = res.content.sha;
+        statusEl.textContent = '✓ Сохранено';
+        statusEl.className = 'save-status success';
+    }).catch(function(err) {
+        statusEl.textContent = '✕ ' + err.message;
+        statusEl.className = 'save-status error';
+    }).then(function() {
+        btnSave.disabled = false;
+        spinner.style.display = 'none';
+        setTimeout(function() {
+            if (statusEl.className.indexOf('success') !== -1) {
+                statusEl.textContent = '';
+                statusEl.className = 'save-status';
+            }
+        }, 4000);
+    });
+};
+
+/* ─── Helpers ────────────────────────────────────────────── */
+function esc(s) {
+    if (!s) return '';
+    return s.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+/* ─── Init ───────────────────────────────────────────────── */
+if (getToken()) {
+    ghGet(DATA_PATH).then(function(res) {
+        dataSha = res.sha;
+        data = JSON.parse(decodeURIComponent(escape(atob(res.content))));
+        showEditor();
+    }).catch(function() {
+        // Token expired or invalid — show login
+        clearToken();
+    });
+}
+
+})();
+</script>
+
+</body>
+</html>

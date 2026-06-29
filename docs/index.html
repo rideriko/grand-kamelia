@@ -981,32 +981,7 @@
   <main>
     <section class="hero" data-od-id="hero-family">
       <section class="stage" role="region" tabindex="0" aria-roledescription="карусель" aria-label="Фотографии парк-отеля">
-      <div class="slides" aria-live="polite">
-        <figure class="slide active" data-state="loading" aria-hidden="false">
-          <img src="assets/hero-garden.svg" alt="Зелёный двор парк-отеля с детской площадкой" fetchpriority="high" decoding="async">
-        </figure>
-        <figure class="slide" data-state="loading" aria-hidden="true">
-          <img src="assets/hero-pool.svg" alt="Бассейны у зелёной террасы парк-отеля" loading="lazy" decoding="async">
-        </figure>
-        <figure class="slide" data-state="loading" aria-hidden="true">
-          <img src="assets/hero-terrace.svg" alt="Терраса с зоной отдыха" loading="lazy" decoding="async">
-        </figure>
-        <figure class="slide" data-state="loading" aria-hidden="true">
-          <img src="assets/hero-restaurant.svg" alt="Ресторан и бар для гостей отеля" loading="lazy" decoding="async">
-        </figure>
-        <figure class="slide" data-state="loading" aria-hidden="true">
-          <img src="assets/hero-kids.svg" alt="Детская игровая зона" loading="lazy" decoding="async">
-        </figure>
-        <figure class="slide" data-state="loading" aria-hidden="true">
-          <img src="assets/hero-room.svg" alt="Уютный номер в парк-отеле" loading="lazy" decoding="async">
-        </figure>
-        <figure class="slide" data-state="loading" aria-hidden="true">
-          <img src="assets/hero-entrance.svg" alt="Вход и фасад парк-отеля Гранд Камелия" loading="lazy" decoding="async">
-        </figure>
-        <figure class="slide" data-state="loading" aria-hidden="true">
-          <img src="assets/hero-sunset.svg" alt="Вечерняя атмосфера на территории отеля" loading="lazy" decoding="async">
-        </figure>
-      </div>
+      <div class="slides" id="hero-slides" aria-live="polite"></div>
       <span class="sr-only image-status" aria-live="polite"></span>
       <div class="shade"></div>
 
@@ -1087,48 +1062,7 @@
         <p class="section-intro">От спокойного утра у бассейна до вечерней игры в бильярд — всё нужное для семейного дня находится на территории.</p>
       </div>
     </div>
-    <div class="gallery-grid" aria-label="Фотографии территории и удобств">
-      <figure class="gallery-card">
-        <img src="assets/pools.svg" alt="Два бассейна с подогревом: взрослый 1,5 м и детский 1 м" loading="lazy" decoding="async">
-        <figcaption>Два бассейна с&nbsp;подогревом — взрослый и&nbsp;детский</figcaption>
-      </figure>
-      <figure class="gallery-card">
-        <img src="assets/garden.svg" alt="Зелёная территория парк-отеля с дорожками и цветами" loading="lazy" decoding="async">
-        <figcaption>Закрытый зелёный двор с&nbsp;цветами и&nbsp;зонами отдыха</figcaption>
-      </figure>
-      <figure class="gallery-card">
-        <img src="assets/kids-room.svg" alt="Детская веранда с няней" loading="lazy" decoding="async">
-        <figcaption>Детская веранда с&nbsp;няней 6&nbsp;дней в&nbsp;неделю</figcaption>
-      </figure>
-      <figure class="gallery-card">
-        <img src="assets/playground.svg" alt="Детская площадка с лабиринтом и батутом" loading="lazy" decoding="async">
-        <figcaption>Детский лабиринт, площадка и&nbsp;батут</figcaption>
-      </figure>
-      <figure class="gallery-card">
-        <img src="assets/restaurant.svg" alt="Ресторан и бар для гостей отеля" loading="lazy" decoding="async">
-        <figcaption>Ресторан с&nbsp;детским меню и&nbsp;бар</figcaption>
-      </figure>
-      <figure class="gallery-card">
-        <img src="assets/bar.svg" alt="Бар на территории отеля" loading="lazy" decoding="async">
-        <figcaption>Бар работает с&nbsp;8:00 до&nbsp;22:00</figcaption>
-      </figure>
-      <figure class="gallery-card">
-        <img src="assets/game-room.svg" alt="Игровой зал с бильярдом и аэрохоккеем" loading="lazy" decoding="async">
-        <figcaption>Игровой зал: бильярд, аэрохоккей</figcaption>
-      </figure>
-      <figure class="gallery-card">
-        <img src="assets/billiard.svg" alt="Бильярдный стол" loading="lazy" decoding="async">
-        <figcaption>Бильярд для вечернего досуга</figcaption>
-      </figure>
-      <figure class="gallery-card">
-        <img src="assets/bicycles.svg" alt="Велосипеды для гостей" loading="lazy" decoding="async">
-        <figcaption>Велосипеды, фрисби, баскетбол</figcaption>
-      </figure>
-      <figure class="gallery-card">
-        <img src="assets/barbecue.svg" alt="Мангальная зона" loading="lazy" decoding="async">
-        <figcaption>Мангальная зона для&nbsp;вечерних посиделок</figcaption>
-      </figure>
-    </div>
+    <div class="gallery-grid" id="infra-gallery" aria-label="Фотографии территории и удобств"></div>
     <div class="infrastructure-grid">
       <article class="facility-group">
         <h3>Для детей</h3>
@@ -1183,7 +1117,7 @@
   </section>
 
   <section class="page-section food-section" id="food" data-od-id="food" aria-labelledby="food-title">
-    <img class="food-bg" src="assets/food-restaurant.svg" alt="" aria-hidden="true">
+    <img class="food-bg" id="food-bg" src="" alt="" aria-hidden="true">
     <div class="food-overlay"></div>
     <div class="food-content">
       <div class="section-head">
@@ -1221,80 +1155,7 @@
       <p class="section-intro" style="margin-bottom:0">От компактного стандарта для пары до трёхкомнатного номера для большой семьи.</p>
       </div>
     </div>
-    <div class="rooms-gallery" aria-label="Номера — фотографии и описание">
-      <article class="room-post" data-room="standart">
-        <div class="room-post-media">
-          <div class="room-post-slides">
-            <img src="assets/room-standart.svg" alt="Номер Стандарт — двуспальная кровать, кондиционер, телевизор, Wi-Fi, терраса" loading="lazy" decoding="async">
-          </div>
-          <span class="room-post-badge">2–3 гостя</span>
-        </div>
-        <div class="room-post-body">
-          <h3>Стандарт</h3>
-          <p>Двуспальная кровать или две односпальные; в&nbsp;части номеров есть раскладное кресло.</p>
-        </div>
-      </article>
-      <article class="room-post" data-room="comfort-1room">
-        <div class="room-post-media">
-          <div class="room-post-slides">
-            <img src="assets/room-comfort-1room.svg" alt="Номер Однокомнатный комфорт — двуспальная кровать и раскладной диван" loading="lazy" decoding="async">
-          </div>
-          <span class="room-post-badge">до 4 гостей</span>
-        </div>
-        <div class="room-post-body">
-          <h3>Однокомнатный комфорт</h3>
-          <p>Двуспальная кровать и&nbsp;раскладной диван.</p>
-        </div>
-      </article>
-      <article class="room-post" data-room="premium-1room">
-        <div class="room-post-media">
-          <div class="room-post-slides">
-            <img src="assets/room-premium-1room.svg" alt="Номер Однокомнатный премиум — просторный номер с двуспальной кроватью и диваном" loading="lazy" decoding="async">
-          </div>
-          <span class="room-post-badge">до 4 гостей</span>
-        </div>
-        <div class="room-post-body">
-          <h3>Однокомнатный премиум</h3>
-          <p>Просторный однокомнатный номер с&nbsp;двуспальной кроватью и&nbsp;раскладным диваном.</p>
-        </div>
-      </article>
-      <article class="room-post" data-room="comfort-2room">
-        <div class="room-post-media">
-          <div class="room-post-slides">
-            <img src="assets/room-comfort-2room.svg" alt="Номер Двухкомнатный комфорт — две комнаты, терраса" loading="lazy" decoding="async">
-          </div>
-          <span class="room-post-badge">до 5 гостей</span>
-        </div>
-        <div class="room-post-body">
-          <h3>Двухкомнатный комфорт</h3>
-          <p>Двуспальная кровать, односпальная кровать и&nbsp;раскладной диван.</p>
-        </div>
-      </article>
-      <article class="room-post" data-room="premium-2room">
-        <div class="room-post-media">
-          <div class="room-post-slides">
-            <img src="assets/room-premium-2room.svg" alt="Номер Двухкомнатный премиум — больше пространства для семьи" loading="lazy" decoding="async">
-          </div>
-          <span class="room-post-badge">до 5 гостей</span>
-        </div>
-        <div class="room-post-body">
-          <h3>Двухкомнатный премиум</h3>
-          <p>Больше пространства для семьи: двуспальная кровать, односпальная кровать и&nbsp;раскладной диван.</p>
-        </div>
-      </article>
-      <article class="room-post" data-room="premium-3room">
-        <div class="room-post-media">
-          <div class="room-post-slides">
-            <img src="assets/room-premium-3room.svg" alt="Номер Трёхкомнатный премиум — две спальни и зал, два санузла" loading="lazy" decoding="async">
-          </div>
-          <span class="room-post-badge">до 7 гостей</span>
-        </div>
-        <div class="room-post-body">
-          <h3>Трёхкомнатный премиум</h3>
-          <p>Две спальни и&nbsp;зал: две двуспальные кровати, односпальная кровать и&nbsp;раскладной диван.</p>
-        </div>
-      </article>
-    </div>
+    <div class="rooms-gallery" id="rooms-gallery" aria-label="Номера — фотографии и описание"></div>
     <div class="room-standard">
       <h3>Во всех номерах</h3>
       <p>Кондиционер, холодильник, телевизор, Wi-Fi, собственный санузел с душем, фен, места для хранения, полотенца, постельное бельё и сушилка для вещей. У каждого номера есть терраса со столиком и двумя стульями.</p>
@@ -1312,7 +1173,7 @@
     </div>
     <div class="location-layout">
       <div class="location-copy reveal">
-        <img class="location-map-img" src="assets/location-map.svg" alt="Карта расположения отеля Гранд Камелия, ул. Лучистая, 36, п. Кучугуры" loading="lazy" decoding="async">
+        <img class="location-map-img" id="location-map" src="" alt="Карта расположения отеля Гранд Камелия" loading="lazy" decoding="async">
         <p>Мы не в шумном центре. Зато у нас спокойная зелёная территория, бассейны, ресторан и инфраструктура для семейного отдыха.</p>
         <a class="action-link" href="https://yandex.ru/maps/?text=%D0%9A%D1%83%D1%87%D1%83%D0%B3%D1%83%D1%80%D1%8B%2C%20%D1%83%D0%BB.%20%D0%9B%D1%83%D1%87%D0%B8%D1%81%D1%82%D0%B0%D1%8F%2C%2036" target="_blank" rel="noopener">Построить маршрут</a>
       </div>
@@ -1502,173 +1363,284 @@
 
   <script>
     (() => {
-      const slides = [...document.querySelectorAll('.slide')];
-      const stage = document.querySelector('.stage');
-      const counter = document.querySelector('.slide-count');
-      const menu = document.querySelector('.menu');
-      const nav = document.querySelector('.nav');
-      const autoplayButton = document.querySelector('[data-toggle-autoplay]');
-      const imageStatus = document.querySelector('.image-status');
-      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-      let current = 0;
-      let timer;
-      let userPaused = false;
-      let pointerStartX = 0;
-      let pointerStartY = 0;
+      'use strict';
 
-      const show = next => {
-        current = (next + slides.length) % slides.length;
-        slides.forEach((slide, index) => {
-          const active = index === current;
-          slide.classList.toggle('active', active);
-          slide.setAttribute('aria-hidden', String(!active));
-        });
-        counter.textContent = `0${current + 1} / 0${slides.length}`;
-        if (timer) {
-          stage.dataset.autoplay = 'paused';
-          requestAnimationFrame(() => {
-            if (timer) stage.dataset.autoplay = 'running';
+      /* ─── DEFAULT DATA (fallback if data.json fails to load) ───── */
+      const DEFAULT_DATA = {
+        hero: {
+          slides: [
+            { src: "assets/hero-garden.svg", alt: "Зелёный двор парк-отеля с детской площадкой" },
+            { src: "assets/hero-pool.svg", alt: "Бассейны у зелёной террасы парк-отеля" },
+            { src: "assets/hero-terrace.svg", alt: "Терраса с зоной отдыха" },
+            { src: "assets/hero-restaurant.svg", alt: "Ресторан и бар для гостей отеля" },
+            { src: "assets/hero-kids.svg", alt: "Детская игровая зона" },
+            { src: "assets/hero-room.svg", alt: "Уютный номер в парк-отеле" },
+            { src: "assets/hero-entrance.svg", alt: "Вход и фасад парк-отеля Гранд Камелия" },
+            { src: "assets/hero-sunset.svg", alt: "Вечерняя атмосфера на территории отеля" }
+          ]
+        },
+        infrastructure: {
+          gallery: [
+            { src: "assets/pools.svg", caption: "Два бассейна с&nbsp;подогревом — взрослый и&nbsp;детский" },
+            { src: "assets/garden.svg", caption: "Закрытый зелёный двор с&nbsp;цветами и&nbsp;зонами отдыха" },
+            { src: "assets/kids-room.svg", caption: "Детская веранда с&nbsp;няней 6&nbsp;дней в&nbsp;неделю" },
+            { src: "assets/playground.svg", caption: "Детский лабиринт, площадка и&nbsp;батут" },
+            { src: "assets/restaurant.svg", caption: "Ресторан с&nbsp;детским меню и&nbsp;бар" },
+            { src: "assets/bar.svg", caption: "Бар работает с&nbsp;8:00 до&nbsp;22:00" },
+            { src: "assets/game-room.svg", caption: "Игровой зал: бильярд, аэрохоккей" },
+            { src: "assets/billiard.svg", caption: "Бильярд для вечернего досуга" },
+            { src: "assets/bicycles.svg", caption: "Велосипеды, фрисби, баскетбол" },
+            { src: "assets/barbecue.svg", caption: "Мангальная зона для&nbsp;вечерних посиделок" }
+          ]
+        },
+        food: { background: "assets/food-restaurant.svg" },
+        rooms: {
+          cards: [
+            { src: "assets/room-standart.svg", title: "Стандарт", badge: "2–3 гостя", desc: "Двуспальная кровать или две односпальные; в&nbsp;части номеров есть раскладное кресло." },
+            { src: "assets/room-comfort-1room.svg", title: "Однокомнатный Комфорт", badge: "до 4 гостей", desc: "Двуспальная кровать и&nbsp;раскладной диван." },
+            { src: "assets/room-premium-1room.svg", title: "Однокомнатный Премиум", badge: "до 4 гостей", desc: "Просторный однокомнатный номер с&nbsp;двуспальной кроватью и&nbsp;раскладным диваном." },
+            { src: "assets/room-comfort-2room.svg", title: "Двухкомнатный Комфорт", badge: "до 5 гостей", desc: "Двуспальная кровать, односпальная кровать и&nbsp;раскладной диван." },
+            { src: "assets/room-premium-2room.svg", title: "Двухкомнатный Премиум", badge: "до 5 гостей", desc: "Больше пространства для семьи: двуспальная кровать, односпальная кровать и&nbsp;раскладной диван." },
+            { src: "assets/room-premium-3room.svg", title: "Трёхкомнатный Премиум", badge: "до 7 гостей", desc: "Две спальни и&nbsp;зал: две двуспальные кровати, односпальная кровать и&nbsp;раскладной диван." }
+          ]
+        },
+        location: { map: "assets/location-map.svg" }
+      };
+
+      /* ─── Render functions ─────────────────────────────────────── */
+      function renderHeroSlides(slides) {
+        const container = document.getElementById('hero-slides');
+        if (!container) return;
+        container.innerHTML = slides.map((s, i) =>
+          '<figure class="slide' + (i === 0 ? ' active' : '') + '" data-state="loading" aria-hidden="' + (i !== 0) + '">' +
+            '<img src="' + s.src + '" alt="' + s.alt + '"' + (i === 0 ? ' fetchpriority="high"' : ' loading="lazy"') + ' decoding="async">' +
+          '</figure>'
+        ).join('');
+      }
+
+      function renderInfraGallery(items) {
+        const container = document.getElementById('infra-gallery');
+        if (!container) return;
+        container.innerHTML = items.map(item =>
+          '<figure class="gallery-card">' +
+            '<img src="' + item.src + '" alt="' + item.caption.replace(/&nbsp;/g, ' ') + '" loading="lazy" decoding="async">' +
+            '<figcaption>' + item.caption + '</figcaption>' +
+          '</figure>'
+        ).join('');
+      }
+
+      function renderFoodBg(src) {
+        const img = document.getElementById('food-bg');
+        if (img) img.src = src;
+      }
+
+      function renderRoomCards(cards) {
+        const container = document.getElementById('rooms-gallery');
+        if (!container) return;
+        container.innerHTML = cards.map(card =>
+          '<article class="room-post">' +
+            '<div class="room-post-media">' +
+              '<div class="room-post-slides">' +
+                '<img src="' + card.src + '" alt="Номер ' + card.title + '" loading="lazy" decoding="async">' +
+              '</div>' +
+              '<span class="room-post-badge">' + card.badge + '</span>' +
+            '</div>' +
+            '<div class="room-post-body">' +
+              '<h3>' + card.title + '</h3>' +
+              '<p>' + (card.desc || '') + '</p>' +
+            '</div>' +
+          '</article>'
+        ).join('');
+      }
+
+      function renderLocationMap(src) {
+        const img = document.getElementById('location-map');
+        if (img) img.src = src;
+      }
+
+      function renderAll(data) {
+        if (data.hero && data.hero.slides) renderHeroSlides(data.hero.slides);
+        if (data.infrastructure && data.infrastructure.gallery) renderInfraGallery(data.infrastructure.gallery);
+        if (data.food && data.food.background) renderFoodBg(data.food.background);
+        if (data.rooms && data.rooms.cards) renderRoomCards(data.rooms.cards);
+        if (data.location && data.location.map) renderLocationMap(data.location.map);
+      }
+
+      /* ─── Load data, render, then init slider ─────────────────── */
+      fetch('data.json')
+        .then(function(r) { return r.json(); })
+        .then(function(data) { renderAll(data); })
+        .catch(function() { renderAll(DEFAULT_DATA); })
+        .then(function() { initSliderAndNav(); });
+
+      /* ─── Slider + nav + reveal ───────────────────────────────── */
+      function initSliderAndNav() {
+        const slides = [...document.querySelectorAll('.slide')];
+        const stage = document.querySelector('.stage');
+        const counter = document.querySelector('.slide-count');
+        const menu = document.querySelector('.menu');
+        const nav = document.querySelector('.nav');
+        const autoplayButton = document.querySelector('[data-toggle-autoplay]');
+        const imageStatus = document.querySelector('.image-status');
+        const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+        let current = 0;
+        let timer;
+        let userPaused = false;
+        let pointerStartX = 0;
+        let pointerStartY = 0;
+
+        const show = function(next) {
+          current = (next + slides.length) % slides.length;
+          slides.forEach(function(slide, index) {
+            var active = index === current;
+            slide.classList.toggle('active', active);
+            slide.setAttribute('aria-hidden', String(!active));
           });
-        }
-      };
-
-      const stop = () => {
-        clearInterval(timer);
-        timer = undefined;
-        stage.dataset.autoplay = 'paused';
-      };
-      const autoplay = () => {
-        stop();
-        if (!userPaused && !reducedMotion.matches && !document.hidden && !stage.matches(':hover') && !stage.matches(':focus-within')) {
-          timer = setInterval(() => show(current + 1), 7000);
-          stage.dataset.autoplay = 'running';
-        }
-      };
-
-      slides.forEach((slide, index) => {
-        const image = slide.querySelector('img');
-        const ready = () => slide.setAttribute('data-state', 'ready');
-        const failed = () => {
-          slide.setAttribute('data-state', 'error');
-          imageStatus.textContent = `Не удалось загрузить фото ${index + 1} из ${slides.length}.`;
+          counter.textContent = '0' + (current + 1) + ' / 0' + slides.length;
+          if (timer) {
+            stage.dataset.autoplay = 'paused';
+            requestAnimationFrame(function() {
+              if (timer) stage.dataset.autoplay = 'running';
+            });
+          }
         };
-        if (image.complete) {
-          image.naturalWidth > 0 ? ready() : failed();
-        } else {
-          image.addEventListener('load', ready, { once: true });
-          image.addEventListener('error', failed, { once: true });
-        }
-      });
 
-      const closeMenu = (restoreFocus = false) => {
-        if (!nav.classList.contains('open')) return;
-        nav.classList.remove('open');
-        menu.setAttribute('aria-expanded', 'false');
-        menu.setAttribute('aria-label', 'Открыть меню');
-        if (restoreFocus) menu.focus();
-      };
+        const stop = function() {
+          clearInterval(timer);
+          timer = undefined;
+          stage.dataset.autoplay = 'paused';
+        };
+        const autoplay = function() {
+          stop();
+          if (!userPaused && !reducedMotion.matches && !document.hidden && !stage.matches(':hover') && !stage.matches(':focus-within')) {
+            timer = setInterval(function() { show(current + 1); }, 7000);
+            stage.dataset.autoplay = 'running';
+          }
+        };
 
-      document.querySelector('[data-prev]').addEventListener('click', () => { show(current - 1); autoplay(); });
-      document.querySelector('[data-next]').addEventListener('click', () => { show(current + 1); autoplay(); });
-      autoplayButton.addEventListener('click', () => {
-        userPaused = !userPaused;
-        autoplayButton.setAttribute('aria-pressed', String(userPaused));
-        autoplayButton.setAttribute('aria-label', userPaused ? 'Продолжить слайдер' : 'Приостановить слайдер');
-        userPaused ? stop() : autoplay();
-      });
-      stage.addEventListener('mouseenter', stop);
-      stage.addEventListener('mouseleave', autoplay);
-      stage.addEventListener('focusin', stop);
-      stage.addEventListener('focusout', event => {
-        if (!stage.contains(event.relatedTarget)) autoplay();
-      });
-      stage.addEventListener('keydown', event => {
-        if (event.key === 'ArrowLeft') { event.preventDefault(); show(current - 1); }
-        if (event.key === 'ArrowRight') { event.preventDefault(); show(current + 1); }
-      });
-      stage.addEventListener('pointerdown', event => {
-        if (event.pointerType !== 'touch') return;
-        pointerStartX = event.clientX;
-        pointerStartY = event.clientY;
-      });
-      stage.addEventListener('pointerup', event => {
-        if (event.pointerType !== 'touch') return;
-        const deltaX = event.clientX - pointerStartX;
-        const deltaY = event.clientY - pointerStartY;
-        if (Math.abs(deltaX) < 48 || Math.abs(deltaX) <= Math.abs(deltaY)) return;
-        show(current + (deltaX < 0 ? 1 : -1));
-        autoplay();
-      });
-      const syncMotionPreference = () => {
-        autoplayButton.hidden = reducedMotion.matches;
-        autoplay();
-      };
-      reducedMotion.addEventListener('change', syncMotionPreference);
-      document.addEventListener('visibilitychange', autoplay);
-
-      menu.addEventListener('click', () => {
-        const open = nav.classList.toggle('open');
-        menu.setAttribute('aria-expanded', String(open));
-        menu.setAttribute('aria-label', open ? 'Закрыть меню' : 'Открыть меню');
-      });
-      nav.addEventListener('click', () => closeMenu());
-      document.addEventListener('pointerdown', event => {
-        if (!nav.contains(event.target) && !menu.contains(event.target)) closeMenu();
-      });
-      document.addEventListener('keydown', event => {
-        if (event.key === 'Escape') closeMenu(true);
-      });
-
-      syncMotionPreference();
-
-      /* ─── Scroll reveal ───────────────────────────────────────────── */
-      const revealObserver = new IntersectionObserver(entries => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-            revealObserver.unobserve(entry.target);
+        slides.forEach(function(slide, index) {
+          var image = slide.querySelector('img');
+          var ready = function() { slide.setAttribute('data-state', 'ready'); };
+          var failed = function() {
+            slide.setAttribute('data-state', 'error');
+            imageStatus.textContent = 'Не удалось загрузить фото ' + (index + 1) + ' из ' + slides.length + '.';
+          };
+          if (image.complete) {
+            image.naturalWidth > 0 ? ready() : failed();
+          } else {
+            image.addEventListener('load', ready, { once: true });
+            image.addEventListener('error', failed, { once: true });
           }
         });
-      }, { threshold: 0.12, rootMargin: '0px 0px -42px 0px' });
 
-      document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+        const closeMenu = function(restoreFocus) {
+          if (!nav.classList.contains('open')) return;
+          nav.classList.remove('open');
+          menu.setAttribute('aria-expanded', 'false');
+          menu.setAttribute('aria-label', 'Открыть меню');
+          if (restoreFocus) menu.focus();
+        };
 
-      /* ─── Nav click: scroll to section ────────────────────────────── */
-      const headerEl = document.getElementById('site-header');
-      const scrollToSection = (id) => {
-        const target = document.querySelector(id);
-        if (!target) return;
-        const h = headerEl ? headerEl.offsetHeight : 72;
-        const top = target.getBoundingClientRect().top + window.scrollY - h;
-        window.scrollTo({ top, behavior: 'smooth' });
-      };
-
-      document.querySelectorAll('.nav a[href^="#"]').forEach(link => {
-        link.addEventListener('click', e => {
-          e.preventDefault();
-          scrollToSection(link.getAttribute('href'));
-          if (nav.classList.contains('open')) closeMenu();
+        document.querySelector('[data-prev]').addEventListener('click', function() { show(current - 1); autoplay(); });
+        document.querySelector('[data-next]').addEventListener('click', function() { show(current + 1); autoplay(); });
+        autoplayButton.addEventListener('click', function() {
+          userPaused = !userPaused;
+          autoplayButton.setAttribute('aria-pressed', String(userPaused));
+          autoplayButton.setAttribute('aria-label', userPaused ? 'Продолжить слайдер' : 'Приостановить слайдер');
+          userPaused ? stop() : autoplay();
         });
-      });
-
-      /* ─── Scroll spy: highlight active nav link ───────────────────── */
-      const navLinks = document.querySelectorAll('.nav a[href^="#"]');
-      const sectionIds = Array.from(navLinks).map(a => a.getAttribute('href'));
-      const sections = sectionIds.map(id => document.querySelector(id)).filter(Boolean);
-
-      const spyObserver = new IntersectionObserver(entries => {
-        // Find the first section that's significantly intersecting
-        const visible = entries.filter(e => e.isIntersecting);
-        if (!visible.length) return;
-        // Pick the one with the highest ratio
-        const best = visible.reduce((a, b) => b.intersectionRatio > a.intersectionRatio ? b : a);
-        const id = '#' + best.target.id;
-        navLinks.forEach(a => {
-          a.classList.toggle('active', a.getAttribute('href') === id);
+        stage.addEventListener('mouseenter', stop);
+        stage.addEventListener('mouseleave', autoplay);
+        stage.addEventListener('focusin', stop);
+        stage.addEventListener('focusout', function(event) {
+          if (!stage.contains(event.relatedTarget)) autoplay();
         });
-      }, { threshold: [0, 0.25, 0.5, 0.75], rootMargin: '-72px 0px -60% 0px' });
+        stage.addEventListener('keydown', function(event) {
+          if (event.key === 'ArrowLeft') { event.preventDefault(); show(current - 1); }
+          if (event.key === 'ArrowRight') { event.preventDefault(); show(current + 1); }
+        });
+        stage.addEventListener('pointerdown', function(event) {
+          if (event.pointerType !== 'touch') return;
+          pointerStartX = event.clientX;
+          pointerStartY = event.clientY;
+        });
+        stage.addEventListener('pointerup', function(event) {
+          if (event.pointerType !== 'touch') return;
+          var deltaX = event.clientX - pointerStartX;
+          var deltaY = event.clientY - pointerStartY;
+          if (Math.abs(deltaX) < 48 || Math.abs(deltaX) <= Math.abs(deltaY)) return;
+          show(current + (deltaX < 0 ? 1 : -1));
+          autoplay();
+        });
+        const syncMotionPreference = function() {
+          autoplayButton.hidden = reducedMotion.matches;
+          autoplay();
+        };
+        reducedMotion.addEventListener('change', syncMotionPreference);
+        document.addEventListener('visibilitychange', autoplay);
 
-      sections.forEach(s => spyObserver.observe(s));
+        menu.addEventListener('click', function() {
+          var open = nav.classList.toggle('open');
+          menu.setAttribute('aria-expanded', String(open));
+          menu.setAttribute('aria-label', open ? 'Закрыть меню' : 'Открыть меню');
+        });
+        nav.addEventListener('click', function() { closeMenu(); });
+        document.addEventListener('pointerdown', function(event) {
+          if (!nav.contains(event.target) && !menu.contains(event.target)) closeMenu();
+        });
+        document.addEventListener('keydown', function(event) {
+          if (event.key === 'Escape') closeMenu(true);
+        });
+
+        syncMotionPreference();
+
+        /* ─── Scroll reveal ───────────────────────────────────────── */
+        const revealObserver = new IntersectionObserver(function(entries) {
+          entries.forEach(function(entry) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('visible');
+              revealObserver.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.12, rootMargin: '0px 0px -42px 0px' });
+
+        document.querySelectorAll('.reveal').forEach(function(el) { revealObserver.observe(el); });
+
+        /* ─── Nav click: scroll to section ────────────────────────── */
+        const headerEl = document.getElementById('site-header');
+        const scrollToSection = function(id) {
+          var target = document.querySelector(id);
+          if (!target) return;
+          var h = headerEl ? headerEl.offsetHeight : 72;
+          var top = target.getBoundingClientRect().top + window.scrollY - h;
+          window.scrollTo({ top: top, behavior: 'smooth' });
+        };
+
+        document.querySelectorAll('.nav a[href^="#"]').forEach(function(link) {
+          link.addEventListener('click', function(e) {
+            e.preventDefault();
+            scrollToSection(link.getAttribute('href'));
+            if (nav.classList.contains('open')) closeMenu();
+          });
+        });
+
+        /* ─── Scroll spy ──────────────────────────────────────────── */
+        const navLinks = document.querySelectorAll('.nav a[href^="#"]');
+        const sectionIds = Array.from(navLinks).map(function(a) { return a.getAttribute('href'); });
+        const sections = sectionIds.map(function(id) { return document.querySelector(id); }).filter(Boolean);
+
+        const spyObserver = new IntersectionObserver(function(entries) {
+          var visible = entries.filter(function(e) { return e.isIntersecting; });
+          if (!visible.length) return;
+          var best = visible.reduce(function(a, b) { return b.intersectionRatio > a.intersectionRatio ? b : a; });
+          var id = '#' + best.target.id;
+          navLinks.forEach(function(a) {
+            a.classList.toggle('active', a.getAttribute('href') === id);
+          });
+        }, { threshold: [0, 0.25, 0.5, 0.75], rootMargin: '-72px 0px -60% 0px' });
+
+        sections.forEach(function(s) { spyObserver.observe(s); });
+      }
     })();
   </script>
 </body>

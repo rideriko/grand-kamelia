@@ -1,0 +1,44 @@
+{
+  "hero": {
+    "slides": [
+      { "src": "assets/hero-garden.svg", "alt": "Зелёный двор парк-отеля с детской площадкой" },
+      { "src": "assets/hero-pool.svg", "alt": "Бассейны у зелёной террасы парк-отеля" },
+      { "src": "assets/hero-terrace.svg", "alt": "Терраса с зоной отдыха" },
+      { "src": "assets/hero-restaurant.svg", "alt": "Ресторан и бар для гостей отеля" },
+      { "src": "assets/hero-kids.svg", "alt": "Детская игровая зона" },
+      { "src": "assets/hero-room.svg", "alt": "Уютный номер в парк-отеле" },
+      { "src": "assets/hero-entrance.svg", "alt": "Вход и фасад парк-отеля Гранд Камелия" },
+      { "src": "assets/hero-sunset.svg", "alt": "Вечерняя атмосфера на территории отеля" }
+    ]
+  },
+  "infrastructure": {
+    "gallery": [
+      { "src": "assets/pools.svg", "caption": "Два подогреваемых бассейна" },
+      { "src": "assets/garden.svg", "caption": "Зелёный двор" },
+      { "src": "assets/kids-room.svg", "caption": "Детская веранда с няней" },
+      { "src": "assets/playground.svg", "caption": "Лабиринт, площадка, батут" },
+      { "src": "assets/restaurant.svg", "caption": "Ресторан с детским меню" },
+      { "src": "assets/bar.svg", "caption": "Бар 8:00–22:00" },
+      { "src": "assets/game-room.svg", "caption": "Игровая: бильярд, аэрохоккей" },
+      { "src": "assets/billiard.svg", "caption": "Бильярдный стол" },
+      { "src": "assets/bicycles.svg", "caption": "Велосипеды, фрисби, баскетбол" },
+      { "src": "assets/barbecue.svg", "caption": "Мангальная зона" }
+    ]
+  },
+  "food": {
+    "background": "assets/food-restaurant.svg"
+  },
+  "rooms": {
+    "cards": [
+      { "src": "assets/room-standart.svg", "title": "Стандарт", "badge": "2–3 гостя", "desc": "Двуспальная кровать или две односпальные; в части номеров есть раскладное кресло." },
+      { "src": "assets/room-comfort-1room.svg", "title": "Однокомнатный Комфорт", "badge": "до 4 гостей", "desc": "Двуспальная кровать и раскладной диван." },
+      { "src": "assets/room-premium-1room.svg", "title": "Однокомнатный Премиум", "badge": "до 4 гостей", "desc": "Просторный однокомнатный номер с двуспальной кроватью и раскладным диваном." },
+      { "src": "assets/room-comfort-2room.svg", "title": "Двухкомнатный Комфорт", "badge": "до 5 гостей", "desc": "Двуспальная кровать, односпальная кровать и раскладной диван." },
+      { "src": "assets/room-premium-2room.svg", "title": "Двухкомнатный Премиум", "badge": "до 5 гостей", "desc": "Больше пространства для семьи: двуспальная кровать, односпальная кровать и раскладной диван." },
+      { "src": "assets/room-premium-3room.svg", "title": "Трёхкомнатный Премиум", "badge": "до 7 гостей", "desc": "Две спальни и зал: две двуспальные кровати, односпальная кровать и раскладной диван." }
+    ]
+  },
+  "location": {
+    "map": "assets/location-map.svg"
+  }
+}
