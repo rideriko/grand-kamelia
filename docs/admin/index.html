@@ -832,32 +832,40 @@ window.saveAll = function() {
 
     var jsonStr = JSON.stringify(siteData, null, 2);
 
-    // Upload pending photo files first
+    // Upload pending photos first
     var uploadPromises = pendingUploads.map(function(u) {
         return ghPut(u.path, u.base64, undefined).catch(function(e) {
-            // If file exists, try to get its SHA and update
             return ghGetJSON(u.path).then(function(existing) {
                 return ghPut(u.path, u.base64, existing.sha);
-            }).catch(function() {
-                throw e;
-            });
+            }).catch(function() { throw e; });
         });
     });
 
+    function commitData(retry) {
+        if (retry === undefined) retry = 0;
+        // Always re-fetch the current SHA before saving — prevents 409
+        return ghGetJSON(DATA_PATH).then(function(fresh) {
+            return ghPut(DATA_PATH, toBase64(jsonStr), fresh.sha);
+        }).then(function(res) {
+            dataSha = res.content.sha;
+            statusEl.textContent = '✓ Сохранено';
+            statusEl.className = 'save-status success';
+            refreshAllTabs();
+        }).catch(function(err) {
+            if (retry < 2 && err.message.indexOf('409') !== -1) {
+                statusEl.textContent = 'Повторная попытка…';
+                return commitData(retry + 1);
+            }
+            throw err;
+        });
+    }
+
     Promise.all(uploadPromises).then(function() {
-        // Clear pending uploads and data URLs
         pendingUploads = [];
         pendingDataURLs = {};
-        // Reload photo library to get fresh download URLs
         return loadPhotoLibrary();
     }).then(function() {
-        // Save data.json
-        return ghPut(DATA_PATH, toBase64(jsonStr), dataSha);
-    }).then(function(res) {
-        dataSha = res.content.sha;
-        statusEl.textContent = '✓ Сохранено';
-        statusEl.className = 'save-status success';
-        refreshAllTabs();
+        return commitData();
     }).catch(function(err) {
         statusEl.textContent = '✕ ' + err.message;
         statusEl.className = 'save-status error';
