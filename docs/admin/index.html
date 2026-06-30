@@ -827,48 +827,60 @@ window.saveAll = function() {
 
     btnSave.disabled = true;
     spinner.style.display = 'inline-block';
-    statusEl.textContent = 'Сохранение…';
+    statusEl.textContent = 'Сохранение data.json…';
     statusEl.className = 'save-status';
 
     var jsonStr = JSON.stringify(siteData, null, 2);
 
-    // Upload pending photos first
-    var uploadPromises = pendingUploads.map(function(u) {
-        return ghPut(u.path, u.base64, undefined).catch(function(e) {
-            return ghGetJSON(u.path).then(function(existing) {
-                return ghPut(u.path, u.base64, existing.sha);
-            }).catch(function() { throw e; });
-        });
-    });
-
+    // Step 1: Save data.json first — site won't work without it
     function commitData(retry) {
         if (retry === undefined) retry = 0;
-        // Always re-fetch the current SHA before saving — prevents 409
         return ghGetJSON(DATA_PATH).then(function(fresh) {
             return ghPut(DATA_PATH, toBase64(jsonStr), fresh.sha);
         }).then(function(res) {
             dataSha = res.content.sha;
-            statusEl.textContent = '✓ Сохранено';
-            statusEl.className = 'save-status success';
-            refreshAllTabs();
+            return true;
         }).catch(function(err) {
-            if (retry < 2 && err.message.indexOf('409') !== -1) {
-                statusEl.textContent = 'Повторная попытка…';
+            if (retry < 3 && err.message.indexOf('409') !== -1) {
+                statusEl.textContent = 'Конфликт, попытка ' + (retry + 2) + '/3…';
                 return commitData(retry + 1);
             }
             throw err;
         });
     }
 
-    Promise.all(uploadPromises).then(function() {
+    // Step 2: Upload pending photos
+    function uploadPhotos() {
+        if (pendingUploads.length === 0) {
+            statusEl.textContent = 'Загрузка фото…';
+            return Promise.resolve();
+        }
+        statusEl.textContent = 'Загрузка фото (' + pendingUploads.length + ' шт)…';
+        return Promise.all(pendingUploads.map(function(u) {
+            return ghPut(u.path, u.base64, undefined).catch(function() {
+                // File may already exist (from a failed previous save), get SHA first
+                return ghGetJSON(u.path).then(function(ex) {
+                    return ghPut(u.path, u.base64, ex.sha);
+                });
+            });
+        }));
+    }
+
+    commitData().then(function() {
+        statusEl.textContent = '✓ data.json сохранён, загружаем фото…';
+        return uploadPhotos();
+    }).then(function() {
         pendingUploads = [];
         pendingDataURLs = {};
         return loadPhotoLibrary();
     }).then(function() {
-        return commitData();
+        statusEl.textContent = '✓ Всё сохранено';
+        statusEl.className = 'save-status success';
+        refreshAllTabs();
     }).catch(function(err) {
         statusEl.textContent = '✕ ' + err.message;
         statusEl.className = 'save-status error';
+        // Keep pendingUploads so user can retry
     }).then(function() {
         btnSave.disabled = false;
         spinner.style.display = 'none';
