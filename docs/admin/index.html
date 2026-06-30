@@ -109,7 +109,6 @@
         .tab-content.active { display: flex; gap: 24px; }
 
         .tab-main { flex: 1; min-width: 0; }
-        .tab-sidebar { width: 280px; flex-shrink: 0; }
 
         .tab-header {
             display: flex; align-items: center; justify-content: space-between;
@@ -194,45 +193,55 @@
         .single-img .btn-pick:hover { border-color: var(--fg); }
 
         /* ─── Photo gallery sidebar ────────────────────────────── */
+        .tab-sidebar { width: 260px; flex-shrink: 0; }
         .photo-gallery-sidebar {
             background: var(--bg); border: 1px solid var(--border);
-            border-radius: var(--radius); padding: 16px; position: sticky; top: 80px;
+            border-radius: var(--radius); padding: 14px; position: sticky; top: 80px;
             max-height: calc(100dvh - 100px); overflow-y: auto;
         }
         .photo-gallery-sidebar h3 {
-            font-size: 14px; font-weight: 600; margin-bottom: 6px;
+            font-size: 13px; font-weight: 600; margin-bottom: 4px;
         }
         .photo-gallery-sidebar .gh-link {
-            font-size: 12px; color: var(--accent); display: block; margin-bottom: 12px;
+            font-size: 11px; color: var(--accent); display: block; margin-bottom: 10px;
         }
         .photo-gallery-sidebar .gh-link:hover { text-decoration: underline; }
         .photo-gallery-grid {
-            display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px;
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px;
         }
         .photo-gallery-grid .gthumb {
-            aspect-ratio: 3/2; border-radius: 6px; cursor: pointer;
-            border: 2px solid transparent; object-fit: cover;
+            width: 100%; aspect-ratio: 4/3; border-radius: 4px; cursor: pointer;
+            border: 2px solid transparent; object-fit: cover; object-position: center;
             background: var(--bg2); transition: border-color 0.12s;
+            /* Prevent huge downloads from blowing layout */
+            max-height: 80px;
         }
         .photo-gallery-grid .gthumb:hover { border-color: var(--accent); }
         .photo-gallery-grid .gthumb.selected { border-color: var(--accent); box-shadow: 0 0 0 2px rgba(255,56,92,0.2); }
-        .photo-gallery-sidebar .empty-msg { font-size: 12px; color: var(--muted); text-align: center; padding: 20px 0; }
+        .photo-gallery-sidebar .empty-msg { font-size: 11px; color: var(--muted); text-align: center; padding: 16px 0; }
         .photo-gallery-sidebar .upload-btn {
-            display: block; width: 100%; margin-top: 12px; padding: 10px 0;
-            border-radius: 10px; font-family: inherit; font-size: 13px; font-weight: 500;
+            display: block; width: 100%; margin-top: 10px; padding: 8px 0;
+            border-radius: 8px; font-family: inherit; font-size: 12px; font-weight: 500;
             border: 1.5px dashed var(--border); cursor: pointer;
             background: var(--bg2); color: var(--fg); transition: all 0.12s; text-align: center;
         }
         .photo-gallery-sidebar .upload-btn:hover { border-color: var(--accent); color: var(--accent); }
         .photo-gallery-sidebar .upload-status {
-            font-size: 12px; color: var(--muted); margin-top: 8px; text-align: center;
+            font-size: 11px; color: var(--muted); margin-top: 6px; text-align: center;
         }
 
         /* ─── Responsive ───────────────────────────────────────── */
+        @media (max-width: 1100px) {
+            .tab-sidebar { width: 220px; }
+            .photo-gallery-grid { grid-template-columns: repeat(2, 1fr); }
+            .photo-gallery-grid .gthumb { max-height: 72px; }
+        }
         @media (max-width: 900px) {
             .tab-content { flex-direction: column; }
             .tab-sidebar { width: 100%; }
-            .photo-gallery-sidebar { position: static; max-height: 300px; }
+            .photo-gallery-sidebar { position: static; max-height: 240px; }
+            .photo-gallery-grid { grid-template-columns: repeat(6, 1fr); }
+            .photo-gallery-grid .gthumb { max-height: 64px; }
         }
         @media (max-width: 640px) {
             .topbar { padding: 0 12px; gap: 8px; overflow-x: auto; }
@@ -244,6 +253,7 @@
             .img-card .card-actions { flex-direction: row; order: -1; }
             .card-list { gap: 8px; }
             .photo-gallery-grid { grid-template-columns: repeat(4, 1fr); }
+            .photo-gallery-grid .gthumb { max-height: 56px; }
         }
     </style>
 </head>
@@ -595,7 +605,7 @@ function renderPhotoSidebar(section) {
         for (var i = 0; i < photoLibrary.length; i++) {
             var p = photoLibrary[i];
             var shortName = p.name.length > 20 ? p.name.substring(0, 18) + '…' : p.name;
-            html += '<img class="gthumb" src="' + p.download_url + '" alt="' + esc(p.name) + '" title="' + esc(p.name) + '\n' + esc(p.path) + '" loading="lazy" onclick="onGalleryClick(\'' + esc(p.path) + '\', this)">';
+            html += '<img class="gthumb" src="' + p.download_url + '" alt="' + esc(p.name) + '" title="' + esc(p.name) + '\n' + esc(p.path) + '" loading="lazy" decoding="async" width="80" height="60" onclick="onGalleryClick(\'' + esc(p.path) + '\', this)">';
         }
         html += '</div>';
     }
